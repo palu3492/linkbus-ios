@@ -9,51 +9,53 @@
 import UIKit
 
 struct BusSchedule: Decodable{
-    let msg: String
-    let attention: String
-    let routes: [Route]
+    let msg: String?
+    let attention: String?
+    let routes: [Route]?
 }
 
 struct Route: Decodable{
-    let id: Int
-    let title: String
-    let times: [Time]
+    let id: Int?
+    let title: String?
+    let times: [Time]?
 }
 
 struct Time: Decodable {
-    let start: String
-    let end: String
-    let lbc: BooleanLiteralType
-    let ss: BooleanLiteralType
+    let start: String?
+    let end: String?
+    let lbc: BooleanLiteralType?
+    let ss: BooleanLiteralType?
 }
 
 // end of json structs
 
 struct GoreckiToSexton {
-    var data: [UseableData]
+    var data: [RouteData]
 }
 
 struct SextonToGorecki {
-    var data: [UseableData]
+    var data: [RouteData]
 }
 
 struct CSBEast {
-    var data: [UseableData]
+    var data: [RouteData]
 }
 
 struct GoreckiToAlcuin {
-    var data: [UseableData]
+    var data: [RouteData]
 }
 
 struct AlcuinToGorecki {
-    var data: [UseableData]!
+    var data: [RouteData]!
 }
 
-struct UseableData {
+struct RouteData {
     let startDate: Date
     let endDate: Date
     let timeString: String
     let hasStart: BooleanLiteralType
+    let lastBusClass: BooleanLiteralType
+    let ss: BooleanLiteralType
 }
 
 class ViewController: UIViewController {
@@ -73,52 +75,66 @@ class ViewController: UIViewController {
                 let json = try JSONDecoder().decode(BusSchedule.self, from: data)
                 //print(json.routes[1].times[1].end)
                 
-                var goreckiToSexton: GoreckiToSexton = GoreckiToSexton(data: [UseableData]())
-                var sextonToGorecki: SextonToGorecki = SextonToGorecki(data: [UseableData]())
-                var csbEast: CSBEast = CSBEast(data: [UseableData]())
-                var goreckiToAlcuin: GoreckiToAlcuin = GoreckiToAlcuin(data: [UseableData]())
-                var alcuinToGorecki: AlcuinToGorecki = AlcuinToGorecki(data: [UseableData]())
+                var goreckiToSexton: GoreckiToSexton = GoreckiToSexton(data: [RouteData]())
+                var sextonToGorecki: SextonToGorecki = SextonToGorecki(data: [RouteData]())
+                var csbEast: CSBEast = CSBEast(data: [RouteData]())
+                var goreckiToAlcuin: GoreckiToAlcuin = GoreckiToAlcuin(data: [RouteData]())
+                var alcuinToGorecki: AlcuinToGorecki = AlcuinToGorecki(data: [RouteData]())
                 
                 // === GORECKI TO SEXTION ===
-                var iterator = json.routes[0].times.makeIterator()
-                while let time = iterator.next() {
-                    if (time.start != "") {
-                        var isoDate = time.start
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
-                        dateFormatter.timeZone = TimeZone(identifier: "America/Central")
-                        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                        let startDate = dateFormatter.date(from:isoDate)!
-                        
-                        isoDate = time.end
-                        let endDate = dateFormatter.date(from:isoDate)!
-                        
-                        let textFormatter = DateFormatter()
-                        textFormatter.dateFormat = "h:mm a"
-                        
-                        let timeString: String = (textFormatter.string(from: startDate) + " - " + (textFormatter.string(from: endDate)))
-                        
-                        goreckiToSexton.data.append(UseableData(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true))
+                if (json.routes![0] != nil) {
+                    var iterator = json.routes![0].times!.makeIterator()
+                    while let time = iterator.next() {
+                        if (time.start != "") {
+                            var isoDate = time.start
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
+                            dateFormatter.timeZone = TimeZone(identifier: "America/Central")
+                            dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                            let startDate = dateFormatter.date(from:isoDate!)!
+                            
+                            isoDate = time.end
+                            let endDate = dateFormatter.date(from:isoDate!)!
+                            
+                            let textFormatter = DateFormatter()
+                            textFormatter.dateFormat = "h:mm a"
+                            
+                            let timeString: String = (textFormatter.string(from: startDate) + " - " + (textFormatter.string(from: endDate)))
+                            
+                            let lbc = time.lbc
+                            let ss = time.ss
+                            
+                            goreckiToSexton.data.append(RouteData(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: lbc!, ss: ss!))
+                        }
+                        else {
+                            let isoDate = time.end
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
+                            dateFormatter.timeZone = TimeZone(identifier: "America/Central")
+                            dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                            let endDate = dateFormatter.date(from:isoDate!)!
+                            let startDate = endDate
+                            
+                            let textFormatter = DateFormatter()
+                            textFormatter.dateFormat = "h:mm a"
+                            
+                            let timeString: String = (textFormatter.string(from: endDate))
+                            
+                            let lbc = time.lbc
+                            let ss = time.ss
+                            
+                            goreckiToSexton.data.append(RouteData(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: lbc!, ss: ss!))
+                        }
                     }
-                    else {
-                        let isoDate = time.end
-                        let dateFormatter = DateFormatter()
-                        dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
-                        dateFormatter.timeZone = TimeZone(identifier: "America/Central")
-                        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                        let endDate = dateFormatter.date(from:isoDate)!
-                        let startDate = endDate
-                        
-                        let textFormatter = DateFormatter()
-                        textFormatter.dateFormat = "h:mm a"
-                        
-                        let timeString: String = (textFormatter.string(from: endDate))
-                        
-                        goreckiToSexton.data.append(UseableData(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false))
+                    
+                    //print(goreckiToSexton.data.description)
+                    
+                    var gtsIterator = goreckiToSexton.data.makeIterator()
+                    while let routeData = gtsIterator.next() {
+                        print(routeData.timeString)
                     }
                 }
-                
-                print(goreckiToSexton.data.description)
+
                 
             } catch let jsonErr {
                 print("Error serializing json:", jsonErr)
