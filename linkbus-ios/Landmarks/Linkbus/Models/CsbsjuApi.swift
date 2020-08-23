@@ -1,8 +1,7 @@
 /*
 See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-The model for an individual landmark.
+Structs for CSB/SJU API call
 */
 
 import SwiftUI

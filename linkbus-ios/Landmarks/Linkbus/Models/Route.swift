@@ -21,8 +21,3 @@ struct Route: Identifiable {
             longitude: coordinates.longitude)
     }
 }
-
-struct Coordinates: Hashable, Codable {
-    var latitude: Double
-    var longitude: Double
-}

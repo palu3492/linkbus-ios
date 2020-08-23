@@ -12,7 +12,7 @@ class NetworkController: ObservableObject {
     @Published var dataHasLoaded = false
     
     let csbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date=2/1/2020"
-    let myApiUrl = ""
+    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/linkbus-ios/Landmarks/Linkbus/Resources/LinkbusAPI.json"
 }
 
 extension NetworkController {
@@ -39,8 +39,8 @@ extension NetworkController {
     }
     
     
-    func loadMyApi(completionHandler: @escaping (ApiBusSchedule) -> Void) {
-        let url = URL(string: myApiUrl)!
+    func loadLinkbusApi(completionHandler: @escaping (ApiBusSchedule) -> Void) {
+        let url = URL(string: LinkbusApiUrl)!
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
                 print("Error fetching from my GitHub API: \(error)")
