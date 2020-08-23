@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1B431724F1EBCC00BC1EEA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */; };
 		4CAECD2D24F1DDBB005F6E87 /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAECD2C24F1DDBB005F6E87 /* ProductCard.swift */; };
 		4CAECD3124F1E1CE005F6E87 /* apiSample.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CAECD3024F1E1CE005F6E87 /* apiSample.json */; };
 		B7394866229F194000C47603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394865229F194000C47603 /* AppDelegate.swift */; };
@@ -38,9 +39,11 @@
 
 /* Begin PBXFileReference section */
 		32C0591524A7452A1B7C1DE3 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4CAECD2C24F1DDBB005F6E87 /* ProductCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
 		4CAECD3024F1E1CE005F6E87 /* apiSample.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apiSample.json; sourceTree = "<group>"; };
-		B7394862229F194000C47603 /* Landmarks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Landmarks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CB7628B24F1F028001FA9CB /* routeData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = routeData.json; sourceTree = "<group>"; };
+		B7394862229F194000C47603 /* Linkbus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkbus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7394865229F194000C47603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B7394867229F194000C47603 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B7394869229F194000C47603 /* LandmarkDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkDetail.swift; sourceTree = "<group>"; };
@@ -102,8 +105,9 @@
 		B7394859229F194000C47603 = {
 			isa = PBXGroup;
 			children = (
+				4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */,
 				C4E4AAA0C4E4035000000001 /* README.md */,
-				B7394864229F194000C47603 /* Landmarks */,
+				B7394864229F194000C47603 /* Linkbus */,
 				B7394863229F194000C47603 /* Products */,
 				0BA6BB22EC06EFBEA60A948C /* Configuration */,
 				210CBA1CD0F2559FBC78D82D /* LICENSE */,
@@ -113,12 +117,12 @@
 		B7394863229F194000C47603 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B7394862229F194000C47603 /* Landmarks.app */,
+				B7394862229F194000C47603 /* Linkbus.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B7394864229F194000C47603 /* Landmarks */ = {
+		B7394864229F194000C47603 /* Linkbus */ = {
 			isa = PBXGroup;
 			children = (
 				B739487E229F282200C47603 /* Models */,
@@ -135,7 +139,7 @@
 				B7394873229F194200C47603 /* Info.plist */,
 				B739486D229F194200C47603 /* Preview Content */,
 			);
-			path = Landmarks;
+			path = Linkbus;
 			sourceTree = "<group>";
 		};
 		B739486D229F194200C47603 /* Preview Content */ = {
@@ -181,6 +185,7 @@
 				B739488C229F292E00C47603 /* twinlake.jpg */,
 				B7394889229F292E00C47603 /* umbagog.jpg */,
 				B7394885229F292D00C47603 /* yukon_charleyrivers.jpg */,
+				4CB7628B24F1F028001FA9CB /* routeData.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -188,9 +193,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B7394861229F194000C47603 /* Landmarks */ = {
+		B7394861229F194000C47603 /* Linkbus */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B7394876229F194200C47603 /* Build configuration list for PBXNativeTarget "Landmarks" */;
+			buildConfigurationList = B7394876229F194200C47603 /* Build configuration list for PBXNativeTarget "Linkbus" */;
 			buildPhases = (
 				B739485E229F194000C47603 /* Sources */,
 				B739485F229F194000C47603 /* Frameworks */,
@@ -200,9 +205,9 @@
 			);
 			dependencies = (
 			);
-			name = Landmarks;
+			name = Linkbus;
 			productName = Landmarks;
-			productReference = B7394862229F194000C47603 /* Landmarks.app */;
+			productReference = B7394862229F194000C47603 /* Linkbus.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -220,7 +225,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B739485D229F194000C47603 /* Build configuration list for PBXProject "BuildingListsAndNavigation" */;
+			buildConfigurationList = B739485D229F194000C47603 /* Build configuration list for PBXProject "Linkbus" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -233,7 +238,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B7394861229F194000C47603 /* Landmarks */,
+				B7394861229F194000C47603 /* Linkbus */,
 			);
 		};
 /* End PBXProject section */
@@ -254,6 +259,7 @@
 				B7394899229F292F00C47603 /* twinlake.jpg in Resources */,
 				B7394896229F292F00C47603 /* umbagog.jpg in Resources */,
 				B739489D229F292F00C47603 /* chilkoottrail.jpg in Resources */,
+				4C1B431724F1EBCC00BC1EEA /* Default-568h@2x.png in Resources */,
 				B739489C229F292F00C47603 /* chincoteague.jpg in Resources */,
 				B739489B229F292F00C47603 /* landmarkData.json in Resources */,
 				B7394893229F292F00C47603 /* icybay.jpg in Resources */,
@@ -421,16 +427,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Landmarks/Preview\\ Content";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
+				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Landmarks/Info.plist;
+				INFOPLIST_FILE = Linkbus/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.Landmarks${SAMPLE_CODE_DISAMBIGUATOR}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
+				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -443,16 +449,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Landmarks/Preview\\ Content";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
+				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Landmarks/Info.plist;
+				INFOPLIST_FILE = Linkbus/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.Landmarks${SAMPLE_CODE_DISAMBIGUATOR}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
+				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -462,7 +468,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B739485D229F194000C47603 /* Build configuration list for PBXProject "BuildingListsAndNavigation" */ = {
+		B739485D229F194000C47603 /* Build configuration list for PBXProject "Linkbus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B7394874229F194200C47603 /* Debug */,
@@ -471,7 +477,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B7394876229F194200C47603 /* Build configuration list for PBXNativeTarget "Landmarks" */ = {
+		B7394876229F194200C47603 /* Build configuration list for PBXNativeTarget "Linkbus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B7394877229F194200C47603 /* Debug */,

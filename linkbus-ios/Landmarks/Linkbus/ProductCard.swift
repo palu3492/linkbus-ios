@@ -18,7 +18,9 @@ struct ProductCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
-    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
+    var landmark: Landmark
+    
+    init(landmark:Landmark, title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
         
         self.title = title
         self.description = description
@@ -28,13 +30,15 @@ struct ProductCard: View {
         self.ingredientCount = ingredientCount
         self.category = category
         self.buttonHandler = buttonHandler
+        self.landmark = landmark
     }
     
     var body: some View {
+        
         VStack(alignment: .leading, spacing: 0) {
             
             // Main Featured Image - Upper Half of Card
-            MapView(coordinate: )
+            MapView(coordinate: landmark.locationCoordinate)
                 .scaledToFill()
                 .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 300, alignment: .center)
                 .clipped()
@@ -132,7 +136,7 @@ struct ProductCard: View {
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 12, category: "5 minutes", buttonHandler: nil)
+        ProductCard(landmark: landmarkData[0], title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 12, category: "5 minutes", buttonHandler: nil)
     }
 }
 
