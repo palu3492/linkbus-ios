@@ -18,9 +18,9 @@ struct ProductCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
-    var landmark: Landmark
+    //var landmark: Landmark
     
-    init(landmark:Landmark, title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
+    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
         
         self.title = title
         self.description = description
@@ -30,7 +30,6 @@ struct ProductCard: View {
         self.ingredientCount = ingredientCount
         self.category = category
         self.buttonHandler = buttonHandler
-        self.landmark = landmark
     }
     
     var body: some View {
@@ -42,6 +41,7 @@ struct ProductCard: View {
                 .scaledToFill()
                 .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 300, alignment: .center)
                 .clipped()
+
                 .overlay(
                     Text("Face Mask Required")
                         .fontWeight(Font.Weight.medium)
@@ -87,7 +87,7 @@ struct ProductCard: View {
                     }
                     
                     HStack(alignment: .center, spacing: 0) {
-                        Text("Face")
+                        Text("")
                             .foregroundColor(Color.gray)
                         Text("\(self.ingredientCount)")
                     }.font(Font.custom("HelveticaNeue", size: 14))
@@ -95,7 +95,7 @@ struct ProductCard: View {
                 }
 
                 
-                // 'Based on:' Horizontal Category Stack
+                // 'last bus, night? last bus class? minutes or time? multiple blue boxes for each time?
                 HStack(alignment: .center, spacing: 6) {
                     
                     if category != nil {
@@ -115,7 +115,7 @@ struct ProductCard: View {
                     }
                     
                     HStack(alignment: .center, spacing: 0) {
-                        Text("Face")
+                        Text("")
                             .foregroundColor(Color.gray)
                         Text("\(self.ingredientCount)")
                     }.font(Font.custom("HelveticaNeue", size: 14))
@@ -136,7 +136,7 @@ struct ProductCard: View {
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard(landmark: landmarkData[0], title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 12, category: "5 minutes", buttonHandler: nil)
+        ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
     }
 }
 

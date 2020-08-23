@@ -64,7 +64,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let jsonUrlString = "https://apps.csbsju.edu/busschedule/api"
+        let jsonUrlString = "https://apps.csbsju.edu/busschedule/api/?date=2/1/2020"
         guard let url = URL(string: jsonUrlString) else {return}
         URLSession.shared.dataTask(with: url) { (data, response, err) in
             //check error
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
                 var alcuinToGorecki: AlcuinToGorecki = AlcuinToGorecki(data: [RouteData]())
                 
                 // === GORECKI TO SEXTION ===
-                if (json.routes![0] != nil) {
+                if !(json.routes!.isEmpty) {
                     var iterator = json.routes![0].times!.makeIterator()
                     while let time = iterator.next() {
                         if (time.start != "") {

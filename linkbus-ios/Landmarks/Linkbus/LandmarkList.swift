@@ -10,9 +10,9 @@ import SwiftUI
 struct LandmarkList: View {
     var body: some View {
         NavigationView {
-            List(landmarkData) { landmark in
-                NavigationLink(destination: LandmarkDetail(landmark: landmark)) {
-                    LandmarkRow(landmark: landmark)
+            List(routeData) { route in
+                NavigationLink(destination: LandmarkDetail(route: route)) {
+                    ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
                 }
             }
             .navigationBarTitle(Text("Landmarks"))
@@ -22,7 +22,7 @@ struct LandmarkList: View {
 
 struct LandmarkList_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(["iPhone SE", "iPhone XS Max"], id: \.self) { deviceName in
+        ForEach(["iPhone XS Max"], id: \.self) { deviceName in
             LandmarkList()
                 .previewDevice(PreviewDevice(rawValue: deviceName))
                 .previewDisplayName(deviceName)
