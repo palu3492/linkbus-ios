@@ -18,7 +18,7 @@ struct ProductCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
-    var route: Route!
+    var route: lbRoute!
     
     //var landmark: Landmark
     

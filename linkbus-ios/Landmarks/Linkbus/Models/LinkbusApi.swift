@@ -10,7 +10,7 @@
 
 import SwiftUI
 
-struct ApiRouteDetail: Codable {
+struct RouteDetail: Codable {
     let title, category, city, state: String
     let id: Int
     let coordinates: Coordinates

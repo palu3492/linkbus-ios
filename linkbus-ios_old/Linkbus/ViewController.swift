@@ -64,7 +64,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let jsonUrlString = "https://apps.csbsju.edu/busschedule/api/?date=2/1/2020"
+        let jsonUrlString = "https://apps.csbsju.edu/busschedule/api/?date=11/1/2019"
         guard let url = URL(string: jsonUrlString) else {return}
         URLSession.shared.dataTask(with: url) { (data, response, err) in
             //check error
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
             
             do {
                 let json = try JSONDecoder().decode(BusSchedule.self, from: data)
-                //print(json.routes[1].times[1].end)
+                print(json.routes![1].times![1].end)
                 
                 var goreckiToSexton: GoreckiToSexton = GoreckiToSexton(data: [RouteData]())
                 var sextonToGorecki: SextonToGorecki = SextonToGorecki(data: [RouteData]())

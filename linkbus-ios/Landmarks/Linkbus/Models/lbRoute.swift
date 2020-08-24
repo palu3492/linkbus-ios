@@ -9,10 +9,10 @@
 import SwiftUI
 import CoreLocation
 
-struct Route: Identifiable, Decodable {
+struct lbRoute: Identifiable, Decodable {
     var id: Int
     var title: String
-    var times: [Time]
+    var times: [lbTime]
     var category, city, state: String
     var coordinates: Coordinates
     

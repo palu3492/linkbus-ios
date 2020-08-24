@@ -6,19 +6,19 @@ Structs for CSB/SJU API call
 
 import SwiftUI
 
-struct ApiBusSchedule: Decodable {
+struct BusSchedule: Decodable {
     let msg: String?
     let attention: String?
-    let routes: [ApiRoute]?
+    let routes: [Route]?
 }
 
-struct ApiRoute: Decodable, Identifiable {
+struct Route: Identifiable, Decodable {
     let id: Int?
     let title: String?
-    let times: [ApiTime]?
+    let times: [Time]?
 }
 
-struct ApiTime: Decodable {
+struct Time: Decodable {
     let start: String?
     let end: String?
     let lbc: BooleanLiteralType?
