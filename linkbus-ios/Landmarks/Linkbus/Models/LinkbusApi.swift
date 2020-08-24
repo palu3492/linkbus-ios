@@ -10,8 +10,8 @@
 
 import SwiftUI
 
-struct LinkbusApi: Codable {
-    let name, category, city, state: String
+struct ApiRouteDetail: Codable {
+    let title, category, city, state: String
     let id: Int
     let coordinates: Coordinates
 }

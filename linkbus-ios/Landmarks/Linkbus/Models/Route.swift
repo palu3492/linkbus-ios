@@ -9,11 +9,12 @@
 import SwiftUI
 import CoreLocation
 
-struct Route: Identifiable {
-    let id: Int?
-    let title: String?
-    let times: [Time]?
-    fileprivate var coordinates: Coordinates
+struct Route: Identifiable, Decodable {
+    var id: Int
+    var title: String
+    var times: [Time]
+    var category, city, state: String
+    var coordinates: Coordinates
     
     var locationCoordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(

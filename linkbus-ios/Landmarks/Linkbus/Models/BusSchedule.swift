@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct BusSchedule: Decodable {
-    let msg: String?
-    let attention: String?
-    let routes: [Route]?
+    var msg: String
+    var attention: String
+    var routes: [Route]
 }

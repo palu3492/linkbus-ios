@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct Time {
-    let startDate: Date
-    let endDate: Date
-    let timeString: String
-    let hasStart: BooleanLiteralType
-    let lastBusClass: BooleanLiteralType
-    let ss: BooleanLiteralType
+struct Time: Decodable {
+    var startDate: Date
+    var endDate: Date
+    var timeString: String
+    var hasStart: BooleanLiteralType
+    var lastBusClass: BooleanLiteralType
+    var ss: BooleanLiteralType
 }

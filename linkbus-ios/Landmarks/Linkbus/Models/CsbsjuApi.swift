@@ -9,13 +9,13 @@ import SwiftUI
 struct ApiBusSchedule: Decodable {
     let msg: String?
     let attention: String?
-    let routes: [Route]?
+    let routes: [ApiRoute]?
 }
 
 struct ApiRoute: Decodable, Identifiable {
     let id: Int?
     let title: String?
-    let times: [Time]?
+    let times: [ApiTime]?
 }
 
 struct ApiTime: Decodable {

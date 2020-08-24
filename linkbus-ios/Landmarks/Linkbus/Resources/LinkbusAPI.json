@@ -1,6 +1,6 @@
 [
     {
-        "name": "Gorecki to Sexton",
+        "title": "Gorecki to Sexton",
         "category": "CSB",
         "city": "Saint Joseph",
         "state": "Minnesota",
@@ -11,7 +11,7 @@
         }
     },
     {
-        "name": "Sexton to Gorecki",
+        "title": "Sexton to Gorecki",
         "category": "SJU",
         "city": "Collegeville",
         "state": "Minnesota",
@@ -22,7 +22,7 @@
         }
     },
     {
-        "name": "CSB East to Gorecki/Sexton",
+        "title": "CSB East to Gorecki/Sexton",
         "category": "CSB",
         "city": "Saint Joseph",
         "state": "Minnesota",
@@ -33,7 +33,7 @@
         }
     },
     {
-        "name": "Gorecki to Crossroads",
+        "title": "Gorecki to Crossroads",
         "category": "CSB",
         "city": "Saint Joseph",
         "state": "MN",
@@ -44,7 +44,7 @@
         }
     },
     {
-        "name": "Leave Crossroads",
+        "title": "Leave Crossroads",
         "category": "OC",
         "city": "Saint Cloud",
         "state": "Minnesota",
@@ -55,7 +55,7 @@
         }
     },
     {
-        "name": "Leave Cash Wise",
+        "title": "Leave Cash Wise",
         "category": "OC",
         "city": "Saint Cloud",
         "state": "Minnesota",

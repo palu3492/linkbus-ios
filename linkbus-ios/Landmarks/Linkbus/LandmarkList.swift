@@ -6,18 +6,16 @@ A view showing a list of landmarks.
 */
 
 import SwiftUI
+import Foundation
+import Combine
 
 struct LandmarkList: View {
+    @ObservedObject var routeController = RouteController()
     var body: some View {
         NavigationView {
-            List(routeData) { route in
+            List(routeController.busSchedule.routes) { route in
                 NavigationLink(destination: LandmarkDetail(route: route)) {
-                    ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
-                }
-                .onAppear {
-                    let networkController = NetworkController()
-                    networkController.loadLinkbusApi(completionHandler: <#(ApiBusSchedule) -> Void#>)
-                    networkController.loadCsbsjuApi(completionHandler: <#(ApiBusSchedule) -> Void#>)
+                    ProductCard(title: route.title, description: route.title, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
                 }
             }
             .navigationBarTitle(Text("Landmarks"))

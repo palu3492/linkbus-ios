@@ -18,6 +18,8 @@ struct ProductCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
+    var route: Route!
+    
     //var landmark: Landmark
     
     init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
@@ -37,7 +39,7 @@ struct ProductCard: View {
         VStack(alignment: .leading, spacing: 0) {
             
             // Main Featured Image - Upper Half of Card
-            MapView(coordinate: landmark.locationCoordinate)
+            MapView(coordinate: route.locationCoordinate)
                 .scaledToFill()
                 .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 300, alignment: .center)
                 .clipped()

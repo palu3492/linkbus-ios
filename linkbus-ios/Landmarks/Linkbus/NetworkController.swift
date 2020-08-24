@@ -11,7 +11,7 @@ import SwiftUI
 class NetworkController: ObservableObject {
     @Published var dataHasLoaded = false
     
-    let csbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date=2/1/2020"
+    let csbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date=2/1/2020/"
     let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/linkbus-ios/Landmarks/Linkbus/Resources/LinkbusAPI.json"
 }
 
@@ -39,7 +39,7 @@ extension NetworkController {
     }
     
     
-    func loadLinkbusApi(completionHandler: @escaping (ApiBusSchedule) -> Void) {
+    func loadLinkbusApi(completionHandler: @escaping (ApiRouteDetail) -> Void) {
         let url = URL(string: LinkbusApiUrl)!
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
@@ -54,8 +54,8 @@ extension NetworkController {
             }
             
             if let data = data,
-                let apiBusSchedule = try? JSONDecoder().decode(ApiBusSchedule.self, from: data) {
-                completionHandler(apiBusSchedule)
+                let apiRouteDetail = try? JSONDecoder().decode(ApiRouteDetail.self, from: data) {
+                completionHandler(apiRouteDetail)
             }
         })
         task.resume()

@@ -40,10 +40,10 @@ struct LandmarkDetail: View {
     }
     
     
-    struct LandmarkDetail_Previews: PreviewProvider {
-        static var previews: some View {
-            LandmarkDetail(route: routeData[0])
-        }
-    }
+//    struct LandmarkDetail_Previews: PreviewProvider {
+//        static var previews: some View {
+//            LandmarkDetail(route: routes[0])
+//        }
+//    }
 }
 
