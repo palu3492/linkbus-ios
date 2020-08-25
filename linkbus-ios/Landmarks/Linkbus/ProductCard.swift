@@ -44,7 +44,7 @@ struct ProductCard: View {
                 .scaledToFill()
                 .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 300, alignment: .center)
                 .clipped()
-
+                
                 .overlay(
                     Text("Face Mask Required")
                         .fontWeight(Font.Weight.medium)
@@ -79,10 +79,10 @@ struct ProductCard: View {
                             .fontWeight(Font.Weight.heavy)
                         HStack {
                             Text(category!)
-                            .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                                .font(Font.custom("HelveticaNeue-Medium", size: 12))
                                 .padding([.leading, .trailing], 10)
                                 .padding([.top, .bottom], 5)
-                            .foregroundColor(Color.white)
+                                .foregroundColor(Color.white)
                         }
                         .background(Color(red: 43/255, green: 175/255, blue: 187/255))
                         .cornerRadius(7)
@@ -95,91 +95,78 @@ struct ProductCard: View {
                         Text("\(self.ingredientCount)")
                     }.font(Font.custom("HelveticaNeue", size: 14))
                     
+                    
                 }
-
                 
-                // 'last bus, night? last bus class? minutes or time? multiple blue boxes for each time?
-                HStack(alignment: .center, spacing: 6) {
-                    //ForEach(route.times, id: \.self) { time in
-
-                        HStack {
-                            Text("time.timeString")
-                            .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                                .padding([.leading, .trailing], 10)
-                                .padding([.top, .bottom], 5)
-                            .foregroundColor(Color.white)
-                            
-                        }
-                        .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                        .cornerRadius(7)
-                    HStack {
-                        Text("time.timeString")
-                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                            .padding([.leading, .trailing], 10)
-                            .padding([.top, .bottom], 5)
-                        .foregroundColor(Color.white)
-                        
+                VStack {
+                    GeometryReader { geometry in
+                        self.generateContent(in: geometry)
                     }
-                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                    .cornerRadius(7)
-                    HStack {
-                        Text("time.timeString")
-                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                            .padding([.leading, .trailing], 10)
-                            .padding([.top, .bottom], 5)
-                        .foregroundColor(Color.white)
-                        
-                    }
-                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                    .cornerRadius(7)
-                    HStack {
-                        Text("time.timeString")
-                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                            .padding([.leading, .trailing], 10)
-                            .padding([.top, .bottom], 5)
-                        .foregroundColor(Color.white)
-                        
-                    }
-                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                    .cornerRadius(7)
-                    HStack {
-                        Text("time.timeString")
-                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                            .padding([.leading, .trailing], 10)
-                            .padding([.top, .bottom], 5)
-                        .foregroundColor(Color.white)
-                        
-                    }
-                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                    .cornerRadius(7)
-                    HStack {
-                        Text("time.timeString")
-                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
-                            .padding([.leading, .trailing], 10)
-                            .padding([.top, .bottom], 5)
-                        .foregroundColor(Color.white)
-                        
-                    }
-                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                    .cornerRadius(7)
-                        
-                        
-                    //}
-                    
-                    
                 }
                 .padding([.top, .bottom], 8)
-               
+            
                 
             }
             .padding(12)
             
+            
+            
         }
+            
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+        
     }
+    
+    
+    
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+        
+        return ZStack(alignment: .topLeading) {
+            ForEach(route.times, id: \.self) { time in
+                self.item(for: time.timeString)
+                    .padding([.horizontal, .vertical], 4)
+                    .alignmentGuide(.leading, computeValue: { d in
+                        if (abs(width - d.width) > g.size.width)
+                        {
+                            width = 0
+                            height -= d.height
+                        }
+                        let result = width
+                        if time == self.route.times.last! {
+                            width = 0 //last item
+                        } else {
+                            width -= d.width
+                        }
+                        return result
+                    })
+                    .alignmentGuide(.top, computeValue: {d in
+                        let result = height
+                        if time == self.route.times.last! {
+                            height = 0 // last item
+                        }
+                        return result
+                    })
+            }
+        }
+    }
+    
+    func item(for text: String) -> some View {
+        Text(text)
+            .font(Font.custom("HelveticaNeue-Medium", size: 12))
+            .padding([.leading, .trailing], 10)
+            .padding([.top, .bottom], 5)
+            .foregroundColor(Color.white)
+            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+            .cornerRadius(7)
+    }
+    
 }
+
+
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
@@ -192,35 +179,35 @@ struct RoundedCorners: Shape {
     var tr: CGFloat = 0.0
     var bl: CGFloat = 0.0
     var br: CGFloat = 0.0
-
+    
     func path(in rect: CGRect) -> Path {
         var path = Path()
-
+        
         let w = rect.size.width
         let h = rect.size.height
-
+        
         let tr = min(min(self.tr, h/2), w/2)
         let tl = min(min(self.tl, h/2), w/2)
         let bl = min(min(self.bl, h/2), w/2)
         let br = min(min(self.br, h/2), w/2)
-
+        
         path.move(to: CGPoint(x: w / 2.0, y: 0))
         path.addLine(to: CGPoint(x: w - tr, y: 0))
         path.addArc(center: CGPoint(x: w - tr, y: tr), radius: tr,
                     startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 0), clockwise: false)
-
+        
         path.addLine(to: CGPoint(x: w, y: h - br))
         path.addArc(center: CGPoint(x: w - br, y: h - br), radius: br,
                     startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 90), clockwise: false)
-
+        
         path.addLine(to: CGPoint(x: bl, y: h))
         path.addArc(center: CGPoint(x: bl, y: h - bl), radius: bl,
                     startAngle: Angle(degrees: 90), endAngle: Angle(degrees: 180), clockwise: false)
-
+        
         path.addLine(to: CGPoint(x: 0, y: tl))
         path.addArc(center: CGPoint(x: tl, y: tl), radius: tl,
                     startAngle: Angle(degrees: 180), endAngle: Angle(degrees: 270), clockwise: false)
-
+        
         return path
     }
 }
