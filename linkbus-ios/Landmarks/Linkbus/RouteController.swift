@@ -124,8 +124,8 @@ extension RouteController {
                 tempRoute.title = apiRoute.title!
                 var tempTimes = [LbTime]()
                 
+                var tempId = 0
                 for apiTime in apiRoute.times! {
-                    
                     // process new time structure
                     if (apiTime.start != "") {
                         var isoDate = apiTime.start
@@ -143,7 +143,8 @@ extension RouteController {
                         
                         let timeString: String = (textFormatter.string(from: startDate) + " - " + (textFormatter.string(from: endDate)))
                         
-                        tempTimes.append(LbTime(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
+                        tempId+=1
+                        tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
                     }
                     else {
                         let isoDate = apiTime.end
@@ -159,16 +160,18 @@ extension RouteController {
                         
                         let timeString: String = (textFormatter.string(from: endDate))
                         
-                        tempTimes.append(LbTime(startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
+                        tempId+=1
+                        tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
                     }
                 }
                 tempRoute.times = tempTimes
                 
                 // TODO: add in Linkbus API route data
-                tempRoute.location = ""
-                tempRoute.city = ""
-                tempRoute.state = ""
-                tempRoute.coordinates = Coordinates(longitude: 0, latitude: 0)
+                let i = apiRouteDetail.firstIndex(where: {$0.id == tempRoute.id})
+                tempRoute.location = apiRouteDetail[i!].location
+                tempRoute.city = apiRouteDetail[i!].city
+                tempRoute.state = apiRouteDetail[i!].state
+                tempRoute.coordinates = apiRouteDetail[i!].coordinates
                 
                 lbBusSchedule.routes.append(tempRoute)
             }

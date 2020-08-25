@@ -100,28 +100,72 @@ struct ProductCard: View {
                 
                 // 'last bus, night? last bus class? minutes or time? multiple blue boxes for each time?
                 HStack(alignment: .center, spacing: 6) {
-                    
-                    if category != nil {
-                        Text("Last bus:")
-                            .font(Font.system(size: 13))
-                            .fontWeight(Font.Weight.heavy)
+                    //ForEach(route.times, id: \.self) { time in
+
                         HStack {
-                            Text(category!)
+                            Text("time.timeString")
                             .font(Font.custom("HelveticaNeue-Medium", size: 12))
                                 .padding([.leading, .trailing], 10)
                                 .padding([.top, .bottom], 5)
                             .foregroundColor(Color.white)
+                            
                         }
                         .background(Color(red: 43/255, green: 175/255, blue: 187/255))
                         .cornerRadius(7)
-                        Spacer()
+                    HStack {
+                        Text("time.timeString")
+                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                            .padding([.leading, .trailing], 10)
+                            .padding([.top, .bottom], 5)
+                        .foregroundColor(Color.white)
+                        
                     }
+                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    .cornerRadius(7)
+                    HStack {
+                        Text("time.timeString")
+                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                            .padding([.leading, .trailing], 10)
+                            .padding([.top, .bottom], 5)
+                        .foregroundColor(Color.white)
+                        
+                    }
+                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    .cornerRadius(7)
+                    HStack {
+                        Text("time.timeString")
+                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                            .padding([.leading, .trailing], 10)
+                            .padding([.top, .bottom], 5)
+                        .foregroundColor(Color.white)
+                        
+                    }
+                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    .cornerRadius(7)
+                    HStack {
+                        Text("time.timeString")
+                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                            .padding([.leading, .trailing], 10)
+                            .padding([.top, .bottom], 5)
+                        .foregroundColor(Color.white)
+                        
+                    }
+                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    .cornerRadius(7)
+                    HStack {
+                        Text("time.timeString")
+                        .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                            .padding([.leading, .trailing], 10)
+                            .padding([.top, .bottom], 5)
+                        .foregroundColor(Color.white)
+                        
+                    }
+                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    .cornerRadius(7)
+                        
+                        
+                    //}
                     
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("")
-                            .foregroundColor(Color.gray)
-                        Text("\(self.ingredientCount)")
-                    }.font(Font.custom("HelveticaNeue", size: 14))
                     
                 }
                 .padding([.top, .bottom], 8)
