@@ -13,14 +13,19 @@ struct LandmarkList: View {
     @ObservedObject var routeController = RouteController()
     var body: some View {
         NavigationView {
-            List(routeController.apiBusSchedule.routes ?? []) { route in
-                NavigationLink(destination: LandmarkDetail(route: route)) {
-                    ProductCard(title: route.title!, description: route.title!, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
+            List(routeController.lbBusSchedule.routes) { route in
+                ProductCard(title: route.title, description: route.location, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                 }
+//            List(routeController.lbBusSchedule.routes) { route in
+//                VStack (alignment: .leading) {
+//                    Text(route.title)
+//                        .font(.system(size: 11))
+//                        .foregroundColor(Color.gray)
+//                }
+//            }
             }
         }
     }
-}
 //    var body: some View {
 
 ////                        .onAppear() {

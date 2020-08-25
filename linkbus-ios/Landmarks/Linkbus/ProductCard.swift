@@ -18,11 +18,11 @@ struct ProductCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
-    var route: lbRoute!
+    var route: LbRoute!
     
     //var landmark: Landmark
     
-    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, buttonHandler: (()->())?) {
+    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, route:LbRoute, buttonHandler: (()->())?) {
         
         self.title = title
         self.description = description
@@ -32,6 +32,7 @@ struct ProductCard: View {
         self.ingredientCount = ingredientCount
         self.category = category
         self.buttonHandler = buttonHandler
+        self.route = route
     }
     
     var body: some View {
@@ -138,7 +139,7 @@ struct ProductCard: View {
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", buttonHandler: nil)
+        ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), location: "Test", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
     }
 }
 

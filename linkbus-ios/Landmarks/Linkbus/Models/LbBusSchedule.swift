@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct lbBusSchedule: Decodable {
+struct LbBusSchedule: Decodable {
     var msg: String
     var attention: String
-    var routes: [lbRoute]
+    var routes: [LbRoute]
 }

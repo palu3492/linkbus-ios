@@ -10,12 +10,12 @@
 
 import SwiftUI
 
-struct RouteDetail: Codable {
-    let title, category, city, state: String
+struct RouteDetail: Decodable {
+    let title, location, city, state: String
     let id: Int
     let coordinates: Coordinates
 }
 
-struct Coordinates: Codable {
+struct Coordinates: Decodable {
     let longitude, latitude: Double
 }

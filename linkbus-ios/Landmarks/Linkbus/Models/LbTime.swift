@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct lbTime: Decodable {
+struct LbTime: Decodable {
     var startDate: Date
     var endDate: Date
     var timeString: String
