@@ -142,7 +142,7 @@ struct RouteSheet: View {
     
     private func item(for text: String) -> some View {
         Text(text)
-            .font(Font.custom("HelveticaNeue-Medium", size: 12))
+            .font(Font.custom("SanFrancisco-medium", size: 12))
             .padding([.leading, .trailing], 10)
             .padding([.top, .bottom], 5)
             .foregroundColor(Color.white)

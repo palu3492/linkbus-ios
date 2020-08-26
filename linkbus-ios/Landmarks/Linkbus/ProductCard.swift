@@ -48,7 +48,7 @@ struct ProductCard: View {
             // Main Featured Image - Upper Half of Card
             MapView(coordinate: route.locationCoordinate)
                 .scaledToFill()
-                .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 300, alignment: .center)
+                .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 250, alignment: .center)
                 .clipped()
                 
                 .overlay(
