@@ -93,10 +93,13 @@ struct RouteSheet: View {
                 
                 
                 // route times
-                VStack {
-                    GeometryReader { geometry in
-                        self.generateContent(in: geometry)
+                HStack {
+                    VStack {
+                        GeometryReader { geometry in
+                            self.generateContent(in: geometry)
+                        }
                     }
+                    .padding(.leading)
                 }
                 .padding([.bottom], 5)
             }

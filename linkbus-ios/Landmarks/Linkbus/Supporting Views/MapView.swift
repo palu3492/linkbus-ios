@@ -19,7 +19,7 @@ struct MapView: UIViewRepresentable {
         let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
         let region = MKCoordinateRegion(center: coordinate, span: span)
         uiView.setRegion(region, animated: true)
-        uiView.mapType = MKMapType.hybridFlyover
+        uiView.mapType = MKMapType.satelliteFlyover
         uiView.isZoomEnabled = false
         uiView.isScrollEnabled = false
         uiView.isUserInteractionEnabled = false
