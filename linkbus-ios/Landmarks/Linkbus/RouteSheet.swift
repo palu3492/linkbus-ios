@@ -29,6 +29,13 @@ struct RouteSheet: View {
                 .padding([.top, .bottom], 5)
                 
                 HStack(alignment: .firstTextBaseline) {
+                    Image(systemName: "ellipsis")
+                        .rotationEffect(.degrees(90.0))
+                }
+                .padding([.leading, .trailing], 10)
+                .padding([.top, .bottom], 5)
+                
+                HStack(alignment: .firstTextBaseline) {
                     Image(systemName: "mappin.circle.fill")
                         .font(.title)
                     Text(route.destination)
