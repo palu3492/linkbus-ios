@@ -119,7 +119,7 @@ extension RouteController {
         
         if !(apiBusSchedule.routes!.isEmpty) {
             for apiRoute in apiBusSchedule.routes! {
-                var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), location: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
+                var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
                 tempRoute.id = apiRoute.id!
                 tempRoute.title = apiRoute.title!
                 var tempTimes = [LbTime]()

@@ -14,7 +14,7 @@ struct LandmarkList: View {
     var body: some View {
         NavigationView {
             List(routeController.lbBusSchedule.routes) { route in
-                ProductCard(title: route.title, description: route.location, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                 }
             .navigationBarTitle("Good morning.")
 //            List(routeController.lbBusSchedule.routes) { route in

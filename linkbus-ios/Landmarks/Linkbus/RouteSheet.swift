@@ -19,10 +19,25 @@ struct RouteSheet: View {
         NavigationView {
             VStack(alignment: .leading) {
                 HStack(alignment: .firstTextBaseline) {
-                Text("Gorecki")
-                    .font(.title)
-                Spacer()
+                    Image(systemName: "smallcircle.fill.circle") //stop.circle.fill looks ok
+                        .font(.title)
+                    Text(route.origin)
+                        .font(.title)
+                    Spacer()
                 }
+                .padding([.leading, .trailing], 10)
+                .padding([.top, .bottom], 5)
+                
+                HStack(alignment: .firstTextBaseline) {
+                    Image(systemName: "mappin.circle.fill")
+                        .font(.title)
+                    Text(route.destination)
+                        .font(.title)
+                    Spacer()
+                }
+                .padding([.leading, .trailing], 10)
+                .padding([.top, .bottom], 5)
+                
                 Spacer()
             }
             
@@ -32,6 +47,6 @@ struct RouteSheet: View {
 
 struct RouteSheet_Previews: PreviewProvider {
     static var previews: some View {
-        RouteSheet(route: LbRoute(id: 0, title: "Gorecki to Sexton", times: [LbTime](), location: "Test", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)))
+        RouteSheet(route: LbRoute(id: 0, title: "Gorecki to Sexton", times: [LbTime](), origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)))
     }
 }
