@@ -20,6 +20,9 @@ struct MapView: UIViewRepresentable {
         let region = MKCoordinateRegion(center: coordinate, span: span)
         uiView.setRegion(region, animated: true)
         uiView.mapType = MKMapType.standard
+        uiView.isZoomEnabled = false
+        uiView.isScrollEnabled = false
+        uiView.isUserInteractionEnabled = false
     }
 }
 

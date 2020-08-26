@@ -103,12 +103,6 @@ struct ProductCard: View {
                     
                     
                 }
-                
-//                VStack {
-//                    GeometryReader { geometry in
-//                        self.generateContent(in: geometry)
-//                    }
-//                }
                 .frame(maxHeight: totalHeight) // << variant for VStack
                 .padding([.top, .bottom], 8)
                 
@@ -119,8 +113,9 @@ struct ProductCard: View {
             
             
         }
-            
-        .background(Color.white)
+        
+            //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
+        .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
         .onTapGesture {
@@ -131,61 +126,6 @@ struct ProductCard: View {
         
     }
     
-    
-    
-    private func generateContent(in g: GeometryProxy) -> some View {
-        var width = CGFloat.zero
-        var height = CGFloat.zero
-        
-        return ZStack(alignment: .topLeading) {
-            ForEach(route.times, id: \.self) { time in
-                self.item(for: time.timeString)
-                    .padding([.horizontal, .vertical], 4)
-                    .alignmentGuide(.leading, computeValue: { d in
-                        if (abs(width - d.width) > g.size.width)
-                        {
-                            width = 0
-                            height -= d.height
-                        }
-                        let result = width
-                        if time == self.route.times.last! {
-                            width = 0 //last item
-                        } else {
-                            width -= d.width
-                        }
-                        return result
-                    })
-                    .alignmentGuide(.top, computeValue: {d in
-                        let result = height
-                        if time == self.route.times.last! {
-                            height = 0 // last item
-                        }
-                        return result
-                    })
-            }
-        }.background(viewHeightReader($totalHeight))
-    }
-    
-    private func item(for text: String) -> some View {
-        Text(text)
-            .font(Font.custom("HelveticaNeue-Medium", size: 12))
-            .padding([.leading, .trailing], 10)
-            .padding([.top, .bottom], 5)
-            .foregroundColor(Color.white)
-            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-            .cornerRadius(7)
-    }
-    
-    private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
-        return GeometryReader { geometry -> Color in
-            let rect = geometry.frame(in: .local)
-            DispatchQueue.main.async {
-                binding.wrappedValue = rect.size.height
-            }
-            return .clear
-        }
-    }
-}
 
 
 
@@ -231,4 +171,5 @@ struct RoundedCorners: Shape {
         
         return path
     }
+}
 }
