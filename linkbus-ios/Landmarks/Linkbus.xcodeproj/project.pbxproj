@@ -16,6 +16,7 @@
 		4CB7629724F30918001FA9CB /* LbTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629624F30918001FA9CB /* LbTime.swift */; };
 		4CB7629924F30B09001FA9CB /* LbBusSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629824F30B09001FA9CB /* LbBusSchedule.swift */; };
 		4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */; };
+		4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */; };
 		B7394866229F194000C47603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394865229F194000C47603 /* AppDelegate.swift */; };
 		B7394868229F194000C47603 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394867229F194000C47603 /* SceneDelegate.swift */; };
 		B739486C229F194200C47603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B739486B229F194200C47603 /* Assets.xcassets */; };
@@ -52,6 +53,7 @@
 		4CB7629624F30918001FA9CB /* LbTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LbTime.swift; sourceTree = "<group>"; };
 		4CB7629824F30B09001FA9CB /* LbBusSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LbBusSchedule.swift; sourceTree = "<group>"; };
 		4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkbusApi.swift; sourceTree = "<group>"; };
+		4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSheet.swift; sourceTree = "<group>"; };
 		B7394862229F194000C47603 /* Linkbus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkbus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7394865229F194000C47603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B7394867229F194000C47603 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				4CB7629224F2FE9C001FA9CB /* RouteController.swift */,
 				B73948A0229F2E1F00C47603 /* LandmarkList.swift */,
 				4CAECD2C24F1DDBB005F6E87 /* ProductCard.swift */,
+				4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */,
 				B739487D229F1C0100C47603 /* Supporting Views */,
 				B7394883229F291A00C47603 /* Resources */,
 				B739486B229F194200C47603 /* Assets.xcassets */,
@@ -292,6 +295,7 @@
 				4CB7628F24F2F3ED001FA9CB /* CsbsjuApi.swift in Sources */,
 				B739487A229F1B3F00C47603 /* CircleImage.swift in Sources */,
 				4CAECD2D24F1DDBB005F6E87 /* ProductCard.swift in Sources */,
+				4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */,
 				4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */,
 				B739487C229F1B6800C47603 /* MapView.swift in Sources */,
 				B73948A1229F2E1F00C47603 /* LandmarkList.swift in Sources */,

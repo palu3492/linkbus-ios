@@ -11,7 +11,7 @@
 import SwiftUI
 
 struct RouteDetail: Decodable {
-    let title, location, city, state: String
+    let title, origin, originLocation, destination, destinationLocation, city, state: String
     let id: Int
     let coordinates: Coordinates
 }

@@ -168,7 +168,10 @@ extension RouteController {
                 
                 // TODO: add in Linkbus API route data
                 let i = apiRouteDetail.firstIndex(where: {$0.id == tempRoute.id})
-                tempRoute.location = apiRouteDetail[i!].location
+                tempRoute.origin = apiRouteDetail[i!].origin
+                tempRoute.originLocation = apiRouteDetail[i!].originLocation
+                tempRoute.destination = apiRouteDetail[i!].destination
+                tempRoute.destinationLocation = apiRouteDetail[i!].destinationLocation
                 tempRoute.city = apiRouteDetail[i!].city
                 tempRoute.state = apiRouteDetail[i!].state
                 tempRoute.coordinates = apiRouteDetail[i!].coordinates

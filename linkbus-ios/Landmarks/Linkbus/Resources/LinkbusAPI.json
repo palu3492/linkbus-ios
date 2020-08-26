@@ -1,7 +1,10 @@
 [
     {
         "title": "Gorecki to Sexton",
-        "location": "Gorecki Center",
+        "origin": "Gorecki"
+        "originLocation": "Gorecki Center, CSB"
+        "destination": "Sexton"
+        "destinationLocation": "Sexton Commons, SJU"
         "city": "Saint Joseph",
         "state": "Minnesota",
         "id": 1,
@@ -12,7 +15,10 @@
     },
     {
         "title": "Sexton to Gorecki",
-        "location": "Sexton Commons",
+        "origin": "Sexton"
+        "originLocation": "Sexton Commons, SJU"
+        "destination": "Gorecki"
+        "destinationLocation": "Gorecki Center, CSB"
         "city": "Collegeville",
         "state": "Minnesota",
         "id": 2,
@@ -23,7 +29,10 @@
     },
     {
         "title": "CSB East to Gorecki/Sexton",
-        "location": "CSB East",
+        "origin": "CSB East"
+        "originLocation": "CSB East, CSB"
+        "destination": "Gorecki/Sexton"
+        "destinationLocation": "Gorecki or Sexton"
         "city": "Saint Joseph",
         "state": "Minnesota",
         "id": 3,
@@ -34,7 +43,10 @@
     },
     {
         "title": "Gorecki to Crossroads",
-        "location": "Gorecki Center",
+        "origin": "Gorecki"
+        "originLocation": "Gorecki Center, CSB"
+        "destination": "Crossroads"
+        "destinationLocation": "Crossroads Center Shopping Mall"
         "city": "Saint Joseph",
         "state": "MN",
         "id": 6,
@@ -45,7 +57,10 @@
     },
     {
         "title": "Leave Crossroads",
-        "location": "Crossroads Center",
+        "origin": "Crossroads"
+        "originLocation": "Crossroads Center Shopping Mall"
+        "destination": "Gorecki"
+        "destinationLocation": "Gorecki Center, CSB"
         "city": "Saint Cloud",
         "state": "Minnesota",
         "id": 7,
@@ -56,7 +71,10 @@
     },
     {
         "title": "Leave Cash Wise",
-        "location": "Cash Wise",
+        "origin": "Cash Wise"
+        "originLocation": "Cash Wise Foods"
+        "destination": "Gorecki"
+        "destinationLocation": "Gorecki Center, CSB"
         "city": "Saint Cloud",
         "state": "Minnesota",
         "id": 8,

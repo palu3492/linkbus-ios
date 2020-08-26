@@ -13,7 +13,7 @@ struct LbRoute: Identifiable, Decodable {
     var id: Int
     var title: String
     var times: [LbTime]
-    var location, city, state: String
+    var origin, originLocation, destination, destinationLocation, city, state: String
     var coordinates: Coordinates
     
     var locationCoordinate: CLLocationCoordinate2D {

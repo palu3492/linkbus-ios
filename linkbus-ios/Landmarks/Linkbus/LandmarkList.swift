@@ -16,6 +16,7 @@ struct LandmarkList: View {
             List(routeController.lbBusSchedule.routes) { route in
                 ProductCard(title: route.title, description: route.location, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                 }
+            .navigationBarTitle("Good morning.")
 //            List(routeController.lbBusSchedule.routes) { route in
 //                VStack (alignment: .leading) {
 //                    Text(route.title)

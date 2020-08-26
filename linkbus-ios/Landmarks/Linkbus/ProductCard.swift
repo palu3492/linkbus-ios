@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProductCard: View {
     
+    @State var showRouteSheet = false
+    
     var image:Image     // Featured Image
     var price:Double    // USD
     var title:String    // Product Title
@@ -19,6 +21,10 @@ struct ProductCard: View {
     var buttonHandler: (()->())?
     
     var route: LbRoute!
+    
+    @State private var totalHeight
+    //      = CGFloat.zero       // << variant for ScrollView/List
+        = CGFloat.infinity   // << variant for VStack
     
     //var landmark: Landmark
     
@@ -98,13 +104,14 @@ struct ProductCard: View {
                     
                 }
                 
-                VStack {
-                    GeometryReader { geometry in
-                        self.generateContent(in: geometry)
-                    }
-                }
+//                VStack {
+//                    GeometryReader { geometry in
+//                        self.generateContent(in: geometry)
+//                    }
+//                }
+                .frame(maxHeight: totalHeight) // << variant for VStack
                 .padding([.top, .bottom], 8)
-            
+                
                 
             }
             .padding(12)
@@ -116,6 +123,11 @@ struct ProductCard: View {
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+        .onTapGesture {
+            self.showRouteSheet = true
+        }.sheet(isPresented: $showRouteSheet) {
+            RouteSheet(route: self.route)
+        }
         
     }
     
@@ -151,10 +163,10 @@ struct ProductCard: View {
                         return result
                     })
             }
-        }
+        }.background(viewHeightReader($totalHeight))
     }
     
-    func item(for text: String) -> some View {
+    private func item(for text: String) -> some View {
         Text(text)
             .font(Font.custom("HelveticaNeue-Medium", size: 12))
             .padding([.leading, .trailing], 10)
@@ -164,13 +176,22 @@ struct ProductCard: View {
             .cornerRadius(7)
     }
     
+    private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
+        return GeometryReader { geometry -> Color in
+            let rect = geometry.frame(in: .local)
+            DispatchQueue.main.async {
+                binding.wrappedValue = rect.size.height
+            }
+            return .clear
+        }
+    }
 }
 
 
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard(title: "Gorecki to Sexton", description: "College of Saint Benedict", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), location: "Test", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
+        ProductCard(title: "Gorecki to Sexton", description: "Gorecki Center", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), location: "Test", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
     }
 }
 
