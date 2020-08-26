@@ -65,9 +65,11 @@ struct ProductCard: View {
             // Stack bottom half of card
             VStack(alignment: .leading, spacing: 6) {
                 Text(self.title)
+                    .font(.headline)
                     .fontWeight(Font.Weight.heavy)
                 Text(self.description)
-                    .font(Font.custom("HelveticaNeue-Bold", size: 16))
+                    //.font(Font.custom("HelveticaNeue-Bold", size: 16))
+                    .font(.subheadline)
                     .foregroundColor(Color.gray)
                 
                 // Horizontal Line separating details and price
@@ -85,7 +87,7 @@ struct ProductCard: View {
                             .fontWeight(Font.Weight.heavy)
                         HStack {
                             Text(category!)
-                                .font(Font.custom("HelveticaNeue-Medium", size: 12))
+                                .font(Font.custom("SanFrancisco-medium", size: 12))
                                 .padding([.leading, .trailing], 10)
                                 .padding([.top, .bottom], 5)
                                 .foregroundColor(Color.white)

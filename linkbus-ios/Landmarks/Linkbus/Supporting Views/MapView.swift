@@ -18,11 +18,14 @@ struct MapView: UIViewRepresentable {
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
         let region = MKCoordinateRegion(center: coordinate, span: span)
-        uiView.setRegion(region, animated: true)
+        uiView.setRegion(region, animated: false) // set to false to try to fix lag
         uiView.mapType = MKMapType.satelliteFlyover
         uiView.isZoomEnabled = false
         uiView.isScrollEnabled = false
+        uiView.isPitchEnabled = false
+        uiView.isRotateEnabled = false
         uiView.isUserInteractionEnabled = false
+        uiView.showsUserLocation = false
     }
 }
 

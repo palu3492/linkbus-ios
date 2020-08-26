@@ -9,8 +9,15 @@ import SwiftUI
 import Foundation
 import Combine
 
+
 struct LandmarkList: View {
     @ObservedObject var routeController = RouteController()
+    
+    // init removes seperator/dividers from list, in future maybe use scrollview
+    init() {
+        UITableView.appearance().separatorStyle = .none
+    }
+
     var body: some View {
         NavigationView {
             List(routeController.lbBusSchedule.routes) { route in
