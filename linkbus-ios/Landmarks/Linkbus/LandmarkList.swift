@@ -14,11 +14,30 @@ struct LandmarkList: View {
     @ObservedObject var routeController = RouteController()
     
     var alertPresented: Bool
+    var greeting: String
     
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
         UITableView.appearance().separatorStyle = .none
         self.alertPresented = false
+        
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: currentDate)
+        
+        if (hour < 6) {
+            self.greeting = "Goodnight. 😴"
+        }
+        else if (hour < 12) {
+            self.greeting = "Good morning. 🌅"
+        }
+        else if (hour < 17) {
+            self.greeting = "Good afternoon. ☀️"
+        }
+        else { // < 24
+            self.greeting = "Good evening. 🌙"
+        }
+        
     }
 
     var body: some View {
@@ -29,7 +48,7 @@ struct LandmarkList: View {
                 ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                 }
                 }
-            .navigationBarTitle("Good night. 🌙 ")
+            .navigationBarTitle(self.greeting)
 //            List(routeController.lbBusSchedule.routes) { route in
 //                VStack (alignment: .leading) {
 //                    Text(route.title)

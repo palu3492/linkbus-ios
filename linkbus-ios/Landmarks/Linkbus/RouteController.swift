@@ -119,7 +119,7 @@ extension RouteController {
         
         if !(apiBusSchedule.routes!.isEmpty) {
             for apiRoute in apiBusSchedule.routes! {
-                var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
+                var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
                 tempRoute.id = apiRoute.id!
                 tempRoute.title = apiRoute.title!
                 var tempTimes = [LbTime]()
@@ -160,6 +160,7 @@ extension RouteController {
                         
                         let timeString: String = (textFormatter.string(from: endDate))
                         
+                            
                         tempId+=1
                         tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
                     }
@@ -176,10 +177,19 @@ extension RouteController {
                 tempRoute.state = apiRouteDetail[i!].state
                 tempRoute.coordinates = apiRouteDetail[i!].coordinates
                 
+                //https://stackoverflow.com/a/41640902
+                let formatter = DateComponentsFormatter()
+                formatter.unitsStyle = .full
+                formatter.allowedUnits = [.month, .day, .hour, .minute]
+                formatter.maximumUnitCount = 2   // often, you don't care about seconds if the elapsed time is in months, so you'll set max unit to whatever is appropriate in your case
+                tempRoute.nextBusTimer = formatter.string(from: Date(), to: tempRoute.times[0].startDate)!
+                
+                
                 lbBusSchedule.routes.append(tempRoute)
             }
             
         }
+        
         
         var iterator = lbBusSchedule.routes[0].times.makeIterator()
         while let time = iterator.next() {
@@ -187,5 +197,7 @@ extension RouteController {
         }
         
     }
+    
 }
+
 

@@ -47,7 +47,7 @@ struct ProductCard: View {
             // Stack bottom half of card
             VStack(alignment: .leading) {
                 
-                HStack {
+                HStack(alignment: .center) {
                     Text(self.title)
                         .font(Font.custom("HelveticaNeue", size: 18))
                         .font(.headline)
@@ -55,27 +55,32 @@ struct ProductCard: View {
                     Spacer()
                     
                     VStack {
-                        Text("Next bus")
-                            .font(Font.custom("HelveticaNeue", size: 12))
-                            //.font(.subheadline)
-                            //.fontWeight(.regular)
-                            .foregroundColor(Color.gray)
-                        HStack {
-                            Text(category!)
+                        HStack(alignment: .center) {
+                            Spacer()
+                            Text("Next bus")
                                 .font(Font.custom("HelveticaNeue", size: 12))
+                                //.font(.subheadline)
+                                //.fontWeight(.regular)
+                                .foregroundColor(Color.gray)
+                        }
+                        HStack(alignment: .center) {
+                          Spacer()
+                            Text(route.nextBusTimer)
+                                .font(Font.custom("HelveticaNeue", size: 14))
                                 //.font(.footnote)
                                 .padding([.leading, .trailing], 5)
                                 .padding([.top, .bottom], 2.5)
                                 .foregroundColor(Color.white)
+                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                            .cornerRadius(7)
+                            .padding([.top, .bottom], 4)
+                            
                         }
-                        .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                        .cornerRadius(7)
-                        .padding([.top, .bottom], 4)
                     }
                 }
-                
-                
-            
+                    
+                    
+                    
                 .padding([.top, .bottom], 8)
                 
                 //                HStack(alignment: .center, spacing: 4) {
@@ -199,7 +204,7 @@ struct ProductCard: View {
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
-        ProductCard(title: "Gorecki to Sexton", description: "Gorecki Center", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
+        ProductCard(title: "Gorecki to Sexton", description: "Gorecki Center", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), nextBusTimer: "5 mintutes", origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
     }
 }
 

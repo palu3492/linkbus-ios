@@ -30,7 +30,7 @@ struct AlertCard: View {
     
                 // Price and Buy Now Stack
                 HStack(alignment: .center, spacing: 0) {
-                    Text("Face masks are required on the CSB/SJU Link.")
+                    Text("A face mask is required to ride the CSB/SJU Link.")
                         .foregroundColor(Color.white)
                 }.font(Font.custom("HelveticaNeue", size: 14))
 //                HStack(alignment: .center, spacing: 4) {
