@@ -23,7 +23,7 @@ struct ProductCard: View {
     var route: LbRoute!
     
     @State private var totalHeight
-    //      = CGFloat.zero       // << variant for ScrollView/List
+        //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
     
     //var landmark: Landmark
@@ -42,93 +42,159 @@ struct ProductCard: View {
     }
     
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 0) {
             
-            // Main Featured Image - Upper Half of Card
-            MapView(coordinate: route.locationCoordinate)
-                .scaledToFill()
-                .frame(minWidth: nil, idealWidth: nil, maxWidth: UIScreen.main.bounds.width, minHeight: nil, idealHeight: nil, maxHeight: 250, alignment: .center)
-                .clipped()
-                
-                .overlay(
-                    Text("Face Mask Required")
-                        .fontWeight(Font.Weight.medium)
-                        .font(Font.system(size: 16))
-                        .foregroundColor(Color.white)
-                        .padding([.leading, .trailing], 16)
-                        .padding([.top, .bottom], 8)
-                        .background(Color.black.opacity(0.5))
-                        .mask(RoundedCorners(tl: 0, tr: 0, bl: 0, br: 15))
-                    , alignment: .topLeading)
-            
             // Stack bottom half of card
-            VStack(alignment: .leading, spacing: 6) {
-                Text(self.title)
-                    .font(.headline)
-                    .fontWeight(Font.Weight.heavy)
-                Text(self.description)
-                    //.font(Font.custom("HelveticaNeue-Bold", size: 16))
-                    .font(.subheadline)
-                    .foregroundColor(Color.gray)
+            VStack(alignment: .leading) {
                 
-                // Horizontal Line separating details and price
-                Rectangle()
-                    .foregroundColor(Color.gray.opacity(0.3))
-                    .frame(width: nil, height: 1, alignment: .center)
-                    .padding([.leading, .trailing], -12)
-                
-                // 'Based on:' Horizontal Category Stack
-                HStack(alignment: .center, spacing: 6) {
+                HStack {
+                    Text(self.title)
+                        .font(Font.custom("HelveticaNeue", size: 18))
+                        .font(.headline)
+                        .fontWeight(.regular)
+                    Spacer()
                     
-                    if category != nil {
-                        Text("Next bus:")
-                            .font(Font.system(size: 13))
-                            .fontWeight(Font.Weight.heavy)
+                    VStack {
+                        Text("Next bus")
+                            .font(Font.custom("HelveticaNeue", size: 12))
+                            //.font(.subheadline)
+                            //.fontWeight(.regular)
+                            .foregroundColor(Color.gray)
                         HStack {
                             Text(category!)
-                                .font(Font.custom("SanFrancisco-medium", size: 12))
-                                .padding([.leading, .trailing], 10)
-                                .padding([.top, .bottom], 5)
+                                .font(Font.custom("HelveticaNeue", size: 12))
+                                //.font(.footnote)
+                                .padding([.leading, .trailing], 5)
+                                .padding([.top, .bottom], 2.5)
                                 .foregroundColor(Color.white)
                         }
                         .background(Color(red: 43/255, green: 175/255, blue: 187/255))
                         .cornerRadius(7)
-                        Spacer()
+                        .padding([.top, .bottom], 4)
                     }
-                    
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("")
-                            .foregroundColor(Color.gray)
-                        Text("\(self.ingredientCount)")
-                    }.font(Font.custom("HelveticaNeue", size: 14))
-                    
-                    
                 }
-                .frame(maxHeight: totalHeight) // << variant for VStack
+                
+                
+            
                 .padding([.top, .bottom], 8)
+                
+                //                HStack(alignment: .center, spacing: 4) {
+                //                    Text(String.init(format: "$%.2f", arguments: [self.price]))
+                //                        .fontWeight(Font.Weight.heavy)
+                //                    Text("for 2 people")
+                //                        .font(Font.system(size: 13))
+                //                        .fontWeight(Font.Weight.bold)
+                //                        .foregroundColor(Color.gray)
+                //                    Spacer()
+                //                    Image("Plus-Icon")
+                //                        .resizable()
+                //                        .scaledToFit()
+                //                        .frame(width: 15, height: 15, alignment: .center)
+                //                        .colorMultiply(Color(red: 231/255, green: 119/255, blue: 112/255))
+                //                        .onTapGesture {
+                //                            self.buttonHandler?()
+                //                    }
+                //                    Text("BUY NOW")
+                //                        .fontWeight(Font.Weight.heavy)
+                //                        .foregroundColor(Color(red: 231/255, green: 119/255, blue: 112/255))
+                //                        .onTapGesture {
+                //                            self.buttonHandler?()
+                //                    }
+                //
+                //                }.padding([.top, .bottom], 8)
                 
                 
             }
             .padding(12)
             
-            
-            
         }
-        
             //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
-        .background(Color(UIColor.secondarySystemBackground))
-        .cornerRadius(15)
-        .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-        .onTapGesture {
-            self.showRouteSheet = true
+            .background(Color(UIColor.secondarySystemBackground))
+            .cornerRadius(15)
+            .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+            .onTapGesture {
+                self.showRouteSheet = true
         }.sheet(isPresented: $showRouteSheet) {
             RouteSheet(route: self.route)
         }
-        
     }
     
+}
 
+//    var body: some View {
+//
+//        VStack(alignment: .leading, spacing: 0) {
+//
+//            // Main Featured Image - Upper Half of Card
+//
+//
+//            // Stack bottom half of card
+//            VStack(alignment: .leading, spacing: 6) {
+//                Text(self.title)
+//                    .font(.headline)
+//                    .fontWeight(Font.Weight.heavy)
+//                Text(self.description)
+//                    //.font(Font.custom("HelveticaNeue-Bold", size: 16))
+//                    .font(.subheadline)
+//                    .foregroundColor(Color.gray)
+//
+//                // Horizontal Line separating details and price
+//                Rectangle()
+//                    .foregroundColor(Color.gray.opacity(0.3))
+//                    .frame(width: nil, height: 1, alignment: .center)
+//                    .padding([.leading, .trailing], -12)
+//
+//                // 'Based on:' Horizontal Category Stack
+//                HStack(alignment: .center, spacing: 6) {
+//
+//                    if category != nil {
+//                        Text("Next bus:")
+//                            .font(Font.system(size: 13))
+//                            .fontWeight(Font.Weight.heavy)
+//                        HStack {
+//                            Text(category!)
+//                                .font(Font.custom("SanFrancisco-medium", size: 12))
+//                                .padding([.leading, .trailing], 10)
+//                                .padding([.top, .bottom], 5)
+//                                .foregroundColor(Color.white)
+//                        }
+//                        .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+//                        .cornerRadius(7)
+//                        Spacer()
+//                    }
+//
+////                    HStack(alignment: .center, spacing: 0) {
+////                        Text("")
+////                            .foregroundColor(Color.gray)
+////                        Text("\(self.ingredientCount)")
+////                    }.font(Font.custom("HelveticaNeue", size: 14))
+//
+//
+//                }
+//                .frame(maxHeight: totalHeight) // << variant for VStack
+//                .padding([.top, .bottom], 8)
+//
+//
+//            }
+//            .padding(12)
+//
+//
+//
+//        }
+//
+//            //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
+//        .background(Color(UIColor.secondarySystemBackground))
+//        .cornerRadius(15)
+//        .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+//        .onTapGesture {
+//            self.showRouteSheet = true
+//        }.sheet(isPresented: $showRouteSheet) {
+//            RouteSheet(route: self.route)
+//        }
+//
+//    }
+//
+//
 
 
 struct ProductCard_Previews: PreviewProvider {
@@ -174,4 +240,4 @@ struct RoundedCorners: Shape {
         return path
     }
 }
-}
+

@@ -9,7 +9,7 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date=11/1/2019"
+    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date=9/1/2020"
     let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/linkbus-ios/Landmarks/Linkbus/Resources/LinkbusAPI.json"
     
     var apiBusSchedule = BusSchedule(msg: "", attention: "", routes: [Route]())

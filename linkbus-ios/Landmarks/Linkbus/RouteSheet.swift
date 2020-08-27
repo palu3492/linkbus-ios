@@ -111,7 +111,9 @@ struct RouteSheet: View {
             .navigationBarHidden(true)
             
         }
+        
     }
+    
     
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
