@@ -42,6 +42,20 @@
         }
     },
     {
+        "title": "Flynntown to Sexton",
+        "origin": "Flynntown",
+        "originLocation": "Flynntown, SJU",
+        "destination": "Sexton",
+        "destinationLocation": "Sexton, SJU",
+        "city": "Collegeville",
+        "state": "Minnesota",
+        "id": 4,
+        "coordinates": {
+            "longitude": -94.3952,
+            "latitude": 45.5865
+        }
+    },
+    {
         "title": "Gorecki to Crossroads",
         "origin": "Gorecki",
         "originLocation": "Gorecki Center, CSB",
@@ -81,6 +95,34 @@
         "coordinates": {
             "longitude": -113.934831,
             "latitude": 48.56002
+        }
+    },
+    {
+        "title": "Gorecki to Alcuin",
+        "origin": "Gorecki",
+        "originLocation": "Gorecki Center, CSB",
+        "destination": "Alcuin",
+        "destinationLocation": "Alcuin Library, SJU",
+        "city": "Saint Joseph",
+        "state": "Minnesota",
+        "id": 9,
+        "coordinates": {
+            "longitude": -113.536248,
+            "latitude": 48.69423
+        }
+    },
+    {
+        "title": "Alcuin to Gorecki",
+        "origin": "Alcuin",
+        "originLocation": "Alcuin Library, SJU",
+        "destination": "Gorecki",
+        "destinationLocation": "Gorecki Center, CSB",
+        "city": "Collegeville",
+        "state": "Minnesota",
+        "id": 10,
+        "coordinates": {
+            "longitude": -94.3908,
+            "latitude": 45.5815
         }
     }
 ]

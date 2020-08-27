@@ -37,6 +37,7 @@ struct RouteSheet: View {
                     
                     Text(route.origin)
                         .font(.title)
+                        .padding(.leading)
                     Spacer()
                 }
                 .padding([.top], 5)
@@ -50,6 +51,7 @@ struct RouteSheet: View {
                     Text("Pickup from " + route.originLocation)
                         .font(.subheadline)
                         .padding(.leading, 45) //fix
+                        .padding(.leading)
                         .foregroundColor(Color.gray)
                     Spacer()
                 }
@@ -72,6 +74,7 @@ struct RouteSheet: View {
                         .padding(.leading)
                     Text(route.destination)
                         .font(.title)
+                        .padding(.leading)
                     Spacer()
                 }
                 .padding([.top], 5)
@@ -84,6 +87,7 @@ struct RouteSheet: View {
                     Text("Dropoff at " + route.destinationLocation)
                         .font(.subheadline)
                         .padding(.leading, 45) //fix
+                        .padding(.leading)
                         .foregroundColor(Color.gray)
                     Spacer()
                 }
