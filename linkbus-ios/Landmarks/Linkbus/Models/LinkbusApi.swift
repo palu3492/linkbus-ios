@@ -10,6 +10,20 @@
 
 import SwiftUI
 
+struct LinkbusApi: Decodable {
+    let alerts: [Alert]
+    let routes: [RouteDetail]
+}
+
+struct Alert: Identifiable, Decodable {
+    let id: Int
+    let active: Bool
+    let text: String
+    let clickable: Bool
+    let action: String
+    let color: String
+}
+
 struct RouteDetail: Decodable {
     let title, origin, originLocation, destination, destinationLocation, city, state: String
     let id: Int

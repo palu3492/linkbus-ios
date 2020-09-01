@@ -12,10 +12,10 @@ class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
     let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/linkbus-ios/Landmarks/Linkbus/Resources/LinkbusAPI.json"
     
-    var apiBusSchedule = BusSchedule(msg: "", attention: "", routes: [Route]())
-    var apiRouteDetail = [RouteDetail]()
+    var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
+    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
     
-    @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", routes: [LbRoute]())
+    @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
     init() {
         testLinkBusApi()
@@ -32,8 +32,8 @@ extension RouteController {
         fetchCsbsjuApi { apiResponse in
             if let success = apiResponse {
                 DispatchQueue.main.async {
-                    self.apiBusSchedule = apiResponse!
-                    print(self.apiBusSchedule)
+                    self.csbsjuApiResponse = apiResponse!
+                    print(self.csbsjuApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -43,8 +43,8 @@ extension RouteController {
         fetchLinkbusApi { apiResponse in
             if let success = apiResponse {
                 DispatchQueue.main.async {
-                    self.apiRouteDetail = apiResponse!
-                    print(self.apiRouteDetail)
+                    self.linkbusApiResponse = apiResponse!
+                    print(self.linkbusApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -58,8 +58,8 @@ extension RouteController {
     func testLinkBusApi() {
         fetchLinkbusApi { apiResponse in
             if let success = apiResponse {
-                self.apiRouteDetail = apiResponse!
-                print(self.apiRouteDetail)
+                self.linkbusApiResponse = apiResponse!
+                print(self.linkbusApiResponse)
             }
         }
     }
@@ -87,7 +87,7 @@ extension RouteController {
         task.resume()
     }
     
-    func fetchLinkbusApi(completionHandler: @escaping ([RouteDetail]?) -> Void) {
+    func fetchLinkbusApi(completionHandler: @escaping (LinkbusApi?) -> Void) {
         let url = URL(string: LinkbusApiUrl)!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
@@ -103,7 +103,7 @@ extension RouteController {
             }
             
             if let data = data,
-                let apiResponse = try? JSONDecoder().decode([RouteDetail].self, from: data) {
+                let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
                 completionHandler(apiResponse)
             }
         })
@@ -114,11 +114,12 @@ extension RouteController {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
-        lbBusSchedule.msg = apiBusSchedule.msg!
-        lbBusSchedule.attention = apiBusSchedule.attention!
+        lbBusSchedule.msg = csbsjuApiResponse.msg!
+        lbBusSchedule.attention = csbsjuApiResponse.attention!
+        lbBusSchedule.alerts = linkbusApiResponse.alerts
         
-        if !(apiBusSchedule.routes!.isEmpty) {
-            for apiRoute in apiBusSchedule.routes! {
+        if !(csbsjuApiResponse.routes!.isEmpty) {
+            for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
                 tempRoute.id = apiRoute.id!
                 tempRoute.title = apiRoute.title!
@@ -177,14 +178,14 @@ extension RouteController {
                     tempRoute.times = tempTimes
                     
                     // TODO: add in Linkbus API route data
-                    let i = apiRouteDetail.firstIndex(where: {$0.id == tempRoute.id})
-                    tempRoute.origin = apiRouteDetail[i!].origin
-                    tempRoute.originLocation = apiRouteDetail[i!].originLocation
-                    tempRoute.destination = apiRouteDetail[i!].destination
-                    tempRoute.destinationLocation = apiRouteDetail[i!].destinationLocation
-                    tempRoute.city = apiRouteDetail[i!].city
-                    tempRoute.state = apiRouteDetail[i!].state
-                    tempRoute.coordinates = apiRouteDetail[i!].coordinates
+                    let i = linkbusApiResponse.routes.firstIndex(where: {$0.id == tempRoute.id})
+                    tempRoute.origin = linkbusApiResponse.routes[i!].origin
+                    tempRoute.originLocation = linkbusApiResponse.routes[i!].originLocation
+                    tempRoute.destination = linkbusApiResponse.routes[i!].destination
+                    tempRoute.destinationLocation = linkbusApiResponse.routes[i!].destinationLocation
+                    tempRoute.city = linkbusApiResponse.routes[i!].city
+                    tempRoute.state = linkbusApiResponse.routes[i!].state
+                    tempRoute.coordinates = linkbusApiResponse.routes[i!].coordinates
                     
                     //https://stackoverflow.com/a/41640902
                     let formatter = DateComponentsFormatter()

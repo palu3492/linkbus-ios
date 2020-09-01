@@ -1,128 +1,147 @@
-[
-    {
-        "title": "Gorecki to Sexton",
-        "origin": "Gorecki",
-        "originLocation": "Gorecki Center, CSB",
-        "destination": "Sexton",
-        "destinationLocation": "Sexton Commons, SJU",
-        "city": "Saint Joseph",
-        "state": "Minnesota",
-        "id": 1,
-        "coordinates": {
-            "longitude": -94.3221,
-            "latitude": 45.5605
+{
+    "alerts": [
+        {
+            "id": 1
+            "active": true,
+            "text": "A face mask is required to ride the CSB/SJU Link.",
+            "clickable": true,
+            "action": "https://www.csbsju.edu/covid-19",
+            "color": Color.red
+        },
+        {
+            "id": 2
+            "active": true,
+            "text": "Welcome back to campus.",
+            "clickable": false,
+            "action": "",
+            "color": Color.blue
         }
-    },
-    {
-        "title": "Sexton to Gorecki",
-        "origin": "Sexton",
-        "originLocation": "Sexton Commons, SJU",
-        "destination": "Gorecki",
-        "destinationLocation": "Gorecki Center, CSB",
-        "city": "Collegeville",
-        "state": "Minnesota",
-        "id": 2,
-        "coordinates": {
-            "longitude": -94.3942,
-            "latitude": 45.5817
+    ],
+    "routes": [{
+            "title": "Gorecki to Sexton",
+            "origin": "Gorecki",
+            "originLocation": "Gorecki Center, CSB",
+            "destination": "Sexton",
+            "destinationLocation": "Sexton Commons, SJU",
+            "city": "Saint Joseph",
+            "state": "Minnesota",
+            "id": 1,
+            "coordinates": {
+                "longitude": -94.3221,
+                "latitude": 45.5605
+            }
+        },
+        {
+            "title": "Sexton to Gorecki",
+            "origin": "Sexton",
+            "originLocation": "Sexton Commons, SJU",
+            "destination": "Gorecki",
+            "destinationLocation": "Gorecki Center, CSB",
+            "city": "Collegeville",
+            "state": "Minnesota",
+            "id": 2,
+            "coordinates": {
+                "longitude": -94.3942,
+                "latitude": 45.5817
+            }
+        },
+        {
+            "title": "CSB East to Gorecki/Sexton",
+            "origin": "CSB East",
+            "originLocation": "CSB East, CSB",
+            "destination": "Gorecki/Sexton",
+            "destinationLocation": "Gorecki or Sexton",
+            "city": "Saint Joseph",
+            "state": "Minnesota",
+            "id": 3,
+            "coordinates": {
+                "longitude": -135.334571,
+                "latitude": 59.560551
+            }
+        },
+        {
+            "title": "Flynntown to Sexton/Gorecki",
+            "origin": "Flynntown",
+            "originLocation": "Flynntown, SJU",
+            "destination": "Sexton/Gorecki",
+            "destinationLocation": "Sexton or Gorecki",
+            "city": "Collegeville",
+            "state": "Minnesota",
+            "id": 4,
+            "coordinates": {
+                "longitude": -94.3952,
+                "latitude": 45.5865
+            }
+        },
+        {
+            "title": "Gorecki to Crossroads",
+            "origin": "Gorecki",
+            "originLocation": "Gorecki Center, CSB",
+            "destination": "Crossroads",
+            "destinationLocation": "Crossroads Center Shopping Mall",
+            "city": "Saint Joseph",
+            "state": "MN",
+            "id": 6,
+            "coordinates": {
+                "longitude": -113.536248,
+                "latitude": 48.69423
+            }
+        },
+        {
+            "title": "Leave Crossroads",
+            "origin": "Crossroads",
+            "originLocation": "Crossroads Center Shopping Mall",
+            "destination": "Gorecki",
+            "destinationLocation": "Gorecki Center, CSB",
+            "city": "Saint Cloud",
+            "state": "Minnesota",
+            "id": 7,
+            "coordinates": {
+                "longitude": -153.849883,
+                "latitude": 60.641684
+            }
+        },
+        {
+            "title": "Leave Cash Wise",
+            "origin": "Cash Wise",
+            "originLocation": "Cash Wise Foods",
+            "destination": "Gorecki",
+            "destinationLocation": "Gorecki Center, CSB",
+            "city": "Saint Cloud",
+            "state": "Minnesota",
+            "id": 8,
+            "coordinates": {
+                "longitude": -113.934831,
+                "latitude": 48.56002
+            }
+        },
+        {
+            "title": "Gorecki to Alcuin",
+            "origin": "Gorecki",
+            "originLocation": "Gorecki Center, CSB",
+            "destination": "Alcuin",
+            "destinationLocation": "Alcuin Library, SJU",
+            "city": "Saint Joseph",
+            "state": "Minnesota",
+            "id": 9,
+            "coordinates": {
+                "longitude": -113.536248,
+                "latitude": 48.69423
+            }
+        },
+        {
+            "title": "Alcuin to Gorecki",
+            "origin": "Alcuin",
+            "originLocation": "Alcuin Library, SJU",
+            "destination": "Gorecki",
+            "destinationLocation": "Gorecki Center, CSB",
+            "city": "Collegeville",
+            "state": "Minnesota",
+            "id": 10,
+            "coordinates": {
+                "longitude": -94.3908,
+                "latitude": 45.5815
+            }
         }
-    },
-    {
-        "title": "CSB East to Gorecki/Sexton",
-        "origin": "CSB East",
-        "originLocation": "CSB East, CSB",
-        "destination": "Gorecki/Sexton",
-        "destinationLocation": "Gorecki or Sexton",
-        "city": "Saint Joseph",
-        "state": "Minnesota",
-        "id": 3,
-        "coordinates": {
-            "longitude": -135.334571,
-            "latitude": 59.560551
-        }
-    },
-    {
-        "title": "Flynntown to Sexton/Gorecki",
-        "origin": "Flynntown",
-        "originLocation": "Flynntown, SJU",
-        "destination": "Sexton/Gorecki",
-        "destinationLocation": "Sexton or Gorecki",
-        "city": "Collegeville",
-        "state": "Minnesota",
-        "id": 4,
-        "coordinates": {
-            "longitude": -94.3952,
-            "latitude": 45.5865
-        }
-    },
-    {
-        "title": "Gorecki to Crossroads",
-        "origin": "Gorecki",
-        "originLocation": "Gorecki Center, CSB",
-        "destination": "Crossroads",
-        "destinationLocation": "Crossroads Center Shopping Mall",
-        "city": "Saint Joseph",
-        "state": "MN",
-        "id": 6,
-        "coordinates": {
-            "longitude": -113.536248,
-            "latitude": 48.69423
-        }
-    },
-    {
-        "title": "Leave Crossroads",
-        "origin": "Crossroads",
-        "originLocation": "Crossroads Center Shopping Mall",
-        "destination": "Gorecki",
-        "destinationLocation": "Gorecki Center, CSB",
-        "city": "Saint Cloud",
-        "state": "Minnesota",
-        "id": 7,
-        "coordinates": {
-            "longitude": -153.849883,
-            "latitude": 60.641684
-        }
-    },
-    {
-        "title": "Leave Cash Wise",
-        "origin": "Cash Wise",
-        "originLocation": "Cash Wise Foods",
-        "destination": "Gorecki",
-        "destinationLocation": "Gorecki Center, CSB",
-        "city": "Saint Cloud",
-        "state": "Minnesota",
-        "id": 8,
-        "coordinates": {
-            "longitude": -113.934831,
-            "latitude": 48.56002
-        }
-    },
-    {
-        "title": "Gorecki to Alcuin",
-        "origin": "Gorecki",
-        "originLocation": "Gorecki Center, CSB",
-        "destination": "Alcuin",
-        "destinationLocation": "Alcuin Library, SJU",
-        "city": "Saint Joseph",
-        "state": "Minnesota",
-        "id": 9,
-        "coordinates": {
-            "longitude": -113.536248,
-            "latitude": 48.69423
-        }
-    },
-    {
-        "title": "Alcuin to Gorecki",
-        "origin": "Alcuin",
-        "originLocation": "Alcuin Library, SJU",
-        "destination": "Gorecki",
-        "destinationLocation": "Gorecki Center, CSB",
-        "city": "Collegeville",
-        "state": "Minnesota",
-        "id": 10,
-        "coordinates": {
-            "longitude": -94.3908,
-            "latitude": 45.5815
-        }
-    }
-]
+    ]
+}

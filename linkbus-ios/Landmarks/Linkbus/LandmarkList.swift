@@ -43,8 +43,10 @@ struct LandmarkList: View {
     var body: some View {
         NavigationView {
             List() {
-                AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link. 😷", alertColor: Color.red)
-                AlertCard(alertText: "Welcome back to campus.", alertColor: Color.blue)
+                ForEach(routeController.lbBusSchedule.alerts) { alert in
+                    AlertCard(alertText: alert.text, alertColor: Color(alert.color))
+                }
+
                 VStack (alignment: .leading, spacing: 12) {
                 ForEach(routeController.lbBusSchedule.routes) { route in
 //                    if #available(iOS 13.4, *) {
