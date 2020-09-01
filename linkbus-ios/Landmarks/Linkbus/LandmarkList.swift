@@ -51,6 +51,7 @@ struct LandmarkList: View {
                 ForEach(routeController.lbBusSchedule.routes) { route in
 //                    if #available(iOS 13.4, *) {
                         ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            .transition(.opacity)
                             //.animation(.default)
                             //.hoverEffect(.lift)
 //                    } else {
