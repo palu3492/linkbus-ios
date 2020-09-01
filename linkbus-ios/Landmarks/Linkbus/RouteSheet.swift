@@ -17,10 +17,18 @@ struct RouteSheet: View {
     
     init(route:LbRoute) {
         self.route = route
+        //UIScrollView.appearance().bounces = false
+        
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().tintColor = .clear
+        UINavigationBar.appearance().backgroundColor = .clear
     }
     
     var body: some View {
         NavigationView {
+            ScrollView {
 
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
@@ -32,7 +40,8 @@ struct RouteSheet: View {
                         HStack(alignment: .firstTextBaseline) {
                             Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!) //stop.circle.fill looks ok
                                 .renderingMode(.template)
-                                .foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                .foregroundColor(Color.blue)
                                 .font(.subheadline) //weight: .ultralight))
                                 .padding(.leading)
                             
@@ -71,7 +80,8 @@ struct RouteSheet: View {
                         HStack(alignment: .firstTextBaseline) {
                             Image(uiImage: UIImage(systemName: "mappin.circle.fill")!)
                                 .renderingMode(.template)
-                                .foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                .foregroundColor(Color.blue)
                                 .font(.headline)
                                 .padding(.leading)
                             Text(route.destination)
@@ -98,7 +108,7 @@ struct RouteSheet: View {
                     .padding(12)
                     
                     
-                                ScrollView() {
+                    
                     // route times
                     HStack(alignment: .lastTextBaseline) {
                         VStack(alignment: .leading) {
@@ -109,23 +119,29 @@ struct RouteSheet: View {
                                     .padding([.leading, .trailing], 10)
                                     .padding([.top, .bottom], 5)
                                     .foregroundColor(Color.white)
-                                    .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                    //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                    .background(Color.blue)
                                     .cornerRadius(7)
                                     .padding([.bottom], 5)
                                 Spacer()
                                 }
                             }
                         }
+                            .padding(12)
                         .padding(.leading)
                     }
                         .padding(.leading)
                     .padding([.bottom], 5)
                     
                     
+                
                 }
-                }
-                .navigationBarTitle("", displayMode: .inline)
-                .navigationBarHidden(true)
+            
+            }
+        
+        
+            .navigationBarTitle("", displayMode: .inline)
+                //.navigationBarHidden(true)
                 
             }
             

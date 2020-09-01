@@ -15,9 +15,12 @@ struct AlertCard: View {
         = CGFloat.infinity   // << variant for VStack
     
     //var landmark: Landmark
+    var alertText: String
+    var alertColor: Color
     
-    init() {
-        
+    init(alertText: String, alertColor: Color) {
+        self.alertText = alertText
+        self.alertColor = alertColor
     }
     
     var body: some View {
@@ -30,7 +33,7 @@ struct AlertCard: View {
     
                 // Price and Buy Now Stack
                 HStack(alignment: .center, spacing: 0) {
-                    Text("A face mask is required to ride the CSB/SJU Link.")
+                    Text(alertText)
                         .foregroundColor(Color.white)
                 }.font(Font.custom("HelveticaNeue", size: 14))
 //                HStack(alignment: .center, spacing: 4) {
@@ -64,7 +67,7 @@ struct AlertCard: View {
             
         }
                     //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
-            .background(Color.red)
+            .background(alertColor)
                 .cornerRadius(15)
                 .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
     }
@@ -149,7 +152,7 @@ struct AlertCard: View {
 
 struct AlertCard_Previews: PreviewProvider {
     static var previews: some View {
-        AlertCard()
+        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: Color.red)
     }
 }
 

@@ -71,7 +71,8 @@ struct ProductCard: View {
                                 .padding([.leading, .trailing], 5)
                                 .padding([.top, .bottom], 2.5)
                                 .foregroundColor(Color.white)
-                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+//                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                .background(Color.blue)
                             .cornerRadius(7)
                             .padding([.top, .bottom], 4)
                             
@@ -116,7 +117,7 @@ struct ProductCard: View {
             //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
             .background(Color(UIColor.secondarySystemBackground))
             .cornerRadius(15)
-            .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+            //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             .onTapGesture {
                 self.showRouteSheet = true
         }.sheet(isPresented: $showRouteSheet) {

@@ -42,11 +42,11 @@
         }
     },
     {
-        "title": "Flynntown to Sexton",
+        "title": "Flynntown to Sexton/Gorecki",
         "origin": "Flynntown",
         "originLocation": "Flynntown, SJU",
-        "destination": "Sexton",
-        "destinationLocation": "Sexton, SJU",
+        "destination": "Sexton/Gorecki",
+        "destinationLocation": "Sexton or Gorecki",
         "city": "Collegeville",
         "state": "Minnesota",
         "id": 4,

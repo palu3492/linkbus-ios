@@ -26,39 +26,50 @@ struct LandmarkList: View {
         let hour = calendar.component(.hour, from: currentDate)
         
         if (hour < 6) {
-            self.greeting = "Goodnight. 😴"
+            self.greeting = "Goodnight 😴"
         }
         else if (hour < 12) {
-            self.greeting = "Good morning. 🌅"
+            self.greeting = "Good morning 🌅"
         }
         else if (hour < 17) {
-            self.greeting = "Good afternoon. ☀️"
+            self.greeting = "Good afternoon ☀️"
         }
         else { // < 24
-            self.greeting = "Good evening. 🌙"
+            self.greeting = "Good evening 🌙"
         }
         
     }
-
+    
     var body: some View {
         NavigationView {
             List() {
-                AlertCard()
+                AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link. 😷", alertColor: Color.red)
+                AlertCard(alertText: "Welcome back to campus.", alertColor: Color.blue)
+                VStack (alignment: .leading, spacing: 12) {
                 ForEach(routeController.lbBusSchedule.routes) { route in
-                ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+//                    if #available(iOS 13.4, *) {
+                        ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            //.animation(.default)
+                            //.hoverEffect(.lift)
+//                    } else {
+//                        // Fallback on earlier versions
+//                    }
+                    //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
                 }
                 }
-            .navigationBarTitle(self.greeting)
-//            List(routeController.lbBusSchedule.routes) { route in
-//                VStack (alignment: .leading) {
-//                    Text(route.title)
-//                        .font(.system(size: 11))
-//                        .foregroundColor(Color.gray)
-//                }
-//            }
+                .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             }
+            .navigationBarTitle(self.greeting)
+            //            List(routeController.lbBusSchedule.routes) { route in
+            //                VStack (alignment: .leading) {
+            //                    Text(route.title)
+            //                        .font(.system(size: 11))
+            //                        .foregroundColor(Color.gray)
+            //                }
+            //            }
         }
     }
+}
 //    var body: some View {
 
 ////                        .onAppear() {
