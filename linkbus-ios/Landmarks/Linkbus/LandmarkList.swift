@@ -44,7 +44,7 @@ struct LandmarkList: View {
         NavigationView {
             List() {
                 ForEach(routeController.lbBusSchedule.alerts) { alert in
-                    AlertCard(alertText: alert.text, alertColor: Color(alert.color))
+                    AlertCard(alertText: alert.text, alertColor: alert.color)
                 }
 
                 VStack (alignment: .leading, spacing: 12) {

@@ -18,9 +18,25 @@ struct AlertCard: View {
     var alertText: String
     var alertColor: Color
     
-    init(alertText: String, alertColor: Color) {
+    init(alertText: String, alertColor: String) {
         self.alertText = alertText
-        self.alertColor = alertColor
+        
+        var color = Color(UIColor.secondarySystemBackground)
+        
+        if (alertColor == "red") {
+            color = Color.red
+        }
+        else if (alertColor == "green") {
+                color = Color.green
+        }
+        else if (alertColor == "blue") {
+            color = Color.blue
+        }
+        else if (alertColor == "yellow") {
+            color = Color.yellow
+        }
+        
+        self.alertColor = color
     }
     
     var body: some View {
@@ -152,7 +168,7 @@ struct AlertCard: View {
 
 struct AlertCard_Previews: PreviewProvider {
     static var previews: some View {
-        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: Color.red)
+        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: "red")
     }
 }
 
