@@ -25,6 +25,7 @@ struct RouteCard: View {
     @State private var totalHeight
         //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
+        @Environment(\.colorScheme) var colorScheme
     
     //var landmark: Landmark
     
@@ -115,7 +116,7 @@ struct RouteCard: View {
             
         }
             //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
-            .background(Color(UIColor.secondarySystemBackground))
+            .background(colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground))
             .cornerRadius(15)
             //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             .onTapGesture {
