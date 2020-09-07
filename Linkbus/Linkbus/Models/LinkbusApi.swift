@@ -21,7 +21,7 @@ struct Alert: Identifiable, Decodable {
     let text: String
     let clickable: Bool
     let action: String
-    let color: String
+    let color: RGBColor
 }
 
 struct RouteDetail: Decodable {
@@ -32,4 +32,8 @@ struct RouteDetail: Decodable {
 
 struct Coordinates: Decodable {
     let longitude, latitude: Double
+}
+
+struct RGBColor: Decodable {
+    let red, green, blue, opacity: Double
 }
