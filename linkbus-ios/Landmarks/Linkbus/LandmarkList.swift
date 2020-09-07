@@ -13,17 +13,24 @@ import Combine
 struct LandmarkList: View {
     @ObservedObject var routeController = RouteController()
     
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var counter = 0
+    
     var alertPresented: Bool
-    var greeting: String
+    @State var menuBarTitle = "Linkbus"
+    public var greeting: String
     
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
+        
+        UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
         self.alertPresented = false
         
         let currentDate = Date()
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: currentDate)
+        
         
         if (hour < 6) {
             self.greeting = "Goodnight 😴"
@@ -37,32 +44,38 @@ struct LandmarkList: View {
         else { // < 24
             self.greeting = "Good evening 🌙"
         }
-        
     }
     
     var body: some View {
         NavigationView {
             List() {
-                ForEach(routeController.lbBusSchedule.alerts) { alert in
-                    AlertCard(alertText: alert.text, alertColor: alert.color)
-                }
-
+                
                 VStack (alignment: .leading, spacing: 12) {
-                ForEach(routeController.lbBusSchedule.routes) { route in
-//                    if #available(iOS 13.4, *) {
+                    ForEach(routeController.lbBusSchedule.alerts) { alert in
+                        AlertCard(alertText: alert.text, alertColor: alert.color)
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                            .zIndex(1)
+                    }
+                    
+                    ForEach(routeController.lbBusSchedule.routes) { route in
+                        //                    if #available(iOS 13.4, *) {
                         ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
-                            .transition(.opacity)
-                            //.animation(.default)
-                            //.hoverEffect(.lift)
-//                    } else {
-//                        // Fallback on earlier versions
-//                    }
-                    //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-                }
+                        
+                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+                            .zIndex(1)
+                        //.animation(.default)
+                        //.hoverEffect(.lift)
+                        //                    } else {
+                        //                        // Fallback on earlier versions
+                        //                    }
+                        //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                    }
+                    //AlertCard(alertText: "There seems to be a connection issue. Please check internet connection.", alertColor: "red")
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             }
-            .navigationBarTitle(self.greeting)
+                
+            .navigationBarTitle(self.menuBarTitle)
             //            List(routeController.lbBusSchedule.routes) { route in
             //                VStack (alignment: .leading) {
             //                    Text(route.title)
@@ -71,8 +84,19 @@ struct LandmarkList: View {
             //                }
             //            }
         }
+        .onReceive(timer) { time in
+            if self.counter == 1 {
+                self.menuBarTitle = self.greeting
+                self.timer.upstream.connect().cancel()
+            }
+            
+            self.counter += 1
+        }
+        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+        .zIndex(1)
     }
 }
+
 //    var body: some View {
 
 ////                        .onAppear() {

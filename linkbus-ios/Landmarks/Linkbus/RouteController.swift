@@ -18,7 +18,6 @@ class RouteController: ObservableObject {
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
     init() {
-        testLinkBusApi()
         webRequest()
     }
 }
@@ -54,15 +53,7 @@ extension RouteController {
             self.processJson()
         }
     }
-    
-    func testLinkBusApi() {
-        fetchLinkbusApi { apiResponse in
-            if let success = apiResponse {
-                self.linkbusApiResponse = apiResponse!
-                print(self.linkbusApiResponse)
-            }
-        }
-    }
+
     
     func fetchCsbsjuApi(completionHandler: @escaping (BusSchedule?) -> Void) {
         let url = URL(string: CsbsjuApiUrl)!

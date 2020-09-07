@@ -27,7 +27,7 @@ struct AlertCard: View {
             color = Color.red
         }
         else if (alertColor == "green") {
-                color = Color.green
+            color = Color.green
         }
         else if (alertColor == "blue") {
             color = Color.blue
@@ -44,48 +44,48 @@ struct AlertCard: View {
             
             // Stack bottom half of card
             VStack(alignment: .leading) {
-
-            
-    
+                
+                
+                
                 // Price and Buy Now Stack
                 HStack(alignment: .center, spacing: 0) {
                     Text(alertText)
                         .foregroundColor(Color.white)
                 }.font(Font.custom("HelveticaNeue", size: 14))
-//                HStack(alignment: .center, spacing: 4) {
-//                    Text(String.init(format: "$%.2f", arguments: [self.price]))
-//                        .fontWeight(Font.Weight.heavy)
-//                    Text("for 2 people")
-//                        .font(Font.system(size: 13))
-//                        .fontWeight(Font.Weight.bold)
-//                        .foregroundColor(Color.gray)
-//                    Spacer()
-//                    Image("Plus-Icon")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 15, height: 15, alignment: .center)
-//                        .colorMultiply(Color(red: 231/255, green: 119/255, blue: 112/255))
-//                        .onTapGesture {
-//                            self.buttonHandler?()
-//                    }
-//                    Text("BUY NOW")
-//                        .fontWeight(Font.Weight.heavy)
-//                        .foregroundColor(Color(red: 231/255, green: 119/255, blue: 112/255))
-//                        .onTapGesture {
-//                            self.buttonHandler?()
-//                    }
-//
-//                }.padding([.top, .bottom], 8)
+                //                HStack(alignment: .center, spacing: 4) {
+                //                    Text(String.init(format: "$%.2f", arguments: [self.price]))
+                //                        .fontWeight(Font.Weight.heavy)
+                //                    Text("for 2 people")
+                //                        .font(Font.system(size: 13))
+                //                        .fontWeight(Font.Weight.bold)
+                //                        .foregroundColor(Color.gray)
+                //                    Spacer()
+                //                    Image("Plus-Icon")
+                //                        .resizable()
+                //                        .scaledToFit()
+                //                        .frame(width: 15, height: 15, alignment: .center)
+                //                        .colorMultiply(Color(red: 231/255, green: 119/255, blue: 112/255))
+                //                        .onTapGesture {
+                //                            self.buttonHandler?()
+                //                    }
+                //                    Text("BUY NOW")
+                //                        .fontWeight(Font.Weight.heavy)
+                //                        .foregroundColor(Color(red: 231/255, green: 119/255, blue: 112/255))
+                //                        .onTapGesture {
+                //                            self.buttonHandler?()
+                //                    }
+                //
+                //                }.padding([.top, .bottom], 8)
                 
                 
             }
             .padding(12)
             
         }
-                    //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
+            //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
             .background(alertColor)
-                .cornerRadius(15)
-                .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+            .cornerRadius(15)
+        //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
     }
     
 }

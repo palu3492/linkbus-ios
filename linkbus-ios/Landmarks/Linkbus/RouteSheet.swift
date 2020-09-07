@@ -29,7 +29,7 @@ struct RouteSheet: View {
     var body: some View {
         NavigationView {
             ScrollView {
-
+                
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
                         HStack(){
@@ -114,39 +114,39 @@ struct RouteSheet: View {
                         VStack(alignment: .leading) {
                             ForEach(route.times, id: \.self) { time in
                                 HStack {
-                                Text(time.timeString)
-                                    .font(Font.custom("HelveticaNeue", size: 12))
-                                    .padding([.leading, .trailing], 10)
-                                    .padding([.top, .bottom], 5)
-                                    .foregroundColor(Color.white)
-                                    //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                    .background(Color.blue)
-                                    .cornerRadius(7)
-                                    .padding([.bottom], 5)
-                                Spacer()
+                                    Text(time.timeString)
+                                        .font(Font.custom("HelveticaNeue", size: 12))
+                                        .padding([.leading, .trailing], 10)
+                                        .padding([.top, .bottom], 5)
+                                        .foregroundColor(Color.white)
+                                        //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                        .background(Color.blue)
+                                        .cornerRadius(7)
+                                        .padding([.bottom], 5)
+                                    Spacer()
                                 }
                             }
                         }
-                            .padding(12)
+                        .padding(12)
                         .padding(.leading)
                     }
-                        .padding(.leading)
+                    .padding(.leading)
                     .padding([.bottom], 5)
                     
                     
-                
+                    
                 }
-            
-            }
-        
-        
-            .navigationBarTitle("", displayMode: .inline)
-                //.navigationBarHidden(true)
                 
             }
+                
+                
+            .navigationBarTitle("", displayMode: .inline)
+            //.navigationBarHidden(true)
             
         }
+        
     }
+}
 
 
 

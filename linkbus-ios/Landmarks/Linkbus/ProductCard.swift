@@ -64,17 +64,17 @@ struct ProductCard: View {
                                 .foregroundColor(Color.gray)
                         }
                         HStack(alignment: .center) {
-                          Spacer()
+                            Spacer()
                             Text(route.nextBusTimer)
                                 .font(Font.custom("HelveticaNeue", size: 14))
                                 //.font(.footnote)
                                 .padding([.leading, .trailing], 5)
                                 .padding([.top, .bottom], 2.5)
                                 .foregroundColor(Color.white)
-//                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                //                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
                                 .background(Color.blue)
-                            .cornerRadius(7)
-                            .padding([.top, .bottom], 4)
+                                .cornerRadius(7)
+                                .padding([.top, .bottom], 4)
                             
                         }
                     }
