@@ -51,6 +51,7 @@ struct AlertCard: View {
                 HStack(alignment: .center, spacing: 0) {
                     Text(alertText)
                         .foregroundColor(Color.white)
+                    Spacer()
                 }.font(Font.custom("HelveticaNeue", size: 14))
                 //                HStack(alignment: .center, spacing: 4) {
                 //                    Text(String.init(format: "$%.2f", arguments: [self.price]))
