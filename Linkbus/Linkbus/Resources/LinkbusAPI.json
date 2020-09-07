@@ -6,7 +6,8 @@
             "text": "A face mask is required to ride the CSB/SJU Link.",
             "clickable": true,
             "action": "https://www.csbsju.edu/covid-19",
-            "color": {
+            "color": "",
+            "rgb": {
                 "red": 1.0,
                 "green": 0.0,
                 "blue": 0.0,
@@ -19,10 +20,25 @@
             "text": "Welcome back to campus.",
             "clickable": false,
             "action": "",
-            "color": {
+            "color": "blue",
+            "rgb": {
                 "red": 0.0,
                 "green": 0.0,
-                "blue": 1.0,
+                "blue": 0.0,
+                "opacity": 0.0
+            }
+        },
+        {
+            "id": 3,
+            "active": true,
+            "text": "Test test test",
+            "clickable": false,
+            "action": "",
+            "color": "green"
+            "rgb": {
+                "red": 0.0,
+                "green": 1.0,
+                "blue": 0.0,
                 "opacity": 1.0
             }
         }
