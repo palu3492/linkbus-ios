@@ -29,7 +29,7 @@ extension RouteController {
         
         dispatchGroup.enter()
         fetchCsbsjuApi { apiResponse in
-            if (apiResponse != nil) {
+            if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.csbsjuApiResponse = apiResponse!
                     print(self.csbsjuApiResponse)
@@ -40,7 +40,7 @@ extension RouteController {
         
         dispatchGroup.enter()
         fetchLinkbusApi { apiResponse in
-            if apiResponse != nil {
+            if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.linkbusApiResponse = apiResponse!
                     print(self.linkbusApiResponse)
