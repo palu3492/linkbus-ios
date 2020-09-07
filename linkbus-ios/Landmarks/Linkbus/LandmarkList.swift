@@ -46,54 +46,46 @@ struct LandmarkList: View {
         }
     }
     
-    var body: some View {
-        NavigationView {
-            List() {
-                
-                VStack (alignment: .leading, spacing: 12) {
+        var body: some View {
+            NavigationView {
+                List() {
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
                         AlertCard(alertText: alert.text, alertColor: alert.color)
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-                            .zIndex(1)
                     }
-                    
+
+                    VStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.routes) { route in
-                        //                    if #available(iOS 13.4, *) {
-                        ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
-                        
-                            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-                            .zIndex(1)
-                        //.animation(.default)
-                        //.hoverEffect(.lift)
-                        //                    } else {
-                        //                        // Fallback on earlier versions
-                        //                    }
+    //                    if #available(iOS 13.4, *) {
+                            ProductCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                                .transition(.opacity)
+                                //.animation(.default)
+                                //.hoverEffect(.lift)
+    //                    } else {
+    //                        // Fallback on earlier versions
+    //                    }
                         //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
                     }
-                    //AlertCard(alertText: "There seems to be a connection issue. Please check internet connection.", alertColor: "red")
-                }
-                .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-            }
-                
-            .navigationBarTitle(self.menuBarTitle)
-            //            List(routeController.lbBusSchedule.routes) { route in
-            //                VStack (alignment: .leading) {
-            //                    Text(route.title)
-            //                        .font(.system(size: 11))
-            //                        .foregroundColor(Color.gray)
-            //                }
-            //            }
-        }
-        .onReceive(timer) { time in
-            if self.counter == 1 {
-                self.menuBarTitle = self.greeting
-                self.timer.upstream.connect().cancel()
-            }
-            
-            self.counter += 1
-        }
-        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-        .zIndex(1)
+                    }
+                    .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                        }
+                            
+                        .navigationBarTitle(self.menuBarTitle)
+                        //            List(routeController.lbBusSchedule.routes) { route in
+                        //                VStack (alignment: .leading) {
+                        //                    Text(route.title)
+                        //                        .font(.system(size: 11))
+                        //                        .foregroundColor(Color.gray)
+                        //                }
+                        //            }
+                    }
+                    .onReceive(timer) { time in
+                        if self.counter == 1 {
+                            self.menuBarTitle = self.greeting
+                            self.timer.upstream.connect().cancel()
+                        }
+                        
+                        self.counter += 1
+                    }
     }
 }
 
