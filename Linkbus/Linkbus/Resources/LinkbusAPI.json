@@ -34,7 +34,7 @@
             "text": "Test test test",
             "clickable": false,
             "action": "",
-            "color": "green"
+            "color": "green",
             "rgb": {
                 "red": 0.0,
                 "green": 1.0,
