@@ -21,7 +21,8 @@ struct Alert: Identifiable, Decodable {
     let text: String
     let clickable: Bool
     let action: String
-    let color: RGBColor
+    let color: String
+    let rgb: RGBColor
 }
 
 struct RouteDetail: Decodable {

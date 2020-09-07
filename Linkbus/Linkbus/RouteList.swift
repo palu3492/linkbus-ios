@@ -50,7 +50,7 @@ struct RouteList: View {
             NavigationView {
                 List() {
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
-                        AlertCard(alertText: alert.text, alertColor: alert.color)
+                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
                     }
 
                     VStack (alignment: .leading, spacing: 12) {
