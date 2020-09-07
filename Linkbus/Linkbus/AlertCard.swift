@@ -17,16 +17,28 @@ struct AlertCard: View {
     let alertText: String
     let alertColor: Color
     
-    init(alertText: String, alertColor: RGBColor) {
+    init(alertText: String, alertColor: String, alertRgb: RGBColor) {
         self.alertText = alertText
         
-        let color = Color(
-            red: alertColor.red,
-            green: alertColor.green,
-            blue: alertColor.blue,
-            opacity: alertColor.opacity
-        )
+        let color: Color
         
+        let colors = [
+            "red": Color.red,
+            "blue": Color.blue,
+            "green": Color.green,
+            "yellow": Color.yellow
+        ]
+        
+        if alertColor != "" {
+            color = colors[alertColor]!
+        } else {
+            color = Color(
+                red: alertRgb.red,
+                green: alertRgb.green,
+                blue: alertRgb.blue,
+                opacity: alertRgb.opacity
+            )
+        }
         self.alertColor = color
     }
     
@@ -47,7 +59,7 @@ struct AlertCard: View {
 
 struct AlertCard_Previews: PreviewProvider {
     static var previews: some View {
-        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0))
+        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0))
     }
 }
 

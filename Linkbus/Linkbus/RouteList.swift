@@ -49,14 +49,14 @@ struct RouteList: View {
         UITableView.appearance().backgroundColor = .clear
     }
     
-    var body: some View {
-        NavigationView {
-            List() {
-                ForEach(routeController.lbBusSchedule.alerts) { alert in
-                    AlertCard(alertText: alert.text, alertColor: alert.color)
-                }
-                
-                VStack (alignment: .leading, spacing: 12) {
+        var body: some View {
+            NavigationView {
+                List() {
+                    ForEach(routeController.lbBusSchedule.alerts) { alert in
+                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
+                    }
+
+                    VStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.routes) { route in
                         //                    if #available(iOS 13.4, *) {
                         RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
