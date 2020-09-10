@@ -16,7 +16,7 @@
         },
         {
             "id": 2,
-            "active": true,
+            "active": false,
             "text": "Welcome back to campus.",
             "clickable": false,
             "action": "",

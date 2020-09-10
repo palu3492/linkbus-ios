@@ -107,7 +107,15 @@ extension RouteController {
         
         lbBusSchedule.msg = csbsjuApiResponse.msg!
         lbBusSchedule.attention = csbsjuApiResponse.attention!
-        lbBusSchedule.alerts = linkbusApiResponse.alerts
+        
+        // only add active alerts to lbBusSchedule
+        if !(linkbusApiResponse.alerts.isEmpty) {
+            for apiAlert in linkbusApiResponse.alerts {
+                if (apiAlert.active) {
+                    lbBusSchedule.alerts.append(apiAlert)
+                }
+            }
+        }
         
         if !(csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
