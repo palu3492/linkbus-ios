@@ -28,91 +28,97 @@ struct RouteSheet: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            VStack() {
                 RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
                     .frame(width: 60, height: 4)
                     .foregroundColor(Color(UIColor.systemGray2))
                     .padding([.top], 10)
                     .padding([.bottom], 5)
                 
+                VStack(alignment: .leading) {
+                    
+                    // origin
+                    HStack(alignment: .firstTextBaseline) {
+                        Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!) //stop.circle.fill looks ok
+                            .renderingMode(.template)
+                            //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                            .foregroundColor(Color.blue)
+                            .font(.subheadline) //weight: .ultralight))
+                            .padding(.leading)
+                        
+                        
+                        Text(route.origin)
+                            .font(.title)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    .padding([.top], 5)
+                    
+                    //origin location
+                    HStack(alignment: .firstTextBaseline) {
+                        //dash indent?
+                        //                    Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!)//systemName: "smallcircle.fill.circle") //stop.circle.fill looks ok
+                        //                        .font(.headline)
+                        //                        .padding(.leading)
+                        Text("Pickup from " + route.originLocation)
+                            .font(.subheadline)
+                            .padding(.leading, 45) //fix
+                            .padding(.leading)
+                            .foregroundColor(Color.gray)
+                        Spacer()
+                    }
+                    .padding([.bottom], 5)
+                    
+                    // ellipses
+                    HStack(alignment: .firstTextBaseline) {
+                        Image(systemName: "ellipsis")
+                            .rotationEffect(.degrees(90.0))
+                            .padding(.leading)
+                    }
+                    .padding([.top, .bottom], 5)
+                    
+                    // destination
+                    HStack(alignment: .firstTextBaseline) {
+                        Image(uiImage: UIImage(systemName: "mappin.circle.fill")!)
+                            .renderingMode(.template)
+                            //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
+                            .foregroundColor(Color.blue)
+                            .font(.headline)
+                            .padding(.leading)
+                        Text(route.destination)
+                            .font(.title)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    .padding([.top], 5)
+                    
+                    //destination location
+                    HStack(alignment: .lastTextBaseline) {
+                        //                    Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!)//systemName: "smallcircle.fill.circle") //stop.circle.fill looks ok
+                        //                        .font(.headline)
+                        //                        .padding(.leading)
+                        Text("Dropoff at " + route.destinationLocation)
+                            .font(.subheadline)
+                            .padding(.leading, 45) //fix
+                            .padding(.leading)
+                            .foregroundColor(Color.gray)
+                        Spacer()
+                    }
+                     
+                }
+                .padding(12)
+                
+                
+                Spacer()
+
+            ScrollView {
+                
+
+                
                 //Spacer()
                 
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading) {
-                        
-                        // origin
-                        HStack(alignment: .firstTextBaseline) {
-                            Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!) //stop.circle.fill looks ok
-                                .renderingMode(.template)
-                                //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                .foregroundColor(Color.blue)
-                                .font(.subheadline) //weight: .ultralight))
-                                .padding(.leading)
-                            
-                            
-                            Text(route.origin)
-                                .font(.title)
-                                .padding(.leading)
-                            Spacer()
-                        }
-                        .padding([.top], 5)
-                        
-                        //origin location
-                        HStack(alignment: .firstTextBaseline) {
-                            //dash indent?
-                            //                    Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!)//systemName: "smallcircle.fill.circle") //stop.circle.fill looks ok
-                            //                        .font(.headline)
-                            //                        .padding(.leading)
-                            Text("Pickup from " + route.originLocation)
-                                .font(.subheadline)
-                                .padding(.leading, 45) //fix
-                                .padding(.leading)
-                                .foregroundColor(Color.gray)
-                            Spacer()
-                        }
-                        .padding([.bottom], 5)
-                        
-                        // ellipses
-                        HStack(alignment: .firstTextBaseline) {
-                            Image(systemName: "ellipsis")
-                                .rotationEffect(.degrees(90.0))
-                                .padding(.leading)
-                        }
-                        .padding([.top, .bottom], 5)
-                        
-                        // destination
-                        HStack(alignment: .firstTextBaseline) {
-                            Image(uiImage: UIImage(systemName: "mappin.circle.fill")!)
-                                .renderingMode(.template)
-                                //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                .foregroundColor(Color.blue)
-                                .font(.headline)
-                                .padding(.leading)
-                            Text(route.destination)
-                                .font(.title)
-                                .padding(.leading)
-                            Spacer()
-                        }
-                        .padding([.top], 5)
-                        
-                        //destination location
-                        HStack(alignment: .lastTextBaseline) {
-                            //                    Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!)//systemName: "smallcircle.fill.circle") //stop.circle.fill looks ok
-                            //                        .font(.headline)
-                            //                        .padding(.leading)
-                            Text("Dropoff at " + route.destinationLocation)
-                                .font(.subheadline)
-                                .padding(.leading, 45) //fix
-                                .padding(.leading)
-                                .foregroundColor(Color.gray)
-                            Spacer()
-                        }
-                         
-                    }
-                    .padding(12)
-                    
-                    
-                    Spacer()
+
                     // route times
                     HStack(alignment: .lastTextBaseline) {
                         VStack(alignment: .leading) {
@@ -147,6 +153,7 @@ struct RouteSheet: View {
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(true)
             
+        }
         }
         
     }

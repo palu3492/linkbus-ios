@@ -29,21 +29,35 @@ struct RouteList: View {
         self.alertPresented = false
         
         let currentDate = Date()
-        let calendar = Calendar.current
+        let calendar = Calendar(identifier: .gregorian)
         let hour = calendar.component(.hour, from: currentDate)
-        
+        let component = calendar.dateComponents([.weekday], from: currentDate)
         
         if (hour < 6) {
-            self.greeting = "Goodnight 😴"
+            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 😴"]
+            let randomGreeting = nightGreetings.randomElement()
+            self.greeting = randomGreeting!
         }
         else if (hour < 12) {
-            self.greeting = "Good morning 🌅"
+//            if (component.weekday == 2) { // if Monday
+//                self.greeting = "Happy Monday 🌅"
+//            }
+//            else if (component.weekday == 6) {
+//                self.greeting = "Happy Friday 🌅"
+//            }
+//            else {
+                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅"]
+                let randomGreeting = morningGreetings.randomElement()
+                self.greeting = randomGreeting!
+//            }
         }
         else if (hour < 17) {
             self.greeting = "Good afternoon ☀️"
         }
         else { // < 24
-            self.greeting = "Good evening 🌙"
+            let eveningGreetings = ["Good evening 🌙", "Good evening 🌙", "Good evening 🌙", "Good evening 🌙"]
+            let randomGreeting = eveningGreetings.randomElement()
+            self.greeting = randomGreeting!
         }
         
         UITableView.appearance().backgroundColor = .clear
