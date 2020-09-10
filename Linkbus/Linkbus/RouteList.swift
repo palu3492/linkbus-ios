@@ -9,7 +9,6 @@ import SwiftUI
 import Foundation
 import Combine
 
-
 struct RouteList: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var routeController = RouteController()
@@ -39,17 +38,17 @@ struct RouteList: View {
             self.greeting = randomGreeting!
         }
         else if (hour < 12) {
-//            if (component.weekday == 2) { // if Monday
-//                self.greeting = "Happy Monday 🌅"
-//            }
-//            else if (component.weekday == 6) {
-//                self.greeting = "Happy Friday 🌅"
-//            }
-//            else {
-                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅"]
-                let randomGreeting = morningGreetings.randomElement()
-                self.greeting = randomGreeting!
-//            }
+            //            if (component.weekday == 2) { // if Monday
+            //                self.greeting = "Happy Monday 🌅"
+            //            }
+            //            else if (component.weekday == 6) {
+            //                self.greeting = "Happy Friday 🌅"
+            //            }
+            //            else {
+            let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅"]
+            let randomGreeting = morningGreetings.randomElement()
+            self.greeting = randomGreeting!
+            //            }
         }
         else if (hour < 17) {
             self.greeting = "Good afternoon ☀️"
@@ -60,17 +59,23 @@ struct RouteList: View {
             self.greeting = randomGreeting!
         }
         
-        UITableView.appearance().backgroundColor = .clear
+        //        UITableView.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
+        //        UITableViewCell.appearance().backgroundColor = .clear
+        //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
+        //        print(colorScheme)
     }
     
-        var body: some View {
-            NavigationView {
-                List() {
-                    ForEach(routeController.lbBusSchedule.alerts) { alert in
-                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
-                    }
-
-                    VStack (alignment: .leading, spacing: 12) {
+    var body: some View {
+        NavigationView {
+            List() {
+                ForEach(routeController.lbBusSchedule.alerts) { alert in
+                    AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
+                        .transition(.opacity)
+                }
+                //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                
+                
+                VStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.routes) { route in
                         //                    if #available(iOS 13.4, *) {
                         RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
@@ -80,15 +85,23 @@ struct RouteList: View {
                         //                    } else {
                         //                        // Fallback on earlier versions
                         //                    }
-                        //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                        
                     }
+                        
+                    .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
                 }
-                .background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                .listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                .transition(.opacity)
+                
+                
+                //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                
             }
+                //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 
                 
-            .navigationBarTitle(self.menuBarTitle)
+                
+                .navigationBarTitle(self.menuBarTitle)
+            
             //            List(routeController.lbBusSchedule.routes) { route in
             //                VStack (alignment: .leading) {
             //                    Text(route.title)

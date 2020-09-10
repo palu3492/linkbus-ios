@@ -25,7 +25,7 @@ struct RouteCard: View {
     @State private var totalHeight
         //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
-        @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     
     //var landmark: Landmark
     
