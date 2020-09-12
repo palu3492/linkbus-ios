@@ -12,7 +12,8 @@
                 "green": 0.0,
                 "blue": 0.0,
                 "opacity": 1.0
-            }
+            },
+            "fullWidth": false
         },
         {
             "id": 2,
@@ -26,7 +27,8 @@
                 "green": 0.0,
                 "blue": 0.0,
                 "opacity": 0.0
-            }
+            },
+            "fullWidth": false
         }
     ],
     "routes": [{
