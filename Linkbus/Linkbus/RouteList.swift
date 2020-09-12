@@ -68,12 +68,16 @@ struct RouteList: View {
     var body: some View {
         NavigationView {
             List() {
-                ForEach(routeController.lbBusSchedule.alerts) { alert in
-                    AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
-                        .transition(.opacity)
+                VStack(alignment: .leading, spacing: 12){
+                    ForEach(routeController.lbBusSchedule.alerts) { alert in
+                        AlertCard(alertText: alert.text,
+                                  alertColor: alert.color,
+                                  alertRgb: alert.rgb,
+                                  fullWidth: alert.fullWidth)
+                            .transition(.opacity)
+                    }
+                    //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 }
-                //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                
                 
                 VStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.routes) { route in

@@ -21,6 +21,7 @@ struct Alert: Identifiable, Decodable {
     let text: String
     let clickable: Bool
     let action: String
+    let fullWidth: Bool
     let color: String
     let rgb: RGBColor
 }
