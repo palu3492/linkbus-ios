@@ -20,12 +20,16 @@ struct RouteList: View {
     @State var menuBarTitle = "Linkbus"
     public var greeting: String
     
+    let sceneDelegate:SceneDelegate
+    
     // init removes seperator/dividers from list, in future maybe use scrollview
-    init() {
+    init(sceneDelegate: SceneDelegate) {
         
         UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
         self.alertPresented = false
+        
+        self.sceneDelegate = sceneDelegate
         
         let currentDate = Date()
         let calendar = Calendar(identifier: .gregorian)
@@ -68,6 +72,24 @@ struct RouteList: View {
     var body: some View {
         NavigationView {
             List() {
+                // Temporary button!
+                Group(){
+                    Button(action: {
+                        self.sceneDelegate.window?.rootViewController = UIHostingController(rootView: SelectDate())
+                    }) {
+                        HStack {
+                            Image(systemName: "calendar")
+                                .font(Font.system(size: 16))
+                            Text("Change Date")
+                                .fontWeight(.semibold)
+                                .font(Font.custom("HelveticaNeue", size: 14))
+                        }
+                        .padding(12)
+                        .foregroundColor(.white)
+                        .background(Color.green)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
                 VStack(alignment: .leading, spacing: 12){
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
                         AlertCard(alertText: alert.text,
@@ -139,12 +161,12 @@ struct RouteList: View {
 //    }
 //}
 
-struct LandmarkList_Previews: PreviewProvider {
-    static var previews: some View {
-        ForEach(["iPhone XS Max"], id: \.self) { deviceName in
-            RouteList()
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
-}
+//struct LandmarkList_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ForEach(["iPhone XS Max"], id: \.self) { deviceName in
+//            RouteList()
+//                .previewDevice(PreviewDevice(rawValue: deviceName))
+//                .previewDisplayName(deviceName)
+//        }
+//    }
+//}
