@@ -22,6 +22,14 @@ struct RouteList: View {
     
     let sceneDelegate:SceneDelegate
     
+    var calendarButton: some View {
+        NavigationLink(destination: SelectDate()) {
+            Image(systemName: "calendar")
+            .imageScale(.large)
+            .padding()
+        }
+    }
+    
     // init removes seperator/dividers from list, in future maybe use scrollview
     init(sceneDelegate: SceneDelegate) {
         
@@ -72,24 +80,6 @@ struct RouteList: View {
     var body: some View {
         NavigationView {
             List() {
-                // Temporary button!
-                Group(){
-                    Button(action: {
-                        self.sceneDelegate.window?.rootViewController = UIHostingController(rootView: SelectDate())
-                    }) {
-                        HStack {
-                            Image(systemName: "calendar")
-                                .font(Font.system(size: 16))
-                            Text("Change Date")
-                                .fontWeight(.semibold)
-                                .font(Font.custom("HelveticaNeue", size: 14))
-                        }
-                        .padding(12)
-                        .foregroundColor(.white)
-                        .background(Color.green)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
                 VStack(alignment: .leading, spacing: 12){
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
                         AlertCard(alertText: alert.text,
@@ -117,16 +107,12 @@ struct RouteList: View {
                     .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
                 }
                 .transition(.opacity)
-                
-                
                 //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 
             }
-                //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                
-                
-                
-                .navigationBarTitle(self.menuBarTitle)
+            //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+            .navigationBarTitle(self.menuBarTitle)
+            .navigationBarItems(trailing: calendarButton)
             
             //            List(routeController.lbBusSchedule.routes) { route in
             //                VStack (alignment: .leading) {

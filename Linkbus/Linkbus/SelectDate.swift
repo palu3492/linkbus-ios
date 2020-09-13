@@ -18,23 +18,26 @@ struct SelectDate: View {
     @State private var lbScheduleDate = Date()
 
     var body: some View {
-        VStack {
-            HStack(){
-                Spacer()
-                Text("Date is \(lbScheduleDate, formatter: dateFormatter)")
-                Spacer()
-                Button(action: {
-                    print("Done")
-                }) {
-                    Text("Done")
-                        .fontWeight(.semibold)
-                        .font(Font.custom("HelveticaNeue", size: 18))
-                        .foregroundColor(Color.blue)
+        List {
+            VStack {
+                HStack(){
+                    Spacer()
+                    Text("Date is \(lbScheduleDate, formatter: dateFormatter)")
+                    Spacer()
+                    Button(action: {
+                        print("Done")
+                    }) {
+                        Text("Done")
+                            .fontWeight(.semibold)
+                            .font(Font.custom("HelveticaNeue", size: 18))
+                            .foregroundColor(Color.blue)
+                    }
+                    Spacer()
                 }
-                Spacer()
+                DatePicker("", selection: $lbScheduleDate, displayedComponents: .date)
             }
-            DatePicker("", selection: $lbScheduleDate, displayedComponents: .date)
         }
+        .navigationBarTitle(Text("Select Date"))
     }
 }
 
