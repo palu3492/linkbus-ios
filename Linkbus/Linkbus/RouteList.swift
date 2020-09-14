@@ -20,24 +20,22 @@ struct RouteList: View {
     @State var menuBarTitle = "Linkbus"
     public var greeting: String
     
-    let sceneDelegate:SceneDelegate
-    
     var calendarButton: some View {
-        NavigationLink(destination: SelectDate()) {
+        NavigationLink(destination: SelectDate(), isActive: $isActive) {
             Image(systemName: "calendar")
             .imageScale(.large)
             .padding()
         }
     }
     
+    @State private var isActive: Bool = false
+    
     // init removes seperator/dividers from list, in future maybe use scrollview
-    init(sceneDelegate: SceneDelegate) {
+    init() {
         
         UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
         self.alertPresented = false
-        
-        self.sceneDelegate = sceneDelegate
         
         let currentDate = Date()
         let calendar = Calendar(identifier: .gregorian)
@@ -111,6 +109,7 @@ struct RouteList: View {
                 
             }
             //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+//            .navigationBarTitle(self.isActive ? "Back" : self.menuBarTitle)
             .navigationBarTitle(self.menuBarTitle)
             .navigationBarItems(trailing: calendarButton)
             

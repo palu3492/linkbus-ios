@@ -14,27 +14,59 @@ struct SelectDate: View {
         formatter.dateStyle = .long
         return formatter
     }
+    
+    @ObservedObject var routeController = RouteController()
 
-    @State private var lbScheduleDate = Date()
+    @State private var lbScheduleDate: Date = Date()
+    
+    @State private var showDatePicker: Bool = true
+    @State private var datePickerButtonText: String = "Done"
+    
+    var editButton: some View {
+        Button(action: {
+            self.datePickerButtonText = self.showDatePicker ? "Edit" : "Done"
+            self.showDatePicker.toggle()
+        }) {
+            Text(self.datePickerButtonText)
+                .fontWeight(.semibold)
+                .font(Font.custom("HelveticaNeue", size: 18))
+                .foregroundColor(Color.blue)
+        }
+    }
+    
+    var datePicker: some View {
+        DatePicker("", selection: $lbScheduleDate, displayedComponents: .date)
+            .transition(.slide)
+            .animation(.spring())
+    }
 
     var body: some View {
-        List {
-            VStack {
+        ScrollView(.vertical, showsIndicators: false) {
+            Divider()
+            .padding(.top, 12)
+            
+            VStack(alignment: .leading, spacing: 12){
                 HStack(){
                     Spacer()
-                    Text("Date is \(lbScheduleDate, formatter: dateFormatter)")
+                    Text("\(lbScheduleDate, formatter: dateFormatter)")
                     Spacer()
-                    Button(action: {
-                        print("Done")
-                    }) {
-                        Text("Done")
-                            .fontWeight(.semibold)
-                            .font(Font.custom("HelveticaNeue", size: 18))
-                            .foregroundColor(Color.blue)
-                    }
+                    self.editButton
                     Spacer()
                 }
-                DatePicker("", selection: $lbScheduleDate, displayedComponents: .date)
+                if self.showDatePicker {
+                    self.datePicker
+                }
+            }
+            
+            Divider()
+                .padding(.bottom, 12)
+            
+            VStack(alignment: .leading, spacing: 12){
+                ForEach(routeController.lbBusSchedule.routes) { route in
+                    RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                        .transition(.opacity)
+                }
+                .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             }
         }
         .navigationBarTitle(Text("Select Date"))
