@@ -17,7 +17,10 @@ class RouteController: ObservableObject {
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
+    private var dailyMessage: String
+    
     init() {
+        self.dailyMessage = ""
         webRequest()
     }
 }
@@ -32,7 +35,7 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.csbsjuApiResponse = apiResponse!
-                    print(self.csbsjuApiResponse)
+//                    print(self.csbsjuApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -43,7 +46,18 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.linkbusApiResponse = apiResponse!
-                    print(self.linkbusApiResponse)
+//                    print(self.linkbusApiResponse)
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.enter()
+        fetchTestUrl { response in
+            if let success = response {
+                DispatchQueue.main.async {
+//                    print(apiResponse)
+                    self.dailyMessage = response!
                     dispatchGroup.leave()
                 }
             }
@@ -52,6 +66,7 @@ extension RouteController {
         dispatchGroup.notify(queue: .main) {
             self.processJson()
         }
+        
     }
 
     
@@ -101,6 +116,63 @@ extension RouteController {
         task.resume()
     }
     
+//    completionHandler: @escaping (data: Data?) -> Void
+    func fetchTestUrl(completionHandler: @escaping (String?) -> Void) {
+        
+        /*
+         POST 'https://apps.csbsju.edu/busschedule/default.aspx' \
+         --header 'User-Agent:  Mozilla/5.0 (Android 8.0)' \
+         --header 'X-MicrosoftAjax:  Delta=true' \
+         --header 'X-Requested-With:  XMLHttpRequest' \
+         --header 'Cookie: ASP.NET_SessionId=wj23zu4ohd5vy0lkghw3gaac' \
+         --form '__VIEWSTATE= /wEPDwUJMjUxNjA1NzE0ZBgGBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAyJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDQkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwMSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAzJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDAkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwNSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkWGh+6w+aUlr4YOYVCBNBCh/BBLI=' \
+         --form '__VIEWSTATEGENERATOR= 9BAD42EF' \
+         --form '__EVENTVALIDATION= /wEdAAJuu0YtVtaTDWfPQnmvmzb0LRHL/npThEIWeX7N+kLIDZtqPuTRCdRUPrjcObmvVnKFIOev' \
+         --form '__ASYNCPOST= true'
+         */
+
+        let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
+        
+        // Create request
+        var request = URLRequest(url: url!)
+        // Set http method
+        request.httpMethod = "POST"
+        // Add body (form data
+        var postString = ""
+        postString += "__VIEWSTATE=%2FwEPDwUJMjUxNjA1NzE0ZBgGBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAyJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDQkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwMSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAzJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDAkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwNSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkWGh%2B6w%2BaUlr4YOYVCBNBCh%2FBBLI%3D"
+        postString += "&__VIEWSTATEGENERATOR=9BAD42EF"
+        postString += "&__EVENTVALIDATION=%2FwEdAAJuu0YtVtaTDWfPQnmvmzb0LRHL%2FnpThEIWeX7N%2BkLIDZtqPuTRCdRUPrjcObmvVnKFIOev"
+        postString += "&__ASYNCPOST=true"
+        request.httpBody = postString.data(using: .utf8)
+        // Add headers
+        request.setValue("Delta=true", forHTTPHeaderField: "X-MicrosoftAjax")
+        request.setValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+//        request.setValue("ASP.NET_SessionId=wj23zu4ohd5vy0lkghw3gaac", forHTTPHeaderField: "Cookie")
+        request.setValue("Mozilla/5.0 (Android 8.0)", forHTTPHeaderField: "User-Agent")
+        
+//        var result:(message:String, data:Data?) = (message: "Fail", data: nil)
+        
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            if(error != nil) {
+                print("Error 1")
+            }
+            else {
+                let dataString = String(decoding: data!, as: UTF8.self)
+                let pattern = #"TodayMsg"><p>([^<]*)<\/p>"#
+//                let range = dataString.range(of: #"TodayMsg"><p>([^<]*)<\/p>"#, options: .regularExpression)
+                let regex = try? NSRegularExpression(pattern: pattern)
+                let searchRange = NSRange(location: 0, length: dataString.utf16.count)
+                if let match = regex?.firstMatch(in: dataString, options: [], range: searchRange) {
+                    if let secondRange = Range(match.range(at: 1), in: dataString) {
+                        let dailyMessage = String(dataString[secondRange])
+                        completionHandler(dailyMessage)
+                    }
+                }
+            }
+        })
+        task.resume()
+    }
+    
     func processJson() {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
@@ -116,6 +188,10 @@ extension RouteController {
                 }
             }
         }
+        // Create alert from daily message
+        let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
+        let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", color: "blue", rgb: color)
+        lbBusSchedule.alerts.append(dailyMessageAlert)
         
         if !(csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
@@ -207,12 +283,12 @@ extension RouteController {
             
         }
         
-        if (lbBusSchedule.routes.count > 0) {
-            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-            while let time = iterator.next() {
-                print(time.timeString)
-            }
-        }
+//        if (lbBusSchedule.routes.count > 0) {
+//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+//            while let time = iterator.next() {
+//                print(time.timeString)
+//            }
+//        }
         
     }
     
