@@ -26,6 +26,14 @@ struct SelectDate: View {
         Button(action: {
             self.datePickerButtonText = self.showDatePicker ? "Edit" : "Done"
             self.showDatePicker.toggle()
+            if !self.showDatePicker {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                let dateFormated = formatter.string(from: self.lbScheduleDate)
+                print(dateFormated)
+                self.routeController.CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/?date="+dateFormated
+                self.routeController.webRequest()
+            }
         }) {
             Text(self.datePickerButtonText)
                 .fontWeight(.semibold)
@@ -61,13 +69,14 @@ struct SelectDate: View {
             Divider()
                 .padding(.bottom, 12)
             
-            VStack(alignment: .leading, spacing: 12){
+            VStack(alignment: .leading, spacing: 12) {
                 ForEach(routeController.lbBusSchedule.routes) { route in
                     RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                         .transition(.opacity)
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
             }
+            .padding(12)
         }
         .navigationBarTitle(Text("Select Date"))
     }

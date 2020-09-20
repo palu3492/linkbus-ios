@@ -9,8 +9,8 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    public var CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
+    let LinkbusApiUrl = "https://raw.githubusercontent.com/palu3492/linkbus-ios/date_picker/Linkbus/Linkbus/Resources/LinkbusAPI.json"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
     var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
@@ -18,6 +18,9 @@ class RouteController: ObservableObject {
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
     init() {
+//        csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
+//        linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
+//        lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
         webRequest()
     }
 }
@@ -25,6 +28,9 @@ class RouteController: ObservableObject {
 extension RouteController {
     
     func webRequest() {
+        // Remove all routes on date change
+        lbBusSchedule.routes.removeAll()
+        
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
@@ -32,7 +38,7 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.csbsjuApiResponse = apiResponse!
-                    print(self.csbsjuApiResponse)
+//                    print(self.csbsjuApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -43,7 +49,7 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.linkbusApiResponse = apiResponse!
-                    print(self.linkbusApiResponse)
+//                    print(self.linkbusApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -207,12 +213,12 @@ extension RouteController {
             
         }
         
-        if (lbBusSchedule.routes.count > 0) {
-            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-            while let time = iterator.next() {
-                print(time.timeString)
-            }
-        }
+//        if (lbBusSchedule.routes.count > 0) {
+//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+//            while let time = iterator.next() {
+//                print(time.timeString)
+//            }
+//        }
         
     }
     
