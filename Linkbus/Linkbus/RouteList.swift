@@ -23,7 +23,8 @@ struct RouteList: View {
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
         
-        UINavigationBar.setAnimationsEnabled(true)
+        
+        //UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
         self.alertPresented = false
         
@@ -63,9 +64,79 @@ struct RouteList: View {
         //        UITableViewCell.appearance().backgroundColor = .clear
         //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        print(colorScheme)
+        
     }
     
     var body: some View {
+        if #available(iOS 14.0, *) {
+            NavigationView {
+                ScrollView {
+                    LazyVStack (alignment: .leading, spacing: 12) {
+                    ForEach(routeController.lbBusSchedule.alerts) { alert in
+                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
+                            //.transition(.opacity)
+                    }
+                    }
+                    .padding(.top, 4)
+                    .padding(.horizontal, 12)
+                    //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                    
+                    LazyVStack (alignment: .leading, spacing: 12) {
+                        ForEach(routeController.lbBusSchedule.routes) { route in
+                            //                    if #available(iOS 13.4, *) {
+                            RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            //.animation(.default)
+                            //.hoverEffect(.lift)
+                            //                    } else {
+                            //                        // Fallback on earlier versions
+                            //                    }
+                            
+                        }
+//                        .transition(.scale)
+//                        .animation(.easeInOut)
+                            
+                        .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+                    }
+                    .padding(.horizontal, 12)
+//                    .transition(.scale)
+//                    .animation(.default)
+                    
+                    
+                    //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                    
+                    Text("updated: just now")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
+                        .padding(12)
+                
+                }
+            
+                    //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                    
+                    
+                    
+                .navigationBarTitle(self.menuBarTitle, displayMode: .large)
+                
+                //            List(routeController.lbBusSchedule.routes) { route in
+                //                VStack (alignment: .leading) {
+                //                    Text(route.title)
+                //                        .font(.system(size: 11))
+                //                        .foregroundColor(Color.gray)
+                //                }
+                //            }
+            }
+            .onReceive(timer) { time in
+                if self.counter == 1 {
+                    self.menuBarTitle = self.greeting
+                    self.timer.upstream.connect().cancel()
+                }
+                
+                self.counter += 1
+            }
+        }
+        
+        else {//IOS 13
+        
         NavigationView {
             List() {
                 ForEach(routeController.lbBusSchedule.alerts) { alert in
@@ -80,6 +151,7 @@ struct RouteList: View {
                         //                    if #available(iOS 13.4, *) {
                         RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                             .transition(.opacity)
+                        
                         //.animation(.default)
                         //.hoverEffect(.lift)
                         //                    } else {
@@ -121,6 +193,7 @@ struct RouteList: View {
         
     }
     
+}
 }
 
 //    var body: some View {

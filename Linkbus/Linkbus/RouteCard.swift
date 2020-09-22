@@ -55,7 +55,7 @@ struct RouteCard: View {
                         .fontWeight(.regular)
                     Spacer()
                     
-                    VStack {
+                    VStack (alignment: .leading, spacing: 0) {
                         HStack(alignment: .center) {
                             Spacer()
                             Text("Next bus")
@@ -80,9 +80,7 @@ struct RouteCard: View {
                         }
                     }
                 }
-                    
-                    
-                    
+
                 .padding([.top, .bottom], 8)
                 
                 //                HStack(alignment: .center, spacing: 4) {
