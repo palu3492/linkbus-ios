@@ -113,6 +113,13 @@ extension RouteController {
         task.resume()
     }
     
+    /**
+        Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
+        After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
+        - Parameter completionHandler: The callback function to be executed on success fetching of website html.
+     
+        - Returns: calls completion handler with daily message as argument or returns null on error.
+     */
     func fetchDailyMessage(completionHandler: @escaping (String?) -> Void) {
         let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
         // Create request
@@ -122,12 +129,13 @@ extension RouteController {
         // Add body (form data)
         var postString = ""
         // These asp.net fields may not work forever!
+        // However.. it's worked for a month so far.
         let specifyData = false
         if specifyData {
             // Allows for date to be changed. Disabled by default. Implement later.
             let date = "9/20/2020"
             let dateEncoded = date.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate="+dateEncoded!
+            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate=" + dateEncoded!
         }
         postString += "&__VIEWSTATE=%2FwEPDwUJMjUxNjA1NzE0ZBgGBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAyJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDQkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwMSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAzJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDAkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwNSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkWGh%2B6w%2BaUlr4YOYVCBNBCh%2FBBLI%3D"
         postString += "&__VIEWSTATEGENERATOR=9BAD42EF"
@@ -155,8 +163,13 @@ extension RouteController {
         task.resume()
     }
     
-    /* */
-    func processDailyMessage(data:Data) -> String {
+    /**
+        Processes the daily message website html into just the daily message string.
+        - Parameter data: The fetched bus schedule website html.
+     
+        - Returns: Daily message string or empty string.
+     */
+    func processDailyMessage(data: Data) -> String {
         let dataString = String(decoding: data, as: UTF8.self)
         let pattern = #"TodayMsg"><p>([^<]*)<\/p>"#
         let regex = try? NSRegularExpression(pattern: pattern)
@@ -189,7 +202,7 @@ extension RouteController {
         if self.dailyMessage != "" {
             // Only add to alerts if message is not empty string
             let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
-            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", color: "blue", rgb: color)
+            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
             lbBusSchedule.alerts.append(dailyMessageAlert)
         }
         

@@ -54,7 +54,7 @@ struct RouteList: View {
             self.greeting = "Good afternoon ☀️"
         }
         else { // < 24
-            let eveningGreetings = ["Good evening 🌙", "Good evening 🌙", "Good evening 🌙", "Good evening 🌙"]
+            let eveningGreetings = ["Good evening 🌙", "Buena noches 🌙", "Good evening 🌙", "Good evening 🌙"]
             let randomGreeting = eveningGreetings.randomElement()
             self.greeting = randomGreeting!
         }
