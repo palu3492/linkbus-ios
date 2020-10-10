@@ -45,13 +45,15 @@ struct RouteSheet: View {
                                 .renderingMode(.template)
                                 //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
                                 .foregroundColor(Color.blue)
-                                .font(.subheadline) //weight: .ultralight))
+                                //.font(.subheadline) //weight: .ultralight))
+                                                                .font(.system(size: 25))
                                 .padding(.leading)
                             
                             
                             Text(route.origin)
-                                .font(.title)
+                                .font(.system(size: 25))
                                 .padding(.leading)
+            
                             Spacer()
                         }
                         .padding([.top], 5)
@@ -63,7 +65,7 @@ struct RouteSheet: View {
                             //                        .font(.headline)
                             //                        .padding(.leading)
                             Text("Pickup from " + route.originLocation)
-                                .font(.subheadline)
+                                .font(.system(size: 14))
                                 .padding(.leading, 45) //fix
                                 .padding(.leading)
                                 .foregroundColor(Color.gray)
@@ -75,7 +77,9 @@ struct RouteSheet: View {
                         HStack(alignment: .firstTextBaseline) {
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90.0))
+                                                                .font(.system(size: 20))
                                 .padding(.leading)
+                                .foregroundColor(Color.gray)
                         }
                         .padding([.top, .bottom], 5)
                         
@@ -85,10 +89,12 @@ struct RouteSheet: View {
                                 .renderingMode(.template)
                                 //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
                                 .foregroundColor(Color.blue)
-                                .font(.headline)
+                                //.font(.headline)
+                                .font(.system(size: 25))
                                 .padding(.leading)
                             Text(route.destination)
-                                .font(.title)
+                                //.font(.title)
+                                                                .font(.system(size: 25))
                                 .padding(.leading)
                             Spacer()
                         }
@@ -100,7 +106,8 @@ struct RouteSheet: View {
                             //                        .font(.headline)
                             //                        .padding(.leading)
                             Text("Dropoff at " + route.destinationLocation)
-                                .font(.subheadline)
+                                //.font(.subheadline)
+                                .font(.system(size: 14))
                                 .padding(.leading, 45) //fix
                                 .padding(.leading)
                                 .foregroundColor(Color.gray)
