@@ -10,29 +10,31 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    let LinkbusApiUrl = "https://raw.githubusercontent.com/palu3492/linkbus-ios/development/Linkbus/Linkbus/Resources/LinkbusAPI.json"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
     var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
     
+    var dailyMessage = ""
+    
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
-    private var dailyMessage: String
     
     init() {
-        self.dailyMessage = ""
         webRequest()
     }
-}
+} 
 
 extension RouteController {
     
     func webRequest() {
+        print("webRequest()")
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
         fetchCsbsjuApi { apiResponse in
-            if let success = apiResponse {
+            if apiResponse != nil {
+                print("CSBJSU API fetched")
                 DispatchQueue.main.async {
                     self.csbsjuApiResponse = apiResponse!
                     dispatchGroup.leave()
@@ -42,7 +44,8 @@ extension RouteController {
         
         dispatchGroup.enter()
         fetchLinkbusApi { apiResponse in
-            if let success = apiResponse {
+            if apiResponse != nil {
+                print("Linkbus API fetched")
                 DispatchQueue.main.async {
                     self.linkbusApiResponse = apiResponse!
                     dispatchGroup.leave()
@@ -52,7 +55,8 @@ extension RouteController {
         
         dispatchGroup.enter()
         fetchDailyMessage { response in
-            if let success = response {
+            if response != nil {
+                print("Daily message fetched")
                 DispatchQueue.main.async {
                     self.dailyMessage = response!
                     dispatchGroup.leave()
@@ -78,7 +82,7 @@ extension RouteController {
             
             guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
-                    print("Error with the response, unexpected status code: \(response)")
+                print("Error with the response, unexpected status code: \(String(describing: response))")
                     return
             }
             
@@ -101,7 +105,7 @@ extension RouteController {
             
             guard let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode) else {
-                    print("Error with the response, unexpected status code: \(response)")
+                print("Error with the response, unexpected status code: \(String(describing: response))")
                     return
             }
             
@@ -118,7 +122,7 @@ extension RouteController {
         After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
         - Parameter completionHandler: The callback function to be executed on success fetching of website html.
      
-        - Returns: calls completion handler with daily message as argument or returns null on error.
+        - Returns: calls completion handler with daily message as argument or returns nil on error.
      */
     func fetchDailyMessage(completionHandler: @escaping (String?) -> Void) {
         let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
@@ -184,11 +188,14 @@ extension RouteController {
     }
     
     func processJson() {
+        print("processJson()")
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
         lbBusSchedule.msg = csbsjuApiResponse.msg!
+//        print("Msg: ", lbBusSchedule.msg)
         lbBusSchedule.attention = csbsjuApiResponse.attention!
+//        print("attention: ",  lbBusSchedule.attention)
         
         // only add active alerts to lbBusSchedule
         if !(linkbusApiResponse.alerts.isEmpty) {
@@ -200,7 +207,7 @@ extension RouteController {
         }
         // Create alert from daily message
         if self.dailyMessage != "" {
-            // Only add to alerts if message is not empty string
+            // Only add to alert if daily message is not empty string
             let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
             let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
             lbBusSchedule.alerts.append(dailyMessageAlert)
