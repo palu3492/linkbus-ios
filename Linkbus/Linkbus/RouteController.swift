@@ -19,7 +19,6 @@ class RouteController: ObservableObject {
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
-    
     init() {
         webRequest()
     }

@@ -14,9 +14,9 @@ struct HomeView: View {
     @ObservedObject var routeController = RouteController()
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    private var counter = 0
+    @State private var counter = 0
     
-    @State var menuBarTitle = "Linkbus"
+    @State private var menuBarTitle = "Linkbus"
     
     init() {
         UINavigationBar.setAnimationsEnabled(true)
@@ -78,13 +78,13 @@ struct HomeView: View {
                 .navigationBarTitle(self.menuBarTitle)
             }
         }
-//        .onReceive(timer) { time in
-//            if self.counter == 1 {
-//                setGreeting()
-//                self.timer.upstream.connect().cancel()
-//            }
-//            counter += 1
-//        }
+        .onReceive(timer) { time in
+            if self.counter == 1 {
+                setGreeting()
+                self.timer.upstream.connect().cancel()
+            }
+            counter += 1
+        }
     }
 }
 
