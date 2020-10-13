@@ -18,6 +18,8 @@ struct HomeView: View {
     
     @State private var menuBarTitle = "Linkbus"
     
+    @State private var showRouteSheet = false
+    
     init() {
         UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
@@ -69,7 +71,18 @@ struct HomeView: View {
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 }
                     //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                    .navigationBarTitle(self.menuBarTitle)
+                .navigationBarTitle(self.menuBarTitle)
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarTrailing, content: {
+                        Image("info.circle")
+                        .onTapGesture {
+                            self.showRouteSheet = true
+                        }
+                        .sheet(isPresented: $showRouteSheet) {
+                            Text("Test")
+                        }
+                    })
+                })
             } else {
                 VStack() {
                     Text("Loading")
