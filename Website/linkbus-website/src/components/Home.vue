@@ -7,7 +7,6 @@
 
         <h3>Alerts</h3>
         <hr />
-        {{ firebaseData }}
         <div>
             <div  v-if="alerts.length > 0">
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"/>
@@ -17,12 +16,17 @@
 
         <h3>Routes</h3>
         <hr />
+
+        <DeleteModal />
+        <EditModal />
     </div>
 </template>
 
 <script>
     import { db } from '../firebase';
     import Alert from './Alert.vue'
+    import DeleteModal from './DeleteModal.vue'
+    import EditModal from './EditModal.vue'
     const alertsPath = 'alerts/alert-0293857245';
 
     const alertsCollection = db.collection('alerts');
@@ -30,11 +34,12 @@
     export default {
         name: "Home",
         components: {
-            Alert
+            Alert,
+            DeleteModal,
+            EditModal
         },
         data: () => {
             return {
-                firebaseData: null,
                 formData: {},
                 alerts: []
             }

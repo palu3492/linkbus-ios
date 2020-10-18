@@ -1,7 +1,14 @@
 <template>
     <div>
-        <p><b>Alert</b> Text: {{ text }}</p>
-
+        <b-row>
+            <b-col>
+                <p><b>Alert</b> Text: {{ text }}</p>
+            </b-col>
+            <b-col cols="auto">
+                <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" v-b-modal.bv-modal-edit />
+                <BIconXSquare variant="danger" class="icon mx-1" title="Delete" v-b-modal.bv-modal-delete />
+            </b-col>
+        </b-row>
     </div>
 </template>
 
@@ -23,12 +30,19 @@
 <!--1-->
 
 <script>
+    import { BIconPencilSquare, BIconXSquare } from 'bootstrap-vue'
     export default {
         name: "Alert",
-        props: ["action", "active", "clickable", "color", "rgb", "fullWidth", "text"]
+        props: ["action", "active", "clickable", "color", "rgb", "fullWidth", "text"],
+        components: {
+            BIconPencilSquare, BIconXSquare
+        }
     }
 </script>
 
 <style scoped>
-
+    .icon {
+        font-size: 1.1em;
+        cursor: pointer;
+    }
 </style>
