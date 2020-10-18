@@ -1,24 +1,15 @@
-# linkbus-website
+# Linkbus Website
+User interface to configure iOS app.
 
-## Project setup
+https://linkbus-website.web.app/
+
+### Project setup and local server
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
-
-### Compiles and minifies for production
+### Build and deploy
 ```
 npm run build
+firebase deploy
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
