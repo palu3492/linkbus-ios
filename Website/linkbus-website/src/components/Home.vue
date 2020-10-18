@@ -5,11 +5,18 @@
 <!--        <p>Background Color:</p>-->
 <!--        <p>Font Color:</p>-->
 
-        <h3>Alerts</h3>
+        <div class="d-flex">
+            <h3 class="mr-3">Alerts</h3>
+            <b-button size="sm" variant="outline-primary" class="create-button m-1" v-b-modal.bv-modal-create>
+                <BIconPlus v-if="false"/>
+                Create Alert
+            </b-button>
+        </div>
         <hr />
         <div>
             <div  v-if="alerts.length > 0">
-                <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"/>
+                <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
+                       v-bind:action="alert.action"/>
             </div>
             <p v-else>No Alerts</p>
         </div>
@@ -19,6 +26,7 @@
 
         <DeleteModal />
         <EditModal />
+        <CreateModal />
     </div>
 </template>
 
@@ -27,16 +35,17 @@
     import Alert from './Alert.vue'
     import DeleteModal from './DeleteModal.vue'
     import EditModal from './EditModal.vue'
+    import CreateModal from './CreateModal.vue'
     const alertsPath = 'alerts/alert-0293857245';
 
     const alertsCollection = db.collection('alerts');
 
+    import { BIconPlus } from 'bootstrap-vue'
+
     export default {
         name: "Home",
         components: {
-            Alert,
-            DeleteModal,
-            EditModal
+            Alert, DeleteModal, EditModal, CreateModal, BIconPlus
         },
         data: () => {
             return {
@@ -126,5 +135,7 @@
     hr{
         margin-top: 0;
     }
-
+    .create-button {
+        padding: .1rem .2rem;
+    }
 </style>
