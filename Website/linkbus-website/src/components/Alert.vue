@@ -1,28 +1,31 @@
 <template>
     <div>
-        <b-row class="alert-row p-0 m-0">
+        <b-row class="alert-row p-0 m-0 py-2 flex-wrap-reverse">
             <b-col class="d-flex">
-                <b-col class="p-0" cols="autos">
-                    <p style="font-size: 0.8em; color: grey" class="m-0"><b>Preview:</b></p>
-                    <p class="alert-preview">{{ text }}</p>
-                </b-col>
-                <b-col class="py-4">
-                    <span class="px-2">
-                        Enabled <BIconCheckCircle variant="success"/>
-                    </span>
-                    <span class="px-2">
-                        Clickable <BIconXCircle variant="danger"/>
-                    </span>
-                    <span class="px-2">
-                        Action {{ action }}
-                    </span>
-                </b-col>
+                <b-row>
+                    <b-col class="p-0" md="auto" sm="12">
+                        <p style="font-size: 0.8em; color: grey" class="m-0"><b>Preview:</b></p>
+                        <p class="alert-preview">{{ text }}</p>
+                    </b-col>
+                    <b-col class="py-4" md="auto" sm="12">
+                        <span class="px-2">
+                            Enabled <BIconCheckCircle variant="success"/>
+                        </span>
+                        <span class="px-2">
+                            Clickable <BIconXCircle variant="danger"/>
+                        </span>
+                        <span class="px-2">
+                            Action {{ action }}
+                        </span>
+                    </b-col>
+                </b-row>
             </b-col>
-            <b-col cols="auto">
+            <b-col md="auto">
                 <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" v-b-modal.bv-modal-edit />
                 <BIconXSquare variant="danger" class="icon mx-1" title="Delete" v-b-modal.bv-modal-delete />
             </b-col>
         </b-row>
+        <hr  class="m-0"/>
     </div>
 </template>
 
@@ -70,5 +73,8 @@
         border-radius: 1em;
         padding: 0.5em;
         width: fit-content;
+    }
+    hr {
+        border-top: 1px solid rgb(0 0 0 / 53%);
     }
 </style>
