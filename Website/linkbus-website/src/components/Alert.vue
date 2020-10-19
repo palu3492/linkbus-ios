@@ -1,27 +1,20 @@
 <template>
     <div>
-        <b-row class="alert-row p-0 m-0 py-2 flex-wrap-reverse">
+        <b-row class="alert-row m-0 p-3 flex-wrap-reverse">
             <b-col class="d-flex">
                 <b-row>
-                    <b-col class="p-0" md="auto" sm="12">
+                    <b-col class="p-0 pr-1" md="auto" sm="12">
                         <p style="font-size: 0.8em; color: grey" class="m-0"><b>Preview:</b></p>
                         <p class="alert-preview">{{ text }}</p>
                     </b-col>
-                    <b-col class="py-4" md="auto" sm="12">
-                        <span class="px-2">
-                            Enabled <BIconCheckCircle variant="success"/>
-                        </span>
-                        <span class="px-2">
-                            Clickable <BIconXCircle variant="danger"/>
-                        </span>
-                        <span class="px-2">
-                            Action {{ action }}
-                        </span>
+                    <b-col class="p-0 pt-3 options" md="auto" sm="12">
+                        <Option v-for="(optionValue, option, i) in options" v-bind:optionValue="optionValue"
+                                v-bind:option="option" v-bind:key="i"/>
                     </b-col>
                 </b-row>
             </b-col>
             <b-col md="auto">
-                <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" v-b-modal.bv-modal-edit />
+                <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" @click="openEditModal(alertData)" />
                 <BIconXSquare variant="danger" class="icon mx-1" title="Delete" v-b-modal.bv-modal-delete />
             </b-col>
         </b-row>
@@ -29,37 +22,37 @@
     </div>
 </template>
 
-<!--action-->
-<!--"https://www.csbsju.edu/covid-19"-->
-<!--active-->
-<!--true-->
-<!--clickable-->
-<!--true-->
-<!--color-->
-<!--"red"-->
-<!--fullWidth-->
-<!--false-->
-<!--id-->
-<!--1-->
-<!--text-->
-<!--"A face mask is required to ride the CSB/SJU Link."-->
-<!--uid-->
-<!--1-->
-
 <script>
-    import { BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle } from 'bootstrap-vue'
+    import { BIconPencilSquare, BIconXSquare } from 'bootstrap-vue'
+    import Option from "./Option";
     export default {
         name: "Alert",
-        props: ["action", "active", "clickable", "color", "rgb", "fullWidth", "text"],
+        props: {
+            action: String,
+            text: String,
+            color: String,
+            active: Boolean,
+            clickable: Boolean,
+            fullWidth: Boolean,
+            rgb: Object,
+            alertData: Object,
+            openEditModal: Function
+        },
         components: {
-            BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle
+            Option,
+            BIconPencilSquare, BIconXSquare
+        },
+        data() {
+            return {
+                options: this._props
+            }
         }
     }
 </script>
 
 <style scoped>
     .icon {
-        font-size: 1.1em;
+        font-size: 1.3em;
         cursor: pointer;
     }
     .alert-row:hover {

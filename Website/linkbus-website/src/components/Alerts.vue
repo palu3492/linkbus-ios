@@ -11,13 +11,14 @@
         <div>
             <div v-if="alerts.length > 0">
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
-                       v-bind:action="alert.action"/>
+                       v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertData="alert"
+                        v-bind:openEditModal="openEditModal"/>
             </div>
             <p v-else>No Alerts</p>
         </div>
 
         <DeleteModal />
-        <EditModal />
+        <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alert="clickedAlert"/>
         <CreateModal />
     </div>
 </template>
@@ -37,10 +38,13 @@
         components: {
             Alert, DeleteModal, EditModal, CreateModal, BIconPlus
         },
-        data: () => {
+        data() {
             return {
                 formData: {},
-                alerts: []
+                alerts: [],
+
+                showEditModal: false,
+                clickedAlert: null
             }
         },
         firestore() {
@@ -59,6 +63,14 @@
                 } catch(error) {
                     console.log(error)
                 }
+            },
+            openEditModal(alertDoc) {
+                this.clickedAlert = alertDoc;
+                this.showEditModal = true;
+            },
+            hideEditModal() {
+                this.showEditModal = false;
+                this.clickedAlert = {};
             }
         }
     }
