@@ -1,57 +1,94 @@
 <template>
     <b-modal id="bv-modal-edit" title="Edit Alert" v-model="showModal">
-        <b-form>
+        <b-spinner variant="primary" label="Spinning" v-if="updatingDatabase"></b-spinner>
+        <b-form v-else>
             <b-input-group>
                 <span class="mr-2">Active</span>
-                <b-form-checkbox switch v-model="active"></b-form-checkbox>
+                <b-form-checkbox switch v-model="formData.active"></b-form-checkbox>
             </b-input-group>
             <b-input-group prepend="Body" class="mt-3">
-                <b-form-input v-model="body"></b-form-input>
+                <b-form-input v-model="formData.text"></b-form-input>
             </b-input-group>
-            Clickable: <b-form-checkbox v-model="clickable"></b-form-checkbox>
-            <b-input-group prepend="Action" class="mt-3">
-                <b-form-input v-model="action"></b-form-input>
+
+<!--            <b-form-text class="mt-3">Website to open when alert is clicked</b-form-text>-->
+            <b-input-group class="mt-3">
+                <template #prepend>
+                    <b-input-group-text>Action</b-input-group-text>
+                    <b-input-group-text>
+                        <b-form-checkbox switch v-model="formData.clickable"></b-form-checkbox>
+                    </b-input-group-text>
+                </template>
+                <b-form-input v-model="formData.action" :disabled="!formData.clickable"></b-form-input>
             </b-input-group>
-            Color: <b-form-select v-model="color" :options="options"></b-form-select>
-<!--            RGB Color: <b-form-input v-model="rgb"></b-form-input>-->
-            Full-width: <b-form-checkbox v-model="fullWidth"></b-form-checkbox>
+
+            <b-input-group class="mt-3">
+                <span class="mr-2 mt-2">iOS Color Palette</span>
+                <b-form-select v-model="formData.color" :options="colorOptions"></b-form-select>
+            </b-input-group>
+
+            <b-form-group class="mt-3">
+                <b-form-text>RGB Color</b-form-text>
+                <b-form-input type="color" v-model="formData.rgb"></b-form-input>
+            </b-form-group>
+
+            <b-input-group class="mt-3">
+                <span class="mr-2">Full-width</span>
+                <b-form-checkbox v-model="formData.fullWidth"></b-form-checkbox>
+            </b-input-group>
         </b-form>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
-            <b-button class="mx-1" variant="primary" @click="hideModal">Save</b-button>
+            <b-button class="mx-1" variant="primary" @click="updateFirebase">Save</b-button>
         </div>
     </b-modal>
 </template>
 
 <script>
+    import {db} from "../firebase";
     export default {
         name: "CustomModal",
         props: {
-            alert: Object,
+            alertDoc: Object,
             showModal: Boolean,
-            hideModal: Function
+            hideModal: Function,
+            updateSuccessAlert: Function
         },
         data() {
             return {
-                body: "",
-                active: true,
-                clickable: false,
-                action: "",
-                color: "red",
-                rgb: {},
-                fullWidth: false,
-
-                options: [
+                formData: {},
+                // body: "",
+                // active: true,
+                // clickable: false,
+                // action: "",
+                // color: "red",
+                // rgb: "#000",
+                // fullWidth: false,
+                colorOptions: [
                     { value: 'red', text: 'Red' },
                     { value: 'blue', text: 'Blue' },
-                ]
+                    { value: 'green', text: 'Green' },
+                ],
+                updatingDatabase: false
+            }
+        },
+        methods: {
+            async updateFirebase() {
+                this.updatingDatabase = true
+                try{
+                    await db.doc(`alerts/${this.alertDoc.id}`).set(this.formData);
+                } catch(error) {
+                    console.log(error)
+                }
+                this.hideModal()
+                this.updateSuccessAlert()
+                this.updatingDatabase = false
             }
         },
         watch: {
-            alert: {
-                handler(alert) {
-                    this.body = alert.text
-                    this.action = alert.action
+            alertDoc: {
+                handler(alertDoc) {
+                    alertDoc.rgb = "#000"
+                    this.formData = alertDoc
                 },
             },
         }

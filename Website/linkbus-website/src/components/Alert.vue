@@ -14,7 +14,7 @@
                 </b-row>
             </b-col>
             <b-col md="auto">
-                <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" @click="openEditModal(alertData)" />
+                <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" @click="openEditModal(alertDoc)" />
                 <BIconXSquare variant="danger" class="icon mx-1" title="Delete" v-b-modal.bv-modal-delete />
             </b-col>
         </b-row>
@@ -35,7 +35,7 @@
             clickable: Boolean,
             fullWidth: Boolean,
             rgb: Object,
-            alertData: Object,
+            alertDoc: Object,
             openEditModal: Function
         },
         components: {

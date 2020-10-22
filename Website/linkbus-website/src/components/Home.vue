@@ -1,11 +1,14 @@
 <template>
-    <div >
+    <div>
+        <b-alert v-model="showDatabaseUpdateAlert" variant="success" dismissible>
+            Alert Saved!
+        </b-alert>
         <h3>General</h3>
         <hr />
         <p>Background Color:</p>
         <p>Font Color:</p>
 
-        <Alerts />
+        <Alerts v-bind:updateSuccessAlert="updateSuccessAlert"/>
 
         <h3 class="mt-3">Routes</h3>
         <hr />
@@ -19,6 +22,16 @@
         name: "Home",
         components: {
             Alerts
+        },
+        data() {
+            return {
+                showDatabaseUpdateAlert: false
+            }
+        },
+        methods: {
+            updateSuccessAlert() {
+                this.showDatabaseUpdateAlert = true
+            }
         }
     }
 </script>

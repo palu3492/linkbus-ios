@@ -11,14 +11,15 @@
         <div>
             <div v-if="alerts.length > 0">
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
-                       v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertData="alert"
+                       v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
                         v-bind:openEditModal="openEditModal"/>
             </div>
             <p v-else>No Alerts</p>
         </div>
 
         <DeleteModal />
-        <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alert="clickedAlert"/>
+        <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alertDoc="clickedAlert"
+                   v-bind:updateSuccessAlert="updateSuccessAlert"/>
         <CreateModal />
     </div>
 </template>
@@ -38,11 +39,13 @@
         components: {
             Alert, DeleteModal, EditModal, CreateModal, BIconPlus
         },
+        props: {
+            updateSuccessAlert: Function
+        },
         data() {
             return {
                 formData: {},
                 alerts: [],
-
                 showEditModal: false,
                 clickedAlert: null
             }
@@ -55,15 +58,6 @@
             }
         },
         methods: {
-            async updateFirebase() {
-                try{
-                    if(this.formData.uid){
-                        await db.doc('').set(this.formData)
-                    }
-                } catch(error) {
-                    console.log(error)
-                }
-            },
             openEditModal(alertDoc) {
                 this.clickedAlert = alertDoc;
                 this.showEditModal = true;
