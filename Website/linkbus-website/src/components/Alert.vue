@@ -10,7 +10,7 @@
                     </b-col>
                     <b-col md="auto" sm="12" v-if="text !== '' && text !== undefined">
                         <p style="font-size: 0.8em; color: grey" class="m-0"><b>Preview:</b></p>
-                        <p class="alert-preview m-0">{{ text }}</p>
+                        <p class="alert-preview m-0" :style="backgroundColor">{{ text }}</p>
                     </b-col>
                     <b-col md="auto" sm="12" class="px-2 d-flex mt-4">
                         <p class="mb-0">Action: </p>
@@ -46,10 +46,10 @@
             action: String,
             text: String,
             color: String,
+            colorCode: String,
             active: Boolean,
             clickable: Boolean,
             fullWidth: Boolean,
-            rgb: Object,
             alertDoc: Object,
             openEditModal: Function,
             openDeleteModal: Function
@@ -62,6 +62,17 @@
         //         options: this._props
         //     }
         // }
+        computed: {
+            backgroundColor() {
+                let bg = ''
+                if(this.color === ''){
+                    bg = this.colorCode;
+                } else {
+                    bg = this.color;
+                }
+                return `background-color: ${bg}`;
+            }
+        }
     }
 </script>
 
@@ -77,7 +88,6 @@
         background: #0000000a;
     }
     .alert-preview{
-        background: red;
         color: white;
         font-size: 1em;
         border: solid 0;

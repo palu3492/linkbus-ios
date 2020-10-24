@@ -13,7 +13,8 @@
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
                        v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
                        v-bind:openEditModal="openEditModal" v-bind:openDeleteModal="openDeleteModal"
-                       v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"/>
+                       v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"
+                       v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" />
             </div>
             <p v-else class="mt-3">No Alerts</p>
         </div>

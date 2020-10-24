@@ -2,7 +2,7 @@
     <b-modal id="bv-modal-create" v-model="showModal">
         <div slot="modal-header" class="m-modal-header">
             <h5 class="modal-title">Create New Alert</h5>
-            <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
+            <button type="button" aria-label="Close" class="close" @click="hideModal(); reset();">×</button>
         </div>
         <b-overlay :show="updatingDatabase" rounded="sm" :variant="'light'" spinner-variant="primary">
             <b-form>
@@ -40,13 +40,13 @@
                     </b-col>
                     <b-col>
                         <b-form-text class="m-0">RGB Color</b-form-text>
-                        <b-form-input type="color" v-model="formData.colorCode"></b-form-input>
+                        <b-form-input type="color" v-model="formData.colorCode" :disabled="formData.color !== ''"></b-form-input>
                     </b-col>
                 </b-row>
             </b-form>
         </b-overlay>
         <div slot="modal-footer">
-            <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
+            <b-button class="mx-1" variant="dark" @click="hideModal(); reset();">Cancel</b-button>
             <b-button class="mx-1" variant="success" @click="updateFirebase">Create</b-button>
         </div>
     </b-modal>
@@ -54,6 +54,17 @@
 
 <script>
     import {db} from "../firebase";
+
+    const formDataDefault = {
+        text: "",
+        active: true,
+        clickable: false,
+        action: "",
+        color: "",
+        colorCode: "#000000",
+        fullWidth: false,
+        uid: 1
+    };
 
     export default {
         name: "CreateModal",
@@ -64,20 +75,13 @@
             updateSuccessAlert: Function
         },
         data() {
-            return {formData: {
-                    text: "",
-                    active: true,
-                    clickable: false,
-                    action: "",
-                    color: "red",
-                    rgb: "#f54",
-                    fullWidth: false,
-                    uid: 1
-                },
+            return {
+                formData: { ...formDataDefault },
                 colorOptions: [
+                    { value: '', text: 'Select' },
                     { value: 'red', text: 'Red' },
-                    { value: 'blue', text: 'Blue' },
                     { value: 'green', text: 'Green' },
+                    { value: 'blue', text: 'Blue' },
                 ],
                 updatingDatabase: false
             }
@@ -85,23 +89,41 @@
         methods: {
             async updateFirebase() {
                 this.updatingDatabase = true
+                let alertData = this.formData;
+                alertData.rgb = this.rgb()
                 try{
-                    await db.collection('alerts').add(this.formData)
+                    await db.collection('alerts').add(alertData);
+                    this.updateSuccessAlert('Alert Created!', 'success')
                 } catch(error) {
+                    console.log('ERROR:')
                     console.log(error)
+                    this.updateSuccessAlert('Database communiction error', 'danger')
                 }
                 this.hideModal()
-                this.updateSuccessAlert('Alert Created!')
                 this.updatingDatabase = false
+                this.formData = { ...formDataDefault }
             },
-        },
-        computed: {
-
             rgb() {
-                return{
-                    value: this.formData.colorCode
+                const hexToRgb = (color, start, end) => {
+                    return (parseInt(color.slice(start, end), 16) / 255).toFixed(2);
+                }
+                let red, green, blue, opacity;
+                red = hexToRgb(this.formData.colorCode,0, 2)
+                green = hexToRgb(this.formData.colorCode,2, 4)
+                blue = hexToRgb(this.formData.colorCode,4, 6)
+                opacity = 1.0
+                return {
+                    red: red,
+                    green: green,
+                    blue: blue,
+                    opacity: opacity
                 }
             },
+            reset() {
+                this.formData = { ...formDataDefault }
+            }
+        },
+        computed: {
             validUrl() {
                 if(this.formData.clickable === undefined || this.formData.action === undefined){
                     return null;

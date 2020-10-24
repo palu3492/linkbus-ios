@@ -96,11 +96,13 @@
                 // Convert rgb to color code
                 try{
                     await db.doc(`alerts/${this.alertDoc.id}`).set(this.formData);
+                    this.updateSuccessAlert('Alert Saved!', 'success')
                 } catch(error) {
+                    console.log('ERROR:')
                     console.log(error)
+                    this.updateSuccessAlert('Database communiction error', 'danger')
                 }
                 this.hideModal()
-                this.updateSuccessAlert('Alert Saved!')
                 this.updatingDatabase = false
             }
         },
@@ -137,8 +139,7 @@
             alertDoc: {
                 handler(alertDoc) {
                     // Convert rgb to color code
-                    this.formData.colorCode = "#c41a1a"
-                    this.formData = alertDoc
+                    this.formData = { ...alertDoc }
                     // if(alertDoc.text !== undefined && alertDoc.action !== undefined) {
                     //     this.formData.colorCode = "#c41a1a"
                     //     this.formData = alertDoc

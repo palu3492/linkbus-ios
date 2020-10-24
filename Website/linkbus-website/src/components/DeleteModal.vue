@@ -2,7 +2,7 @@
     <b-modal id="bv-modal-delete" v-model="showModal">
         <div slot="modal-header" class="m-modal-header">
             <div>
-                <h5 class="modal-title">Delete Modal</h5>
+                <h5 class="modal-title">Delete Alert</h5>
                 <p class="m-0 small text-muted">ID: {{ alertDoc.id }}</p>
             </div>
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
@@ -38,11 +38,13 @@
                 this.updatingDatabase = true
                 try{
                     await db.doc(`alerts/${this.alertDoc.id}`).delete()
+                    this.updateSuccessAlert('Alert Deleted!', 'success')
                 } catch(error) {
+                    console.log('ERROR:')
                     console.log(error)
+                    this.updateSuccessAlert('Database communiction error', 'danger')
                 }
                 this.hideModal()
-                this.updateSuccessAlert('Alert Deleted!')
                 this.updatingDatabase = false
             }
         }

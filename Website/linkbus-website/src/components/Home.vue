@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-alert :show="dismissCountDown" dismissible variant="success" @dismissed="dismissCountDown=0"
+        <b-alert :show="dismissCountDown" dismissible :variant="dbStatus" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged" >
             <p class="mb-1">{{ alertUpdatedReason }}</p>
             <b-progress variant="success" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
@@ -30,12 +30,14 @@
             return {
                 dismissSecs: 5,
                 dismissCountDown: 0,
-                alertUpdatedReason: ''
+                alertUpdatedReason: '',
+                dbStatus: ''
             }
         },
         methods: {
-            showSuccessAlert(reason) {
+            showSuccessAlert(reason, status) {
                 this.alertUpdatedReason = reason
+                this.dbStatus = status
                 this.dismissCountDown = this.dismissSecs
             },
             countDownChanged(dismissCountDown) {
