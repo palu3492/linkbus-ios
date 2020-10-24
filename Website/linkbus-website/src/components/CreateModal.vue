@@ -105,12 +105,13 @@
             },
             rgb() {
                 const hexToRgb = (color, start, end) => {
-                    return (parseInt(color.slice(start, end), 16) / 255).toFixed(2);
+                    let value = parseInt(color.slice(start, end), 16) / 255;
+                    return Math.round(value * 100) / 100
                 }
                 let red, green, blue, opacity;
-                red = hexToRgb(this.formData.colorCode,0, 2)
-                green = hexToRgb(this.formData.colorCode,2, 4)
-                blue = hexToRgb(this.formData.colorCode,4, 6)
+                red = hexToRgb(this.formData.colorCode,1, 3)
+                green = hexToRgb(this.formData.colorCode,3, 5)
+                blue = hexToRgb(this.formData.colorCode,5, 7)
                 opacity = 1.0
                 return {
                     red: red,

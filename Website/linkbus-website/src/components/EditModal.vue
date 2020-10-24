@@ -140,6 +140,7 @@
                 handler(alertDoc) {
                     // Convert rgb to color code
                     this.formData = { ...alertDoc }
+                    this.formData.id = alertDoc.id
                     // if(alertDoc.text !== undefined && alertDoc.action !== undefined) {
                     //     this.formData.colorCode = "#c41a1a"
                     //     this.formData = alertDoc
