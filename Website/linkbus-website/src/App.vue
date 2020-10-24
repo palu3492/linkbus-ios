@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <b-container class="bv-example-row" id="home-container">
-      <h1 id="title">Linkbus</h1>
+    <b-container id="home-container">
+      <h1 id="title" class="mt-2">Linkbus</h1>
       <Home />
     </b-container>
   </div>

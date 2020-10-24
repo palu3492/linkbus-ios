@@ -5,8 +5,9 @@
         </b-alert>
         <h3>General</h3>
         <hr />
-        <p>Background Color:</p>
-        <p>Font Color:</p>
+<!--        <p>Background Color:</p>-->
+<!--        <p>Font Color:</p>-->
+<!--        <p>Show daily message as alert</p>-->
 
         <Alerts v-bind:updateSuccessAlert="updateSuccessAlert"/>
 

@@ -12,9 +12,10 @@
             <div v-if="alerts.length > 0">
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
                        v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
-                        v-bind:openEditModal="openEditModal"/>
+                       v-bind:openEditModal="openEditModal" v-bind:active="alert.active"
+                       v-bind:fullWidth="alert.fullWidth"/>
             </div>
-            <p v-else>No Alerts</p>
+            <p v-else class="mt-3">No Alerts</p>
         </div>
 
         <DeleteModal />
@@ -52,7 +53,7 @@
         },
         firestore() {
             const alertDocs = alertsCollection
-                .where('uid', '==', 1)
+                .where('uid', '==', 1);
             return {
                 alerts: alertDocs
             }
