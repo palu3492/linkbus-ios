@@ -8,7 +8,7 @@
                         <BIconCheckCircle variant="success" class="activeIcon" v-if="active" />
                         <BIconXCircle variant="danger" class="activeIcon" v-else />
                     </b-col>
-                    <b-col md="auto" sm="12">
+                    <b-col md="auto" sm="12" v-if="text !== '' && text !== undefined">
                         <p style="font-size: 0.8em; color: grey" class="m-0"><b>Preview:</b></p>
                         <p class="alert-preview m-0">{{ text }}</p>
                     </b-col>
@@ -30,7 +30,7 @@
             </b-col>
             <b-col md="auto">
                 <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" @click="openEditModal(alertDoc)" />
-                <BIconXSquare variant="danger" class="icon mx-1" title="Delete" v-b-modal.bv-modal-delete />
+                <BIconXSquare variant="danger" class="icon mx-1" title="Delete" @click="openDeleteModal(alertDoc)" />
             </b-col>
         </b-row>
         <hr  class="m-0"/>
@@ -51,7 +51,8 @@
             fullWidth: Boolean,
             rgb: Object,
             alertDoc: Object,
-            openEditModal: Function
+            openEditModal: Function,
+            openDeleteModal: Function
         },
         components: {
             BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle

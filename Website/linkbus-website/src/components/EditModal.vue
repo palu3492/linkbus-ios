@@ -74,13 +74,13 @@
             return {
                 // Placeholder values
                 formData: {
-                    text: "",
-                    active: true,
-                    clickable: false,
-                    action: "",
-                    color: "",
-                    rgb: "#000",
-                    fullWidth: false,
+                    // text: "",
+                    // active: true,
+                    // clickable: false,
+                    // action: "",
+                    // color: "",
+                    // rgb: "#000",
+                    // fullWidth: false,
                 },
                 colorOptions: [
                     { value: 'red', text: 'Red' },
@@ -139,11 +139,13 @@
             alertDoc: {
                 handler(alertDoc) {
                     // Convert rgb to color code
-                    if(alertDoc.text !== undefined && alertDoc.action !== undefined) {
-                        this.formData.colorCode = "#c41a1a"
-                        this.formData = alertDoc
-                        // this.showInfo = true;
-                    }
+                    this.formData.colorCode = "#c41a1a"
+                    this.formData = alertDoc
+                    // if(alertDoc.text !== undefined && alertDoc.action !== undefined) {
+                    //     this.formData.colorCode = "#c41a1a"
+                    //     this.formData = alertDoc
+                    //     // this.showInfo = true;
+                    // }
                     // if(alertDoc.text !== undefined && alertDoc.action !== undefined){
                     //     // this.formData = alertDoc
                     //     console.log('change');

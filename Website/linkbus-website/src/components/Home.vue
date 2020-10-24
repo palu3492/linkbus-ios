@@ -1,7 +1,9 @@
 <template>
     <div>
-        <b-alert v-model="showDatabaseUpdateAlert" variant="success" dismissible>
-            Alert Saved!
+        <b-alert :show="dismissCountDown" dismissible variant="success" @dismissed="dismissCountDown=0"
+                 @dismiss-count-down="countDownChanged" >
+            <p class="mb-1">Alert Saved!</p>
+            <b-progress variant="success" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
         <h3>General</h3>
         <hr />
@@ -9,7 +11,7 @@
 <!--        <p>Font Color:</p>-->
 <!--        <p>Show daily message as alert</p>-->
 
-        <Alerts v-bind:updateSuccessAlert="updateSuccessAlert"/>
+        <Alerts v-bind:updateSuccessAlert="showSuccessAlert"/>
 
         <h3 class="mt-3">Routes</h3>
         <hr />
@@ -26,12 +28,16 @@
         },
         data() {
             return {
-                showDatabaseUpdateAlert: false
+                dismissSecs: 5,
+                dismissCountDown: 0
             }
         },
         methods: {
-            updateSuccessAlert() {
-                this.showDatabaseUpdateAlert = true
+            showSuccessAlert() {
+                this.dismissCountDown = this.dismissSecs
+            },
+            countDownChanged(dismissCountDown) {
+                this.dismissCountDown = dismissCountDown
             }
         }
     }

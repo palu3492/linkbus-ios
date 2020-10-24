@@ -12,13 +12,13 @@
             <div v-if="alerts.length > 0">
                 <Alert v-for="alert in alerts" v-bind:key="alert.id" v-bind:text="alert.text"
                        v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
-                       v-bind:openEditModal="openEditModal" v-bind:active="alert.active"
-                       v-bind:fullWidth="alert.fullWidth"/>
+                       v-bind:openEditModal="openEditModal" v-bind:openDeleteModal="openDeleteModal"
+                       v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"/>
             </div>
             <p v-else class="mt-3">No Alerts</p>
         </div>
 
-        <DeleteModal />
+        <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal" v-bind:alertDoc="clickedAlert"/>
         <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alertDoc="clickedAlert"
                    v-bind:updateSuccessAlert="updateSuccessAlert"/>
         <CreateModal />
@@ -48,7 +48,8 @@
                 formData: {},
                 alerts: [],
                 showEditModal: false,
-                clickedAlert: null
+                showDeleteModal: false,
+                clickedAlert: {}
             }
         },
         firestore() {
@@ -65,6 +66,14 @@
             },
             hideEditModal() {
                 this.showEditModal = false;
+                this.clickedAlert = {};
+            },
+            openDeleteModal(alertDoc) {
+                this.clickedAlert = alertDoc;
+                this.showDeleteModal = true;
+            },
+            hideDeleteModal() {
+                this.showDeleteModal = false;
                 this.clickedAlert = {};
             }
         }
