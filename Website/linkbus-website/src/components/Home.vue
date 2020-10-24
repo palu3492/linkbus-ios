@@ -2,7 +2,7 @@
     <div>
         <b-alert :show="dismissCountDown" dismissible variant="success" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged" >
-            <p class="mb-1">Alert Saved!</p>
+            <p class="mb-1">{{ alertUpdatedReason }}</p>
             <b-progress variant="success" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
         <h3>General</h3>
@@ -29,11 +29,13 @@
         data() {
             return {
                 dismissSecs: 5,
-                dismissCountDown: 0
+                dismissCountDown: 0,
+                alertUpdatedReason: ''
             }
         },
         methods: {
-            showSuccessAlert() {
+            showSuccessAlert(reason) {
+                this.alertUpdatedReason = reason
                 this.dismissCountDown = this.dismissSecs
             },
             countDownChanged(dismissCountDown) {

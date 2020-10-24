@@ -12,45 +12,45 @@
 <!--            <b-spinner variant="primary" label="Spinning"></b-spinner>-->
 <!--        </div>-->
         <b-overlay :show="updatingDatabase" rounded="sm" :variant="'light'" spinner-variant="primary">
-        <b-form v-if="showInfo">
-            <div class="d-flex">
-                <b-input-group style="width: auto">
-                    <span class="mr-2">Active</span>
-                    <b-form-checkbox switch v-model="formData.active"></b-form-checkbox>
+            <b-form>
+                <div class="d-flex">
+                    <b-input-group style="width: auto">
+                        <span class="mr-2">Active</span>
+                        <b-form-checkbox switch v-model="formData.active"></b-form-checkbox>
+                    </b-input-group>
+                    <b-input-group class="ml-md-4" style="width: auto">
+                        <span class="mr-2">Full-width</span>
+                        <b-form-checkbox switch v-model="formData.fullWidth"></b-form-checkbox>
+                    </b-input-group>
+                </div>
+
+                <b-input-group prepend="Body" class="mt-3">
+                    <b-form-input :state="validBody" v-model="formData.text" required></b-form-input>
                 </b-input-group>
-                <b-input-group class="ml-md-4" style="width: auto">
-                    <span class="mr-2">Full-width</span>
-                    <b-form-checkbox switch v-model="formData.fullWidth"></b-form-checkbox>
+
+                <b-input-group prepend="Action" class="mt-3">
+                    <b-input-group-prepend is-text>
+                        <b-form-checkbox switch v-model="formData.clickable"></b-form-checkbox>
+                    </b-input-group-prepend>
+                    <b-form-input url v-model="formData.action" :disabled="!formData.clickable"
+                                  :state="validUrl" placeholder="http://www.example.com"></b-form-input>
                 </b-input-group>
-            </div>
 
-            <b-input-group prepend="Body" class="mt-3">
-                <b-form-input :state="validBody" v-model="formData.text" required></b-form-input>
-            </b-input-group>
-
-            <b-input-group prepend="Action" class="mt-3">
-                <b-input-group-prepend is-text>
-                    <b-form-checkbox switch v-model="formData.clickable"></b-form-checkbox>
-                </b-input-group-prepend>
-                <b-form-input url v-model="formData.action" :disabled="!formData.clickable"
-                              :state="validUrl" placeholder="http://www.example.com"></b-form-input>
-            </b-input-group>
-
-            <p class="mb-0 mt-3">Background Color</p>
-            <b-row class="d-flex">
-                <b-col>
-                    <b-form-text class="m-0">iOS Color Palette</b-form-text>
-                    <b-form-select v-model="formData.color" :options="colorOptions"></b-form-select>
-                </b-col>
-                <b-col cols='auto'>
-                    <p class="mt-4 mb-0">OR</p>
-                </b-col>
-                <b-col>
-                    <b-form-text class="m-0">RGB Color</b-form-text>
-                    <b-form-input type="color" v-model="formData.colorCode"></b-form-input>
-                </b-col>
-            </b-row>
-        </b-form>
+                <p class="mb-0 mt-3">Background Color</p>
+                <b-row class="d-flex">
+                    <b-col>
+                        <b-form-text class="m-0">iOS Color Palette</b-form-text>
+                        <b-form-select v-model="formData.color" :options="colorOptions"></b-form-select>
+                    </b-col>
+                    <b-col cols='auto'>
+                        <p class="mt-4 mb-0">OR</p>
+                    </b-col>
+                    <b-col>
+                        <b-form-text class="m-0">RGB Color</b-form-text>
+                        <b-form-input type="color" v-model="formData.colorCode"></b-form-input>
+                    </b-col>
+                </b-row>
+            </b-form>
         </b-overlay>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
@@ -87,14 +87,12 @@
                     { value: 'blue', text: 'Blue' },
                     { value: 'green', text: 'Green' },
                 ],
-                updatingDatabase: false,
-                showInfo: true
+                updatingDatabase: false
             }
         },
         methods: {
             async updateFirebase() {
                 this.updatingDatabase = true
-                // this.showInfo = false;
                 // Convert rgb to color code
                 try{
                     await db.doc(`alerts/${this.alertDoc.id}`).set(this.formData);
@@ -102,7 +100,7 @@
                     console.log(error)
                 }
                 this.hideModal()
-                this.updateSuccessAlert()
+                this.updateSuccessAlert('Alert Saved!')
                 this.updatingDatabase = false
             }
         },
@@ -144,7 +142,6 @@
                     // if(alertDoc.text !== undefined && alertDoc.action !== undefined) {
                     //     this.formData.colorCode = "#c41a1a"
                     //     this.formData = alertDoc
-                    //     // this.showInfo = true;
                     // }
                     // if(alertDoc.text !== undefined && alertDoc.action !== undefined){
                     //     // this.formData = alertDoc

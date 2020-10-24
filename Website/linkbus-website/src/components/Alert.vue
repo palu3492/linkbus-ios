@@ -14,7 +14,7 @@
                     </b-col>
                     <b-col md="auto" sm="12" class="px-2 d-flex mt-4">
                         <p class="mb-0">Action: </p>
-                        <p v-if="clickable" class="ml-2 mb-0"><a :href="action" target="_blank">{{ action }}</a></p>
+                        <p v-if="clickable" class="ml-1 mb-0"><a :href="action" target="_blank">{{ action }}</a></p>
                         <BIconXCircle v-else class="ml-2 mt-1" variant="danger" />
                     </b-col>
                     <b-col md="auto" sm="12" class="px-2 d-flex mt-4">

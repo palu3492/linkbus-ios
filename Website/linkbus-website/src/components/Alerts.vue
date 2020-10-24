@@ -2,7 +2,7 @@
     <div>
         <div class="d-flex">
             <h3 class="mr-3" style="flex-grow: 1;">Alerts</h3>
-            <b-button size="sm" variant="outline-primary" class="create-button m-1" v-b-modal.bv-modal-create>
+            <b-button size="sm" variant="outline-primary" class="create-button m-1" @click="openCreateModal">
                 <BIconPlus v-if="false"/>
                 Create Alert
             </b-button>
@@ -18,10 +18,12 @@
             <p v-else class="mt-3">No Alerts</p>
         </div>
 
-        <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal" v-bind:alertDoc="clickedAlert"/>
+        <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal"
+                     v-bind:alertDoc="clickedAlert" v-bind:updateSuccessAlert="updateSuccessAlert"/>
         <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alertDoc="clickedAlert"
                    v-bind:updateSuccessAlert="updateSuccessAlert"/>
-        <CreateModal />
+        <CreateModal v-bind:showModal="showCreateModal" v-bind:hideModal="hideCreateModal"
+                     v-bind:updateSuccessAlert="updateSuccessAlert"/>
     </div>
 </template>
 
@@ -49,6 +51,7 @@
                 alerts: [],
                 showEditModal: false,
                 showDeleteModal: false,
+                showCreateModal: false,
                 clickedAlert: {}
             }
         },
@@ -75,6 +78,12 @@
             hideDeleteModal() {
                 this.showDeleteModal = false;
                 this.clickedAlert = {};
+            },
+            openCreateModal() {
+                this.showCreateModal = true;
+            },
+            hideCreateModal() {
+                this.showCreateModal = false;
             }
         }
     }

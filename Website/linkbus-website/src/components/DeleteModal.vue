@@ -8,7 +8,7 @@
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
         </div>
         <b-overlay :show="updatingDatabase" rounded="sm" :variant="'light'" spinner-variant="primary">
-            <p class="my-4">Are you sure you want to delete this alert?</p>
+            <p class="my-3">Are you sure you want to delete this alert?</p>
         </b-overlay>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
@@ -25,7 +25,8 @@
         props: {
             alertDoc: Object,
             showModal: Boolean,
-            hideModal: Function
+            hideModal: Function,
+            updateSuccessAlert: Function
         },
         data() {
             return {
@@ -41,7 +42,7 @@
                     console.log(error)
                 }
                 this.hideModal()
-                // this.updateSuccessAlert()
+                this.updateSuccessAlert('Alert Deleted!')
                 this.updatingDatabase = false
             }
         }
