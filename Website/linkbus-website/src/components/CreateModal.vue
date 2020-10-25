@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="bv-modal-create" v-model="showModal">
+    <b-modal id="bv-modal-create" v-model="showModal" ref="createModal" @hide="handleHideEvent">
         <div slot="modal-header" class="m-modal-header">
             <h5 class="modal-title">Create New Alert</h5>
             <button type="button" aria-label="Close" class="close" @click="hideModal(); reset();">×</button>
@@ -83,7 +83,8 @@
                     { value: 'green', text: 'Green' },
                     { value: 'blue', text: 'Blue' },
                 ],
-                updatingDatabase: false
+                updatingDatabase: false,
+                showModalValue: false
             }
         },
         methods: {
@@ -122,6 +123,11 @@
             },
             reset() {
                 this.formData = { ...formDataDefault }
+            },
+            handleHideEvent() {
+                if(this.showModal === true){
+                    this.hideModal();
+                }
             }
         },
         computed: {
@@ -146,7 +152,7 @@
                     return false;
                 }
                 return true;
-            },
+            }
         }
     }
 </script>
