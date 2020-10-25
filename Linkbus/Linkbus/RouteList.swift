@@ -26,6 +26,7 @@ struct RouteList: View {
         
         //UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
+
         self.alertPresented = false
         
         let currentDate = Date()
