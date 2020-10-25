@@ -16,8 +16,9 @@ struct AlertCard: View {
     
     let alertText: String
     let alertColor: Color
+    let fullWidth: Bool
     
-    init(alertText: String, alertColor: String, alertRgb: RGBColor) {
+    init(alertText: String, alertColor: String, alertRgb: RGBColor, fullWidth: Bool) {
         self.alertText = alertText
         
         let color: Color
@@ -40,6 +41,7 @@ struct AlertCard: View {
             )
         }
         self.alertColor = color
+        self.fullWidth = fullWidth
     }
     
     var body: some View {
@@ -48,6 +50,7 @@ struct AlertCard: View {
                 .foregroundColor(Color.white)
                 .padding(12)
                 .font(Font.custom("HelveticaNeue", size: 14))
+                .frame(maxWidth: self.fullWidth ? .infinity : nil, alignment: .leading)
         }
         .background(alertColor)
         .cornerRadius(15)
@@ -59,7 +62,11 @@ struct AlertCard: View {
 
 struct AlertCard_Previews: PreviewProvider {
     static var previews: some View {
-        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0))
+        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
+                  alertColor: "red",
+                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
+                  fullWidth: false
+        )
     }
 }
 

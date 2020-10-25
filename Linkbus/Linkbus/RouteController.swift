@@ -17,7 +17,10 @@ class RouteController: ObservableObject {
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     
+    private var dailyMessage: String
+    
     init() {
+        self.dailyMessage = ""
         webRequest()
     }
 }
@@ -32,7 +35,6 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.csbsjuApiResponse = apiResponse!
-                    print(self.csbsjuApiResponse)
                     dispatchGroup.leave()
                 }
             }
@@ -43,7 +45,16 @@ extension RouteController {
             if let success = apiResponse {
                 DispatchQueue.main.async {
                     self.linkbusApiResponse = apiResponse!
-                    print(self.linkbusApiResponse)
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.enter()
+        fetchDailyMessage { response in
+            if let success = response {
+                DispatchQueue.main.async {
+                    self.dailyMessage = response!
                     dispatchGroup.leave()
                 }
             }
@@ -52,6 +63,7 @@ extension RouteController {
         dispatchGroup.notify(queue: .main) {
             self.processJson()
         }
+        
     }
 
     
@@ -101,6 +113,76 @@ extension RouteController {
         task.resume()
     }
     
+    /**
+        Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
+        After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
+        - Parameter completionHandler: The callback function to be executed on success fetching of website html.
+     
+        - Returns: calls completion handler with daily message as argument or returns null on error.
+     */
+    func fetchDailyMessage(completionHandler: @escaping (String?) -> Void) {
+        let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
+        // Create request
+        var request = URLRequest(url: url!)
+        // Set http method
+        request.httpMethod = "POST"
+        // Add body (form data)
+        var postString = ""
+        // These asp.net fields may not work forever!
+        // However.. it's worked for a month so far.
+        let specifyData = false
+        if specifyData {
+            // Allows for date to be changed. Disabled by default. Implement later.
+            let date = "9/20/2020"
+            let dateEncoded = date.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate=" + dateEncoded!
+        }
+        postString += "&__VIEWSTATE=%2FwEPDwUJMjUxNjA1NzE0ZBgGBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAyJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDQkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwMSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAzJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDAkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwNSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkWGh%2B6w%2BaUlr4YOYVCBNBCh%2FBBLI%3D"
+        postString += "&__VIEWSTATEGENERATOR=9BAD42EF"
+        postString += "&__EVENTVALIDATION=%2FwEdAAJuu0YtVtaTDWfPQnmvmzb0LRHL%2FnpThEIWeX7N%2BkLIDZtqPuTRCdRUPrjcObmvVnKFIOev"
+        postString += "&__ASYNCPOST=true"
+        request.httpBody = postString.data(using: .utf8)
+        // Add headers
+        request.setValue("Delta=true", forHTTPHeaderField: "X-MicrosoftAjax")
+        request.setValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
+        request.setValue("Mozilla/5.0 (Android 8.0)", forHTTPHeaderField: "User-Agent")
+        // Create url session to send request
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            if let error = error {
+                print("Error with fetching daily message: \(error)")
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+                    print("Error with the response, unexpected status code: \(String(describing: response))")
+                    return
+            }
+            let dailyMessage = self.processDailyMessage(data: data!)
+            completionHandler(dailyMessage)
+        })
+        task.resume()
+    }
+    
+    /**
+        Processes the daily message website html into just the daily message string.
+        - Parameter data: The fetched bus schedule website html.
+     
+        - Returns: Daily message string or empty string.
+     */
+    func processDailyMessage(data: Data) -> String {
+        let dataString = String(decoding: data, as: UTF8.self)
+        let pattern = #"TodayMsg"><p>([^<]*)<\/p>"#
+        let regex = try? NSRegularExpression(pattern: pattern)
+        let searchRange = NSRange(location: 0, length: dataString.utf16.count)
+        if let match = regex?.firstMatch(in: dataString, options: [], range: searchRange) {
+            if let secondRange = Range(match.range(at: 1), in: dataString) {
+                let dailyMessage = String(dataString[secondRange])
+                return dailyMessage
+            }
+        }
+        return ""
+    }
+    
     func processJson() {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
@@ -115,6 +197,13 @@ extension RouteController {
                     lbBusSchedule.alerts.append(apiAlert)
                 }
             }
+        }
+        // Create alert from daily message
+        if self.dailyMessage != "" {
+            // Only add to alerts if message is not empty string
+            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
+            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
+            lbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
         if !(csbsjuApiResponse.routes!.isEmpty) {
@@ -207,12 +296,12 @@ extension RouteController {
             
         }
         
-        if (lbBusSchedule.routes.count > 0) {
-            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-            while let time = iterator.next() {
-                print(time.timeString)
-            }
-        }
+//        if (lbBusSchedule.routes.count > 0) {
+//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+//            while let time = iterator.next() {
+//                print(time.timeString)
+//            }
+//        }
         
     }
     

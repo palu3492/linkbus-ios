@@ -55,7 +55,7 @@ struct RouteList: View {
             self.greeting = "Good afternoon ☀️"
         }
         else { // < 24
-            let eveningGreetings = ["Good evening 🌙", "Good evening 🌙", "Good evening 🌙", "Good evening 🌙"]
+            let eveningGreetings = ["Good evening 🌙", "Buena noches 🌙", "Good evening 🌙", "Good evening 🌙"]
             let randomGreeting = eveningGreetings.randomElement()
             self.greeting = randomGreeting!
         }
@@ -139,12 +139,16 @@ struct RouteList: View {
         
         NavigationView {
             List() {
-                ForEach(routeController.lbBusSchedule.alerts) { alert in
-                    AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
-                        .transition(.opacity)
+                VStack(alignment: .leading, spacing: 12){
+                    ForEach(routeController.lbBusSchedule.alerts) { alert in
+                        AlertCard(alertText: alert.text,
+                                  alertColor: alert.color,
+                                  alertRgb: alert.rgb,
+                                  fullWidth: alert.fullWidth)
+                            .transition(.opacity)
+                    }
+                    //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 }
-                //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                
                 
                 VStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.routes) { route in
