@@ -200,7 +200,7 @@ func processJson() {
     if !(linkbusApiResponse.alerts.isEmpty) {
         for apiAlert in linkbusApiResponse.alerts {
             if (apiAlert.active) {
-                lbBusSchedule.alerts.append(apiAlert)
+                refreshedLbBusSchedule.alerts.append(apiAlert)
             }
         }
     }
@@ -209,7 +209,7 @@ func processJson() {
         // Only add to alerts if message is not empty string
         let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
         let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
-        lbBusSchedule.alerts.append(dailyMessageAlert)
+        refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
     }
     
     if !(csbsjuApiResponse.routes!.isEmpty) {

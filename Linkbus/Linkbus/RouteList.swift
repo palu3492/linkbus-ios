@@ -50,7 +50,7 @@ struct RouteList: View {
             //                self.greeting = "Happy Friday 🌅"
             //            }
             //            else {
-            let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅"]
+            let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
             let randomGreeting = morningGreetings.randomElement()
             self.greeting = randomGreeting!
             //            }
@@ -59,7 +59,7 @@ struct RouteList: View {
             self.greeting = "Good afternoon ☀️"
         }
         else { // < 24
-            let eveningGreetings = ["Good evening 🌙", "Buena noches 🌙", "Good evening 🌙", "Good evening 🌙"]
+            let eveningGreetings = ["Good evening 🌙", "Buenas noches 🌙", "Good evening 🌙", "Good evening 🌙"]
             let randomGreeting = eveningGreetings.randomElement()
             self.greeting = randomGreeting!
         }
@@ -82,12 +82,14 @@ struct RouteList: View {
                 ScrollView {
                     LazyVStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
-                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth)
+                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action)
                             //.transition(.opacity)
                     }
                     }
                     .padding(.top, 4)
                     .padding(.horizontal, 12)
+                    .transition(.scale)
+                    .animation(.default)
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
                     LazyVStack (alignment: .leading, spacing: 12) {
@@ -109,17 +111,19 @@ struct RouteList: View {
                     .padding(.horizontal, 12)
                     .transition(.scale)
                     .animation(.default)
+                    .padding(.top, 4)
                     
                     
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
-                    Text("updated: just now")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(12)
+    
+//                    Text("updated: just now")
+//                        .font(.footnote)
+//                        .foregroundColor(.gray)
+//                        .padding(12)
                 
                 }
-                .padding(.top, 1)
+                .padding(.top, 1) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
             
                     //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
@@ -137,7 +141,7 @@ struct RouteList: View {
                 //            }
             }
             .onReceive(timer) { time in
-                if self.counter == 1 {
+                if self.counter == 2 {
                     self.menuBarTitle = self.greeting
                 }
                 
@@ -147,8 +151,6 @@ struct RouteList: View {
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
-                print(self.lastRefreshTime)
-                print(currentTime)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
@@ -169,7 +171,9 @@ struct RouteList: View {
                         AlertCard(alertText: alert.text,
                                   alertColor: alert.color,
                                   alertRgb: alert.rgb,
-                                  fullWidth: alert.fullWidth)
+                                  fullWidth: alert.fullWidth,
+                                  clickable: alert.clickable,
+                                  action: alert.action)
                             .transition(.opacity)
                     }
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
