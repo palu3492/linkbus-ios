@@ -113,7 +113,6 @@ struct RouteList: View {
                     .animation(.default)
                     .padding(.top, 4)
                     
-                    
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
     
