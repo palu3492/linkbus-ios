@@ -78,6 +78,8 @@ struct RouteCard: View {
                                 .padding([.top, .bottom], 4)
                             
                         }
+                        .transition(.scale)
+                        .animation(.default)
                     }
                 }
 

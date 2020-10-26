@@ -11,18 +11,21 @@ import Combine
 
 struct RouteList: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var routeController = RouteController()
+    @ObservedObject var routeController: RouteController
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var counter = 0
     
     var alertPresented: Bool
+
     @State var menuBarTitle = "Linkbus"
+    @State var initial = true
+    @State var lastRefreshTime = ""
     public var greeting: String
     
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
-        
+        self.routeController = RouteController()
         
         //UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
@@ -66,6 +69,11 @@ struct RouteList: View {
         //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        print(colorScheme)
         
+        let time = Date()
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm"
+        lastRefreshTime = timeFormatter.string(from: time)
+        
     }
     
     var body: some View {
@@ -74,7 +82,7 @@ struct RouteList: View {
                 ScrollView {
                     LazyVStack (alignment: .leading, spacing: 12) {
                     ForEach(routeController.lbBusSchedule.alerts) { alert in
-                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb)
+                        AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth)
                             //.transition(.opacity)
                     }
                     }
@@ -99,8 +107,8 @@ struct RouteList: View {
                         .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
                     }
                     .padding(.horizontal, 12)
-//                    .transition(.scale)
-//                    .animation(.default)
+                    .transition(.scale)
+                    .animation(.default)
                     
                     
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
@@ -111,12 +119,14 @@ struct RouteList: View {
                         .padding(12)
                 
                 }
+                .padding(.top, 1)
             
                     //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
                     
                     
                 .navigationBarTitle(self.menuBarTitle, displayMode: .large)
+
                 
                 //            List(routeController.lbBusSchedule.routes) { route in
                 //                VStack (alignment: .leading) {
@@ -129,11 +139,25 @@ struct RouteList: View {
             .onReceive(timer) { time in
                 if self.counter == 1 {
                     self.menuBarTitle = self.greeting
-                    self.timer.upstream.connect().cancel()
                 }
                 
                 self.counter += 1
+                
+                let time = Date()
+                let timeFormatter = DateFormatter()
+                timeFormatter.dateFormat = "HH:mm"
+                let currentTime = timeFormatter.string(from: time)
+                print(self.lastRefreshTime)
+                print(currentTime)
+                if self.lastRefreshTime != currentTime {
+                    self.routeController.webRequest()
+                    self.lastRefreshTime = currentTime
+                }
             }
+            .onAppear(perform: {
+                    //self.routeController.webRequest()
+                    print("appeared")
+            })
         }
         
         else {//IOS 13
