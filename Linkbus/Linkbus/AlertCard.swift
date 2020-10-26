@@ -60,15 +60,15 @@ struct AlertCard: View {
     
 }
 
-struct AlertCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
-                  alertColor: "red",
-                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
-                  fullWidth: false
-        )
-    }
-}
+//struct AlertCard_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
+//                  alertColor: "red",
+//                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
+//                  fullWidth: false
+//        )
+//    }
+//}
 
 
 

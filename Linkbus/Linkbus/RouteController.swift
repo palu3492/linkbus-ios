@@ -10,17 +10,20 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    let LinkbusApiUrl = "https://raw.githubusercontent.com/palu3492/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/alert"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
     var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
+    var linkbusAlertsApiResponse = LinkbusAlertsApi(alerts: [NewAlert]())
     
-    @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
+    @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
     
     private var dailyMessage: String
     
     init() {
         self.dailyMessage = ""
+        print("web request")
         webRequest()
     }
 }
@@ -55,6 +58,18 @@ extension RouteController {
             if let success = response {
                 DispatchQueue.main.async {
                     self.dailyMessage = response!
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.enter()
+        print("fetch alerts")
+        fetchAlerts { apiResponse in
+            if let success = apiResponse {
+                print("alerts fetched")
+                DispatchQueue.main.async {
+                    self.linkbusAlertsApiResponse = apiResponse!
                     dispatchGroup.leave()
                 }
             }
@@ -183,7 +198,32 @@ extension RouteController {
         return ""
     }
     
+    func fetchAlerts(completionHandler: @escaping (LinkbusAlertsApi?) -> Void) {
+        let url = URL(string: LinkbusAlertsApiUrl)!
+        
+        let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+            if let error = error {
+                print("Error with fetching bus schedule from Linkbus API: \(error)")
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode) else {
+                    print("Error with the response, unexpected status code: \(response)")
+                    return
+            }
+            print("Fetched")
+            print(data!)
+            if let data = data,
+                let apiResponse = try? JSONDecoder().decode(LinkbusAlertsApi.self, from: data) {
+                completionHandler(apiResponse)
+            }
+        })
+        task.resume()
+    }
+    
     func processJson() {
+        print("process")
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
@@ -191,20 +231,29 @@ extension RouteController {
         lbBusSchedule.attention = csbsjuApiResponse.attention!
         
         // only add active alerts to lbBusSchedule
-        if !(linkbusApiResponse.alerts.isEmpty) {
-            for apiAlert in linkbusApiResponse.alerts {
+//        if !(linkbusApiResponse.alerts.isEmpty) {
+//            for apiAlert in linkbusApiResponse.alerts {
+//                if (apiAlert.active) {
+//                    lbBusSchedule.alerts.append(apiAlert)
+//                }
+//            }
+//        }
+        print("...")
+        print(linkbusAlertsApiResponse.alerts)
+        if !(linkbusAlertsApiResponse.alerts.isEmpty) {
+            for apiAlert in linkbusAlertsApiResponse.alerts {
                 if (apiAlert.active) {
                     lbBusSchedule.alerts.append(apiAlert)
                 }
             }
         }
         // Create alert from daily message
-        if self.dailyMessage != "" {
-            // Only add to alerts if message is not empty string
-            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
-            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
-            lbBusSchedule.alerts.append(dailyMessageAlert)
-        }
+//        if self.dailyMessage != "" {
+//            // Only add to alerts if message is not empty string
+//            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
+//            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
+//            lbBusSchedule.alerts.append(dailyMessageAlert)
+//        }
         
         if !(csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
