@@ -15,6 +15,7 @@ struct LinkbusApi: Decodable {
     let routes: [RouteDetail]
 }
 
+// Deprecated
 struct Alert: Identifiable, Decodable {
     let id: Int
     let active: Bool

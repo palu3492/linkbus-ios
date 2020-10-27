@@ -12,6 +12,7 @@ struct LinkbusAlertsApi: Decodable {
     let alerts: [NewAlert]
 }
 
+// The new alert struct. Temporary name.
 struct NewAlert: Identifiable, Decodable {
     let id: String
     let active: Bool

@@ -11,6 +11,7 @@ import SwiftUI
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
     let LinkbusApiUrl = "https://raw.githubusercontent.com/palu3492/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    // Using both APIs for now
     let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/alert"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
@@ -33,6 +34,7 @@ extension RouteController {
     func webRequest() {
         let dispatchGroup = DispatchGroup()
         
+        // CSBSJU API
         dispatchGroup.enter()
         fetchCsbsjuApi { apiResponse in
             if let success = apiResponse {
@@ -43,6 +45,7 @@ extension RouteController {
             }
         }
         
+        // Alert/route JSON data "API" from GitHub
         dispatchGroup.enter()
         fetchLinkbusApi { apiResponse in
             if let success = apiResponse {
@@ -53,6 +56,7 @@ extension RouteController {
             }
         }
         
+        // Daily message alert
         dispatchGroup.enter()
         fetchDailyMessage { response in
             if let success = response {
@@ -63,11 +67,10 @@ extension RouteController {
             }
         }
         
+        // New API connected to website for alerts
         dispatchGroup.enter()
-        print("fetch alerts")
         fetchAlerts { apiResponse in
             if let success = apiResponse {
-                print("alerts fetched")
                 DispatchQueue.main.async {
                     self.linkbusAlertsApiResponse = apiResponse!
                     dispatchGroup.leave()
@@ -131,7 +134,7 @@ extension RouteController {
     /**
         Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
         After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
-        - Parameter completionHandler: The callback function to be executed on success fetching of website html.
+        - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
      
         - Returns: calls completion handler with daily message as argument or returns null on error.
      */
@@ -144,7 +147,7 @@ extension RouteController {
         // Add body (form data)
         var postString = ""
         // These asp.net fields may not work forever!
-        // However.. it's worked for a month so far.
+        // However.. they've worked for a couple months so far.
         let specifyData = false
         if specifyData {
             // Allows for date to be changed. Disabled by default. Implement later.
@@ -172,6 +175,7 @@ extension RouteController {
                     print("Error with the response, unexpected status code: \(String(describing: response))")
                     return
             }
+            // Process HTML into data we care about, the "daily message"
             let dailyMessage = self.processDailyMessage(data: data!)
             completionHandler(dailyMessage)
         })
@@ -185,6 +189,7 @@ extension RouteController {
         - Returns: Daily message string or empty string.
      */
     func processDailyMessage(data: Data) -> String {
+        // Use regex to parse HTML for daily message within p tag
         let dataString = String(decoding: data, as: UTF8.self)
         let pattern = #"TodayMsg"><p>([^<]*)<\/p>"#
         let regex = try? NSRegularExpression(pattern: pattern)
@@ -198,6 +203,12 @@ extension RouteController {
         return ""
     }
     
+    /**
+        Fetches the new Linkbus API json data. Currenly only alert data.
+        - Parameter completionHandler: The callback function to be executed on successful fetching of API JOSN data.
+      
+        - Returns: calls completion handler with the API response as argument or returns nill on error.
+     */
     func fetchAlerts(completionHandler: @escaping (LinkbusAlertsApi?) -> Void) {
         let url = URL(string: LinkbusAlertsApiUrl)!
         
@@ -212,8 +223,6 @@ extension RouteController {
                     print("Error with the response, unexpected status code: \(response)")
                     return
             }
-            print("Fetched")
-            print(data!)
             if let data = data,
                 let apiResponse = try? JSONDecoder().decode(LinkbusAlertsApi.self, from: data) {
                 completionHandler(apiResponse)
@@ -223,13 +232,14 @@ extension RouteController {
     }
     
     func processJson() {
-        print("process")
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
         lbBusSchedule.msg = csbsjuApiResponse.msg!
         lbBusSchedule.attention = csbsjuApiResponse.attention!
         
+        // SKIPPING OLD ALERTS
+        // Remove this later
         // only add active alerts to lbBusSchedule
 //        if !(linkbusApiResponse.alerts.isEmpty) {
 //            for apiAlert in linkbusApiResponse.alerts {
@@ -238,8 +248,7 @@ extension RouteController {
 //                }
 //            }
 //        }
-        print("...")
-        print(linkbusAlertsApiResponse.alerts)
+        // USING NEW ALERTS FROM API
         if !(linkbusAlertsApiResponse.alerts.isEmpty) {
             for apiAlert in linkbusAlertsApiResponse.alerts {
                 if (apiAlert.active) {
@@ -248,12 +257,15 @@ extension RouteController {
             }
         }
         // Create alert from daily message
-//        if self.dailyMessage != "" {
-//            // Only add to alerts if message is not empty string
-//            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
-//            let dailyMessageAlert = Alert(id: 120, active: true, text: self.dailyMessage, clickable: true, action: "", fullWidth: false, color: "blue", rgb: color)
-//            lbBusSchedule.alerts.append(dailyMessageAlert)
-//        }
+        // Website will be able to customize this in the near future
+        if self.dailyMessage != "" {
+            // Only add to alerts if message is not empty string
+            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
+            let dailyMessageAlert = NewAlert(id: "h213h408", active: true, text: self.dailyMessage,
+                                             clickable: true, action: "", fullWidth: false,
+                                             color: "blue", rgb: color, uid: 1, colorCode: "#000")
+            lbBusSchedule.alerts.append(dailyMessageAlert)
+        }
         
         if !(csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
