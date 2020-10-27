@@ -20,6 +20,8 @@ struct RouteCard: View {
     var category:String?    // Optional Category
     var buttonHandler: (()->())?
     
+    @State var timer = "Now"
+    
     var route: LbRoute!
     
     @State private var totalHeight
@@ -40,6 +42,8 @@ struct RouteCard: View {
         self.category = category
         self.buttonHandler = buttonHandler
         self.route = route
+        
+        self.timer = "Now"
     }
     
     var body: some View {
@@ -66,23 +70,55 @@ struct RouteCard: View {
                         }
                         HStack(alignment: .center) {
                             Spacer()
-                            Text(route.nextBusTimer)
-                                .font(Font.custom("HelveticaNeue", size: 14))
-                                //.font(.footnote)
-                                .padding([.leading, .trailing], 5)
-                                .padding([.top, .bottom], 2.5)
-                                .foregroundColor(Color.white)
-                                //                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                .background(Color.blue)
-                                .cornerRadius(7)
-                                .padding([.top, .bottom], 4)
-                            
+                            if (route.nextBusTimer == "Departing now") {
+                                Text(route.nextBusTimer)
+                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    //.font(.footnote)
+                                    .padding([.leading, .trailing], 5)
+                                    .padding([.top, .bottom], 2.5)
+                                    .foregroundColor(Color.white)
+                                    //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                    .background(Color.red)
+                                    .cornerRadius(7)
+                                    .padding([.top, .bottom], 4)
+                            }
+                            else if (route.nextBusTimer.contains("Now")) {
+                                let delay = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (delay) in
+                                    self.timer = route.nextBusTimer
+                                    print("executed")
+                                }
+                                Text(timer)
+                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    //.fontWeight(.medium)
+                                    //.font(.footnote)
+                                    .padding([.leading, .trailing], 5)
+                                    .padding([.top, .bottom], 2.5)
+                                    .foregroundColor(Color.white)
+                                    //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                    .background(Color.green)
+                                    .cornerRadius(7)
+                                    .padding([.top, .bottom], 4)
+                            }
+                            else {
+                                
+                                Text(route.nextBusTimer)
+                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    //.fontWeight(.medium)
+                                    //.font(.footnote)
+                                    .padding([.leading, .trailing], 5)
+                                    .padding([.top, .bottom], 2.5)
+                                    .foregroundColor(Color.white)
+                                    //                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                    .background(Color.blue)
+                                    .cornerRadius(7)
+                                    .padding([.top, .bottom], 4)
+                            }
                         }
                         .transition(.scale)
                         .animation(.default)
                     }
                 }
-
+                
                 .padding([.top, .bottom], 8)
                 
                 //                HStack(alignment: .center, spacing: 4) {
@@ -115,12 +151,12 @@ struct RouteCard: View {
             .padding(12)
             
         }
-            //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
-            .background(colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground))
-            .cornerRadius(15)
-            //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
-            .onTapGesture {
-                self.showRouteSheet = true
+        //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
+        .background(colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground))
+        .cornerRadius(15)
+        //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
+        .onTapGesture {
+            self.showRouteSheet = true
         }.sheet(isPresented: $showRouteSheet) {
             RouteSheet(route: self.route)
         }

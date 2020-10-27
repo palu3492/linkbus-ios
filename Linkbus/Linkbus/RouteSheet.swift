@@ -39,6 +39,10 @@ struct RouteSheet: View {
                     
                     VStack(alignment: .leading) {
                         
+                        RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            .transition(.scale)
+                            .animation(.easeInOut)
+                        
                         // origin
                         HStack(alignment: .firstTextBaseline) {
                             Image(uiImage: UIImage(systemName: "smallcircle.fill.circle")!) //stop.circle.fill looks ok

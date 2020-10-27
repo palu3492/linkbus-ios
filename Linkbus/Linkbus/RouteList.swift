@@ -97,7 +97,6 @@ struct RouteList: View {
                             //                    if #available(iOS 13.4, *) {
                             RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
                             //.animation(.default)
-                            //.hoverEffect(.lift)
                             //                    } else {
                             //                        // Fallback on earlier versions
                             //                    }
@@ -140,6 +139,7 @@ struct RouteList: View {
                 //                }
                 //            }
             }
+            .hoverEffect(.lift)
             .onReceive(timer) { time in
                 if self.counter == 2 {
                     self.menuBarTitle = self.greeting
@@ -216,12 +216,20 @@ struct RouteList: View {
             //            }
         }
         .onReceive(timer) { time in
-            if self.counter == 1 {
+            if self.counter == 2 {
                 self.menuBarTitle = self.greeting
-                self.timer.upstream.connect().cancel()
             }
             
             self.counter += 1
+            
+            let time = Date()
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "HH:mm"
+            let currentTime = timeFormatter.string(from: time)
+            if self.lastRefreshTime != currentTime {
+                self.routeController.webRequest()
+                self.lastRefreshTime = currentTime
+            }
         }
         
     }
