@@ -127,7 +127,7 @@ struct RouteList: View {
                     
                     
                     
-                .navigationBarTitle(self.menuBarTitle, displayMode: .large)
+                .navigationBarTitle(self.menuBarTitle)
 
                 
                 //            List(routeController.lbBusSchedule.routes) { route in
@@ -200,11 +200,12 @@ struct RouteList: View {
                 //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 
             }
+            .navigationBarTitle(self.menuBarTitle)
                 //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 
                 
                 
-                .navigationBarTitle(self.menuBarTitle)
+
             
             //            List(routeController.lbBusSchedule.routes) { route in
             //                VStack (alignment: .leading) {
