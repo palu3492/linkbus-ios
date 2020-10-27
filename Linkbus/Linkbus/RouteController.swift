@@ -223,21 +223,20 @@ func processJson() {
             for apiTime in apiRoute.times! {
                 // process new time structure
                 if (apiTime.start != "") {
-                    var isoDate = apiTime.start
+                    var isoStartDate = apiTime.start
+                    var isoEndDate = apiTime.end
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
                     dateFormatter.timeZone = TimeZone(identifier: "America/Central")
                     dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-                    let startDate = dateFormatter.date(from:isoDate!)!
+                    let startDate = dateFormatter.date(from:isoStartDate!)!
+                    let endDate = dateFormatter.date(from:isoEndDate!)!
                     
                     // current time - 1 min so that a bus at 5:30:00 still appears in app if currentTime is 5:30:01
                     let calendar = Calendar.current
                     let date = Date()
                     let currentDate = calendar.date(byAdding: .minute, value: -1, to: date)
-                    if (startDate >= currentDate!) { // make sure start date is not in the past, if true skip add
-                        
-                        isoDate = apiTime.end
-                        let endDate = dateFormatter.date(from:isoDate!)!
+                    if (endDate >= currentDate!) { // make sure end date is not in the past, if true skip add
                         
                         let textFormatter = DateFormatter()
                         textFormatter.dateFormat = "h:mm a"
@@ -262,7 +261,7 @@ func processJson() {
                     let date = Date()
                     let currentDate = calendar.date(byAdding: .minute, value: -1, to: date)
                     
-                    if (startDate >= currentDate!) { // make sure start date is not in the past, if true skip add
+                    if (endDate >= currentDate!) { // make sure end date is not in the past, if true skip add
                         
                         let textFormatter = DateFormatter()
                         textFormatter.dateFormat = "h:mm a"
@@ -290,17 +289,38 @@ func processJson() {
                 tempRoute.state = linkbusApiResponse.routes[i!].state
                 tempRoute.coordinates = linkbusApiResponse.routes[i!].coordinates
                 
+                // next bus timer logic:
+                
+                let nextBusStart = tempRoute.times[0].startDate
+                let nextBusEnd = tempRoute.times[0].endDate
+                
                 //https://stackoverflow.com/a/41640902
                 let formatter = DateComponentsFormatter()
                 formatter.unitsStyle = .full
                 formatter.allowedUnits = [.month, .day, .hour, .minute]
                 formatter.maximumUnitCount = 2   // often, you don't care about seconds if the elapsed time is in months, so you'll set max unit to whatever is appropriate in your case
-                var nextBusTimer = formatter.string(from: Date(), to: tempRoute.times[0].startDate.addingTimeInterval(60))! //adds 60 seconds to round up
+                let timeDifference = formatter.string(from: Date(), to: nextBusStart.addingTimeInterval(60))! //adds 60 seconds to round up
+                var nextBusTimer: String
                 
-                if (nextBusTimer == "0 minutes") {
+                if (nextBusStart != nextBusEnd) && (Date() > nextBusStart) && (Date() < nextBusEnd) { // in a range
+//                    if Date() >= nextBusEnd {
+//                        nextBusTimer = "Departing now"
+//                    }
+                    //else {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "h:mm a"
+                    dateFormatter.timeZone = TimeZone(identifier: "America/Central")
+                    dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                    let nextBusTime = dateFormatter.string(from: nextBusEnd)
+                    nextBusTimer = "Now until " + nextBusTime
+                    //}
+                }
+                else if (timeDifference == "0 minutes" || Date() >= nextBusEnd) {
                     nextBusTimer = "Departing now"
                 }
-                
+                else { // no range
+                    nextBusTimer = timeDifference
+                }
                 tempRoute.nextBusTimer = nextBusTimer
                 
                 
