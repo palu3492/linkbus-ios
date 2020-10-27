@@ -11,7 +11,6 @@
 import SwiftUI
 
 struct LinkbusApi: Decodable {
-    let alerts: [Alert]
     let routes: [RouteDetail]
 }
 

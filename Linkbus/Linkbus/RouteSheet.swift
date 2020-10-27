@@ -128,7 +128,7 @@ struct RouteSheet: View {
                         
                         // route times
                         HStack(alignment: .lastTextBaseline) {
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 0) {
                                 ForEach(route.times, id: \.self) { time in
                                     HStack {
                                         Text(time.timeString)

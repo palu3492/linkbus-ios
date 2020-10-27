@@ -10,21 +10,22 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    let LinkbusApiUrl = "https://raw.githubusercontent.com/palu3492/linkbus-ios/master/Linkbus/Linkbus/Resources/LinkbusAPI.json"
+    // Until we switch to new API, the user and branch need to change depending on current enviroment
+    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/dev/Linkbus/Linkbus/Resources/LinkbusAPI.json"
     // Using both APIs for now
     let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/alert"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
+    var linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
     var linkbusAlertsApiResponse = LinkbusAlertsApi(alerts: [NewAlert]())
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
+    @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
     
     private var dailyMessage: String
     
     init() {
         self.dailyMessage = ""
-        print("web request")
         webRequest()
     }
 }
@@ -32,6 +33,11 @@ class RouteController: ObservableObject {
 extension RouteController {
     
     func webRequest() {
+        csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
+        linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
+        refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
+        linkbusAlertsApiResponse = LinkbusAlertsApi(alerts: [NewAlert]())
+        
         let dispatchGroup = DispatchGroup()
         
         // CSBSJU API
@@ -83,7 +89,7 @@ extension RouteController {
         }
         
     }
-
+    
     
     func fetchCsbsjuApi(completionHandler: @escaping (BusSchedule?) -> Void) {
         let url = URL(string: CsbsjuApiUrl)!
@@ -95,13 +101,13 @@ extension RouteController {
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                    print("Error with the response, unexpected status code: \(response)")
-                    return
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Error with the response, unexpected status code: \(response)")
+                return
             }
             
             if let data = data,
-                let apiResponse = try? JSONDecoder().decode(BusSchedule.self, from: data) {
+               let apiResponse = try? JSONDecoder().decode(BusSchedule.self, from: data) {
                 completionHandler(apiResponse)
             }
         })
@@ -118,13 +124,13 @@ extension RouteController {
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                    print("Error with the response, unexpected status code: \(response)")
-                    return
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Error with the response, unexpected status code: \(response)")
+                return
             }
             
             if let data = data,
-                let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
+               let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
                 completionHandler(apiResponse)
             }
         })
@@ -136,7 +142,7 @@ extension RouteController {
         After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
         - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
      
-        - Returns: calls completion handler with daily message as argument or returns null on error.
+        - Returns: calls completion handler with daily message as argument or returns nill on error.
      */
     func fetchDailyMessage(completionHandler: @escaping (String?) -> Void) {
         let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
@@ -183,8 +189,9 @@ extension RouteController {
     }
     
     /**
-        Processes the daily message website html into just the daily message string.
-        - Parameter data: The fetched bus schedule website html.
+
+        Processes the daily message website HTML into just the daily message string.
+        - Parameter data: The fetched bus schedule website HTML.
      
         - Returns: Daily message string or empty string.
      */
@@ -200,6 +207,7 @@ extension RouteController {
                 return dailyMessage
             }
         }
+        // Return empty string if regex does not work
         return ""
     }
     
@@ -239,7 +247,7 @@ extension RouteController {
         lbBusSchedule.attention = csbsjuApiResponse.attention!
         
         // SKIPPING OLD ALERTS
-        // Remove this later
+        // TODO: Remove this later
         // only add active alerts to lbBusSchedule
 //        if !(linkbusApiResponse.alerts.isEmpty) {
 //            for apiAlert in linkbusApiResponse.alerts {
@@ -249,11 +257,9 @@ extension RouteController {
 //            }
 //        }
         // USING NEW ALERTS FROM API
-        if !(linkbusAlertsApiResponse.alerts.isEmpty) {
-            for apiAlert in linkbusAlertsApiResponse.alerts {
-                if (apiAlert.active) {
-                    lbBusSchedule.alerts.append(apiAlert)
-                }
+        for apiAlert in linkbusAlertsApiResponse.alerts {
+            if (apiAlert.active) {
+                lbBusSchedule.alerts.append(apiAlert)
             }
         }
         // Create alert from daily message
@@ -267,6 +273,10 @@ extension RouteController {
             lbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
+        for a in lbBusSchedule.alerts {
+            print(a)
+        }
+    
         if !(csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
@@ -285,7 +295,11 @@ extension RouteController {
                         dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
                         let startDate = dateFormatter.date(from:isoDate!)!
                         
-                        if (startDate > Date()) { // make sure start date is not in the past, if true skip add
+                        // current time - 1 min so that a bus at 5:30:00 still appears in app if currentTime is 5:30:01
+                        let calendar = Calendar.current
+                        let date = Date()
+                        let currentDate = calendar.date(byAdding: .minute, value: -1, to: date)
+                        if (startDate >= currentDate!) { // make sure start date is not in the past, if true skip add
                             
                             isoDate = apiTime.end
                             let endDate = dateFormatter.date(from:isoDate!)!
@@ -298,8 +312,7 @@ extension RouteController {
                             tempId+=1
                             tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
                         }
-                    }
-                    else {
+                    } else {
                         let isoDate = apiTime.end
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
@@ -308,7 +321,12 @@ extension RouteController {
                         let endDate = dateFormatter.date(from:isoDate!)!
                         let startDate = endDate
                         
-                        if (startDate > Date()) { // make sure start date is not in the past, if true skip add
+                        // current time + 1 min so that a bus at 5:30:00 still appears in app if currentTime is 5:30:01
+                        let calendar = Calendar.current
+                        let date = Date()
+                        let currentDate = calendar.date(byAdding: .minute, value: -1, to: date)
+                        
+                        if (startDate >= currentDate!) { // make sure start date is not in the past, if true skip add
                             
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
@@ -350,22 +368,21 @@ extension RouteController {
                     tempRoute.nextBusTimer = nextBusTimer
                     
                     
-                    lbBusSchedule.routes.append(tempRoute)
+                    refreshedLbBusSchedule.routes.append(tempRoute)
+                    lbBusSchedule = refreshedLbBusSchedule
                 }
                 
             }
-            
         }
         
-//        if (lbBusSchedule.routes.count > 0) {
-//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-//            while let time = iterator.next() {
-//                print(time.timeString)
-//            }
-//        }
-        
-    }
+        if (lbBusSchedule.routes.count > 0) {
+            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+            while let time = iterator.next() {
+                print(time.timeString)
+            }
+        }
     
+    }
 }
 
 

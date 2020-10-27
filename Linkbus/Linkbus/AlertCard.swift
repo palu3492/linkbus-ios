@@ -14,11 +14,15 @@ struct AlertCard: View {
         //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
     
+    @State private var showingActionSheet = false
+    
     let alertText: String
     let alertColor: Color
     let fullWidth: Bool
+    let clickable: Bool
+    let action: String
     
-    init(alertText: String, alertColor: String, alertRgb: RGBColor, fullWidth: Bool) {
+    init(alertText: String, alertColor: String, alertRgb: RGBColor, fullWidth: Bool, clickable: Bool, action: String) {
         self.alertText = alertText
         
         let color: Color
@@ -31,6 +35,7 @@ struct AlertCard: View {
         ]
         
         if alertColor != "" {
+            // TODO: Check if color is in colors
             color = colors[alertColor]!
         } else {
             color = Color(
@@ -42,6 +47,8 @@ struct AlertCard: View {
         }
         self.alertColor = color
         self.fullWidth = fullWidth
+        self.clickable = clickable
+        self.action = action
     }
     
     var body: some View {
@@ -54,21 +61,34 @@ struct AlertCard: View {
         }
         .background(alertColor)
         .cornerRadius(15)
+        .onTapGesture {
+            if clickable {
+                self.showingActionSheet = true
+            }
+        }
+        .actionSheet(isPresented: $showingActionSheet) {
+            ActionSheet(title: Text(action), buttons: [
+                .default(Text("Open in Browser")) { UIApplication.shared.open(URL(string: action)!) },
+                .cancel()
+            ])
+        }
         // .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
         //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
     }
     
 }
 
-//struct AlertCard_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
-//                  alertColor: "red",
-//                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
-//                  fullWidth: false
-//        )
-//    }
-//}
+struct AlertCard_Previews: PreviewProvider {
+    static var previews: some View {
+        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
+                  alertColor: "red",
+                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
+                  fullWidth: false,
+                  clickable: false,
+                  action: ""
+        )
+    }
+}
 
 
 
