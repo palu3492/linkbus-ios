@@ -40,10 +40,12 @@ struct RouteList: View {
         //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        print(colorScheme)
         
+        
         let time = Date()
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
-        lastRefreshTime = timeFormatter.string(from: time)
+        //self.lastRefreshTime = timeFormatter.string(from: time)
+        _lastRefreshTime = State(initialValue: timeFormatter.string(from: time))
         
     }
     
@@ -52,8 +54,20 @@ struct RouteList: View {
             NavigationView {
                 ScrollView {
                     LazyVStack (alignment: .leading, spacing: 12) {
+                        if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                            AlertCard(alertText: "⚠️ No internet connection. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
+                            AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
+                        }
+                        if (routeController.onlineStatus == "back online") {
+                            AlertCard(alertText: "Back online. 🥳", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: false, clickable: false, action: "", routeController: routeController)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                        routeController.onlineStatus = "online"
+                                    }
+                        }
+                        }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
-                            AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action)
+                            AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
                             //.transition(.opacity)
                         }
                     }
@@ -111,7 +125,16 @@ struct RouteList: View {
             }
             .hoverEffect(.lift)
             .onReceive(timer) { time in
-                if self.counter >= 2 {
+                if self.counter >= 1 {
+                    
+                    if routeController.onlineStatus == "offline" {
+                        self.menuBarTitle = "Offline"
+                    }
+                    else {
+                        self.menuBarTitle = self.greeting
+                    }
+                    
+                    // GREETINGS
                     
                     let currentDate = Date()
                     let calendar = Calendar(identifier: .gregorian)
@@ -121,6 +144,7 @@ struct RouteList: View {
                     var newTimeOfDay: String
                     var timeOfDayChanged = false
                     
+
                     if (hour < 6) {
                         newTimeOfDay = "night"
                     }
@@ -139,7 +163,7 @@ struct RouteList: View {
                         self.timeOfDay = newTimeOfDay
                     }
                     
-                    if (timeOfDayChanged) { // timeOfDayChanged will make it immediately run on first laucnh -- fix-try this
+                    if (timeOfDayChanged) {
                         
                         if (self.timeOfDay == "night") {
                             let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 😴"]
@@ -148,10 +172,14 @@ struct RouteList: View {
                         }
                         else if (self.timeOfDay == "morning") {
                             if (component.weekday == 2) { // if Monday
-                                self.greeting = "Happy Monday 🌅"
+                                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Happy Monday 🌅", "Happy Monday 🌅", "Happy Monday 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
+                                let randomGreeting = morningGreetings.randomElement()
+                                self.greeting = randomGreeting!
                             }
                             else if (component.weekday == 6) {
-                                self.greeting = "Happy Friday 🌅"
+                                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Happy Friday 🌅", "Happy Friday 🌅", "Happy Friday 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
+                                let randomGreeting = morningGreetings.randomElement()
+                                self.greeting = randomGreeting!
                             }
                             else {
                                 let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
@@ -167,9 +195,10 @@ struct RouteList: View {
                             let randomGreeting = eveningGreetings.randomElement()
                             self.greeting = randomGreeting!
                         }
-                        self.menuBarTitle = self.greeting
                     }
                 }
+                
+                // AUTO REFRESH
                 
                 self.counter += 1
                 
@@ -177,6 +206,10 @@ struct RouteList: View {
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
+                
+                print("last ref: " + self.lastRefreshTime)
+                print("current time: " + currentTime)
+                print("local desc: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
@@ -185,20 +218,32 @@ struct RouteList: View {
             
         }
         
+        
+        
+        
+        
+        
+        
         else {//IOS 13
             
             NavigationView {
                 List() {
                     VStack(alignment: .leading, spacing: 12){
+                        if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                            AlertCard(alertText: "⚠️ No internet connection. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
+                            AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
+                        }
+                        if (routeController.onlineStatus == "back online") {
+                            AlertCard(alertText: "Back online. 🥳", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: false, clickable: false, action: "", routeController: routeController)
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                        routeController.onlineStatus = "online"
+                                    }
+                        }
+                        }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
-                            AlertCard(alertText: alert.text,
-                                      alertColor: alert.color,
-                                      alertRgb: alert.rgb,
-                                      fullWidth: alert.fullWidth,
-                                      clickable: alert.clickable,
-                                      action: alert.action)
-//                                .transition(.opacity)
-//                                .animation(.default)
+                            AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
+                            //.transition(.opacity)
                         }
 
                         //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
@@ -252,7 +297,16 @@ struct RouteList: View {
                 //            }
             }
             .onReceive(timer) { time in
-                if self.counter >= 2 {
+                if self.counter >= 1 {
+                    
+                    if routeController.onlineStatus == "offline" {
+                        self.menuBarTitle = "Offline"
+                    }
+                    else {
+                        self.menuBarTitle = self.greeting
+                    }
+                    
+                    // GREETINGS
                     
                     let currentDate = Date()
                     let calendar = Calendar(identifier: .gregorian)
@@ -262,6 +316,7 @@ struct RouteList: View {
                     var newTimeOfDay: String
                     var timeOfDayChanged = false
                     
+
                     if (hour < 6) {
                         newTimeOfDay = "night"
                     }
@@ -280,7 +335,7 @@ struct RouteList: View {
                         self.timeOfDay = newTimeOfDay
                     }
                     
-                    if (timeOfDayChanged) { // timeOfDayChanged will make it immediately run on first laucnh -- fix-try this
+                    if (timeOfDayChanged) {
                         
                         if (self.timeOfDay == "night") {
                             let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 😴"]
@@ -289,10 +344,14 @@ struct RouteList: View {
                         }
                         else if (self.timeOfDay == "morning") {
                             if (component.weekday == 2) { // if Monday
-                                self.greeting = "Happy Monday 🌅"
+                                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Happy Monday 🌅", "Happy Monday 🌅", "Happy Monday 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
+                                let randomGreeting = morningGreetings.randomElement()
+                                self.greeting = randomGreeting!
                             }
                             else if (component.weekday == 6) {
-                                self.greeting = "Happy Friday 🌅"
+                                let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Happy Friday 🌅", "Happy Friday 🌅", "Happy Friday 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
+                                let randomGreeting = morningGreetings.randomElement()
+                                self.greeting = randomGreeting!
                             }
                             else {
                                 let morningGreetings = ["Good morning 🌅", "Bonjour 🌅", "Good morning 🌅", "Good morning 🌅", "Good morning 🌅", "Buenos días 🌅"]
@@ -308,9 +367,10 @@ struct RouteList: View {
                             let randomGreeting = eveningGreetings.randomElement()
                             self.greeting = randomGreeting!
                         }
-                        self.menuBarTitle = self.greeting
                     }
                 }
+                
+                // AUTO REFRESH
                 
                 self.counter += 1
                 
@@ -318,6 +378,10 @@ struct RouteList: View {
                 let timeFormatter = DateFormatter()
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
+                
+                print("last ref: " + self.lastRefreshTime)
+                print("current time: " + currentTime)
+                print("local desc: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
@@ -351,3 +415,15 @@ struct LandmarkList_Previews: PreviewProvider {
     }
 }
 
+// TRANSLUCENT MENU BAR TETING....
+
+//extension UINavigationController {
+//    override open func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithOpaqueBackground()
+//        navigationBar.standardAppearance = appearance
+//        navigationBar.compactAppearance = appearance
+//        navigationBar.scrollEdgeAppearance = appearance
+//    }
+//}

@@ -9,12 +9,13 @@ import SwiftUI
 
 struct AlertCard: View {
     
-    
     @State private var totalHeight
         //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
     
     @State private var showingActionSheet = false
+    
+    @ObservedObject var routeController: RouteController
     
     let alertText: String
     let alertColor: Color
@@ -22,7 +23,7 @@ struct AlertCard: View {
     let clickable: Bool
     let action: String
     
-    init(alertText: String, alertColor: String, alertRgb: RGBColor, fullWidth: Bool, clickable: Bool, action: String) {
+    init(alertText: String, alertColor: String, alertRgb: RGBColor, fullWidth: Bool, clickable: Bool, action: String, routeController: RouteController) {
         self.alertText = alertText
         
         let color: Color
@@ -48,6 +49,8 @@ struct AlertCard: View {
         self.fullWidth = fullWidth
         self.clickable = clickable
         self.action = action
+        
+        self.routeController = routeController
     }
     
     var body: some View {
@@ -62,7 +65,12 @@ struct AlertCard: View {
         .cornerRadius(15)
         .onTapGesture {
             if clickable {
+                if (action == "webRequest") {
+                    self.routeController.webRequest()
+                }
+                else {
                 self.showingActionSheet = true
+                }
             }
         }
         .actionSheet(isPresented: $showingActionSheet) {
@@ -77,17 +85,18 @@ struct AlertCard: View {
     
 }
 
-struct AlertCard_Previews: PreviewProvider {
-    static var previews: some View {
-        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
-                  alertColor: "red",
-                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
-                  fullWidth: false,
-                  clickable: false,
-                  action: ""
-        )
-    }
-}
+//struct AlertCard_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AlertCard(alertText: "A face mask is required to ride the CSB/SJU Link.",
+//                  alertColor: "red",
+//                  alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0),
+//                  fullWidth: false,
+//                  clickable: false,
+//                  action: "",
+//                  routeController: nil
+//        )
+//    }
+//}
 
 
 
