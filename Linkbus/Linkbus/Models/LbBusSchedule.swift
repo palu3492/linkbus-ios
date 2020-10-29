@@ -11,6 +11,6 @@ import SwiftUI
 struct LbBusSchedule: Decodable {
     var msg: String
     var attention: String
-    var alerts: [NewAlert] // New Alert
+    var alerts: [Alert]
     var routes: [LbRoute]
 }
