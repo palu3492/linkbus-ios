@@ -50,6 +50,7 @@ extension RouteController {
                 if let success = apiResponse {
                     DispatchQueue.main.async {
                         self.csbsjuApiResponse = apiResponse!
+                        print(self.csbsjuApiResponse)
                         dispatchGroup.leave()
                     }
                 }
