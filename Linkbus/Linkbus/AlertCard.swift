@@ -36,6 +36,7 @@ struct AlertCard: View {
         ]
         
         if alertColor != "" {
+            // TODO: Check if color is in colors
             color = colors[alertColor]!
         } else {
             color = Color(

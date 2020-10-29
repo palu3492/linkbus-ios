@@ -12,11 +12,11 @@ import SwiftUI
 
 struct LinkbusApi: Decodable {
     let alerts: [Alert]
-    let routes: [RouteDetail]
+//    let routes: [RouteDetail] // TODO: Add back
 }
 
 struct Alert: Identifiable, Decodable {
-    let id: Int
+    let id: String
     let active: Bool
     let text: String
     let clickable: Bool
@@ -24,6 +24,12 @@ struct Alert: Identifiable, Decodable {
     let fullWidth: Bool
     let color: String
     let rgb: RGBColor
+    let uid: Int
+    let colorCode: String
+}
+
+struct RGBColor: Decodable {
+    let red, green, blue, opacity: Double
 }
 
 struct RouteDetail: Decodable {
@@ -34,8 +40,4 @@ struct RouteDetail: Decodable {
 
 struct Coordinates: Decodable {
     let longitude, latitude: Double
-}
-
-struct RGBColor: Decodable {
-    let red, green, blue, opacity: Double
 }

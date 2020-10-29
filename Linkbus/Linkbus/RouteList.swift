@@ -64,7 +64,7 @@ struct RouteList: View {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                         routeController.onlineStatus = "online"
                                     }
-                        }
+                                }
                         }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
                             AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
@@ -144,7 +144,7 @@ struct RouteList: View {
                     var newTimeOfDay: String
                     var timeOfDayChanged = false
                     
-
+                    
                     if (hour < 6) {
                         newTimeOfDay = "night"
                     }
@@ -222,8 +222,6 @@ struct RouteList: View {
         
         
         
-        
-        
         else {//IOS 13
             
             NavigationView {
@@ -239,13 +237,13 @@ struct RouteList: View {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                         routeController.onlineStatus = "online"
                                     }
-                        }
+                                }
                         }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
                             AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
                             //.transition(.opacity)
                         }
-
+                        
                         //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     }
                     .transition(.opacity)
@@ -255,8 +253,8 @@ struct RouteList: View {
                         ForEach(routeController.lbBusSchedule.routes) { route in
                             //                    if #available(iOS 13.4, *) {
                             RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
-//                                .transition(.opacity)
-//                                .animation(.default)
+                            //                                .transition(.opacity)
+                            //                                .animation(.default)
                             
                             //.animation(.default)
                             //.hoverEffect(.lift)
@@ -270,7 +268,7 @@ struct RouteList: View {
                     }
                     .transition(.opacity)
                     .animation(.default)
-
+                    
                     //.animation(.default)
                     //.transition(.opacity)
                     
@@ -316,7 +314,7 @@ struct RouteList: View {
                     var newTimeOfDay: String
                     var timeOfDayChanged = false
                     
-
+                    
                     if (hour < 6) {
                         newTimeOfDay = "night"
                     }
@@ -394,7 +392,6 @@ struct RouteList: View {
 }
 
 //    var body: some View {
-
 ////                        .onAppear() {
 ////                            self.routeController.webRequest()
 ////                    }
@@ -404,7 +401,6 @@ struct RouteList: View {
 //        }
 //    }
 //}
-
 struct LandmarkList_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(["iPhone XS Max"], id: \.self) { deviceName in
@@ -416,7 +412,6 @@ struct LandmarkList_Previews: PreviewProvider {
 }
 
 // TRANSLUCENT MENU BAR TETING....
-
 //extension UINavigationController {
 //    override open func viewDidAppear(_ animated: Bool) {
 //        super.viewDidAppear(animated)
