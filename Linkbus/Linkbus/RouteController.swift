@@ -13,7 +13,7 @@ class RouteController: ObservableObject {
     // Until we switch to new API, the user and branch need to change depending on current enviroment
     let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/dev/Linkbus/Linkbus/Resources/LinkbusAPI.json"
     // Using both APIs for now
-    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/alert"
+    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
     var linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
@@ -21,71 +21,86 @@ class RouteController: ObservableObject {
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
     @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
+    @Published var localizedDescription = ""
+    @Published var onlineStatus = ""
+    
+    private var webRequestInProgress: Bool
     
     private var dailyMessage: String
     
     init() {
         self.dailyMessage = ""
+        self.webRequestInProgress = false
         webRequest()
+        
     }
 }
 
 extension RouteController {
     
     func webRequest() {
-        csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-        linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
-        refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
-        linkbusAlertsApiResponse = LinkbusAlertsApi(alerts: [NewAlert]())
-        
-        let dispatchGroup = DispatchGroup()
-        
-        // CSBSJU API
-        dispatchGroup.enter()
-        fetchCsbsjuApi { apiResponse in
-            if apiResponse != nil {
-                DispatchQueue.main.async {
-                    self.csbsjuApiResponse = apiResponse!
-                    dispatchGroup.leave()
+
+        if webRequestInProgress == false {
+            webRequestInProgress = true
+            self.localizedDescription = "default"
+            
+            csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
+            linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
+            refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [NewAlert](), routes: [LbRoute]())
+            print("clear")
+            linkbusAlertsApiResponse = LinkbusAlertsApi(alerts: [NewAlert]())
+            
+            let dispatchGroup = DispatchGroup()
+            
+            // CSBSJU API
+            dispatchGroup.enter()
+            fetchCsbsjuApi { apiResponse in
+                if apiResponse != nil {
+                    DispatchQueue.main.async {
+                        self.csbsjuApiResponse = apiResponse!
+                        dispatchGroup.leave()
+                    }
                 }
             }
-        }
-        
-        // Alert/route JSON data "API" from GitHub
-        dispatchGroup.enter()
-        fetchLinkbusApi { apiResponse in
-            if apiResponse != nil {
-                DispatchQueue.main.async {
-                    self.linkbusApiResponse = apiResponse!
-                    dispatchGroup.leave()
+            
+            // Alert/route JSON data "API" from GitHub
+            dispatchGroup.enter()
+            fetchLinkbusApi { apiResponse in
+                if apiResponse != nil {
+                    DispatchQueue.main.async {
+                        self.linkbusApiResponse = apiResponse!
+                        dispatchGroup.leave()
+                    }
                 }
             }
-        }
-        
-        // Daily message alert
-        dispatchGroup.enter()
-        fetchDailyMessage { response in
-            if response != nil {
-                DispatchQueue.main.async {
-                    self.dailyMessage = response!
-                    dispatchGroup.leave()
+            
+            // Daily message alert
+            dispatchGroup.enter()
+            fetchDailyMessage { response in
+                if response != nil {
+                    DispatchQueue.main.async {
+                        self.dailyMessage = response!
+                        dispatchGroup.leave()
+                    }
+
+                }
+                
+            }
+            
+            // New API connected to website for alerts
+            dispatchGroup.enter()
+            fetchAlerts { apiResponse in
+                if apiResponse != nil {
+                    DispatchQueue.main.async {
+                        self.linkbusAlertsApiResponse = apiResponse!
+                        dispatchGroup.leave()
+                    }
                 }
             }
-        }
-        
-        // New API connected to website for alerts
-        dispatchGroup.enter()
-        fetchAlerts { apiResponse in
-            if apiResponse != nil {
-                DispatchQueue.main.async {
-                    self.linkbusAlertsApiResponse = apiResponse!
-                    dispatchGroup.leave()
-                }
+            
+            dispatchGroup.notify(queue: .main) {
+                self.processJson()
             }
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            self.processJson()
         }
         
     }
@@ -96,13 +111,30 @@ extension RouteController {
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
-                print("Error with fetching bus schedule from CSBSJU API: \(error)")
+                DispatchQueue.main.async {
+                    self.localizedDescription = error.localizedDescription
+                    self.onlineStatus = "offline"
+                    self.webRequestInProgress = false
+                }
+                //print("Error with fetching bus schedule from CSBSJU API: \(error)")
                 return
+            }
+            else {
+                DispatchQueue.main.async {
+                    if self.onlineStatus == "offline" {
+                        self.onlineStatus = "back online"
+                    }
+                    else if self.onlineStatus == "back online" {
+                        self.onlineStatus = "online"
+                    }
+                        self.localizedDescription = "no error"
+                    
+                }
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                print("Error with the response, unexpected status code: \(response)")
+                //print("Error with the response, unexpected status code: \(response)")
                 return
             }
             
@@ -119,15 +151,16 @@ extension RouteController {
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
-                print("Error with fetching bus schedule from Linkbus API: \(error)")
+                //print("Error with fetching bus schedule from Linkbus API: \(error)")
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                print("Error with the response, unexpected status code: \(response)")
+                //print("Error with the response, unexpected status code: \(response)")
                 return
             }
+            //print(httpResponse)
             
             if let data = data,
                let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
@@ -173,12 +206,12 @@ extension RouteController {
         // Create url session to send request
         let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             if let error = error {
-                print("Error with fetching daily message: \(error)")
+                //print("Error with fetching daily message: \(error)")
                 return
             }
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                print("Error with the response, unexpected status code: \(String(describing: response))")
+                //print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
             // Process HTML into data we care about, the "daily message"
@@ -380,6 +413,7 @@ extension RouteController {
                         print(time.timeString)
                     }
                 }
+                self.webRequestInProgress = false
             }
         }
     }
