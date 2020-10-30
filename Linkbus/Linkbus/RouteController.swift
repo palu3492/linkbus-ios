@@ -57,6 +57,7 @@ extension RouteController {
                 if apiResponse != nil {
                     DispatchQueue.main.async {
                         self.csbsjuApiResponse = apiResponse!
+                        print(self.csbsjuApiResponse)
                         dispatchGroup.leave()
                     }
                 }
