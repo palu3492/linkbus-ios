@@ -110,6 +110,9 @@ extension RouteController {
                     else if self.onlineStatus == "back online" {
                         self.onlineStatus = "online"
                     }
+                    else {
+                        self.onlineStatus = "online"
+                    }
                     self.localizedDescription = "no error"
                     
                 }
@@ -282,13 +285,19 @@ extension RouteController {
                         let currentDate = calendar.date(byAdding: .minute, value: -1, to: date)
                         if (endDate >= currentDate!) { // make sure end date is not in the past, if true skip add
                             
+                            var current = false
+                            if (startDate <= Date()) {
+                                current = true
+                            }
+
+                            
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
                             
                             let timeString: String = (textFormatter.string(from: startDate) + " - " + (textFormatter.string(from: endDate)))
                             
                             tempId+=1
-                            tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
+                            tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!, current: current))
                         }
                     }
                     else {
@@ -307,6 +316,11 @@ extension RouteController {
                         
                         if (endDate >= currentDate!) { // make sure end date is not in the past, if true skip add
                             
+                            var current = false
+                            if (startDate <= Date()) {
+                                current = true
+                            }
+                            
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
                             
@@ -314,7 +328,7 @@ extension RouteController {
                             
                             
                             tempId+=1
-                            tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: apiTime.lbc!, ss: apiTime.ss!))
+                            tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: false, lastBusClass: apiTime.lbc!, ss: apiTime.ss!, current: current))
                         }
                     }
                 }

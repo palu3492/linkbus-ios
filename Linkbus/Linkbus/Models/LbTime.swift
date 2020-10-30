@@ -16,4 +16,5 @@ struct LbTime: Identifiable, Decodable, Hashable {
     var hasStart: BooleanLiteralType
     var lastBusClass: BooleanLiteralType
     var ss: BooleanLiteralType
+    var current: BooleanLiteralType
 }

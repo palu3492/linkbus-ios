@@ -15,7 +15,9 @@ struct RouteSheet: View {
         //      = CGFloat.zero       // << variant for ScrollView/List
         = CGFloat.infinity   // << variant for VStack
     
-    init(route:LbRoute) {
+    @ObservedObject var routeController: RouteController
+    
+    init(route:LbRoute, routeController: RouteController) {
         self.route = route
         //UIScrollView.appearance().bounces = false
         
@@ -24,6 +26,8 @@ struct RouteSheet: View {
         UINavigationBar.appearance().isTranslucent = true
         UINavigationBar.appearance().tintColor = .clear
         UINavigationBar.appearance().backgroundColor = .clear
+        
+        self.routeController = routeController
     }
     
     var body: some View {
@@ -39,9 +43,9 @@ struct RouteSheet: View {
                     
                     VStack(alignment: .leading) {
                         
-                        RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
-                            .transition(.scale)
-                            .animation(.easeInOut)
+//                        RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+//                            .transition(.scale)
+//                            .animation(.easeInOut)
                         
                         // origin
                         HStack(alignment: .firstTextBaseline) {
@@ -135,15 +139,39 @@ struct RouteSheet: View {
                             VStack(alignment: .leading, spacing: 0) {
                                 ForEach(route.times, id: \.self) { time in
                                     HStack {
+                                        if (route.nextBusTimer == "Departing now" && time.current) {
+                                            Text(time.timeString)
+                                                .font(Font.custom("HelveticaNeue", size: 12))
+                                                .padding([.leading, .trailing], 10)
+                                                .padding([.top, .bottom], 5)
+                                                .foregroundColor(Color.white)
+                                                //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                                .background(Color.red)
+                                                .cornerRadius(7)
+                                                .padding([.bottom], 5)
+                                        }
+                                        else if (route.nextBusTimer.contains("Now") && time.current) {
                                         Text(time.timeString)
                                             .font(Font.custom("HelveticaNeue", size: 12))
                                             .padding([.leading, .trailing], 10)
                                             .padding([.top, .bottom], 5)
                                             .foregroundColor(Color.white)
                                             //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                            .background(Color.blue)
+                                            .background(Color.green)
                                             .cornerRadius(7)
                                             .padding([.bottom], 5)
+                                        }
+                                        else {
+                                            Text(time.timeString)
+                                                .font(Font.custom("HelveticaNeue", size: 12))
+                                                .padding([.leading, .trailing], 10)
+                                                .padding([.top, .bottom], 5)
+                                                .foregroundColor(Color.white)
+                                                //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                                .background(Color.blue)
+                                                .cornerRadius(7)
+                                                .padding([.bottom], 5)
+                                        }
                                         Spacer()
                                     }
                                 }
@@ -153,10 +181,12 @@ struct RouteSheet: View {
                         }
                         .padding(.leading)
                         .padding([.bottom], 5)
+                        .transition(.opacity)
                         
                         
                         
                     }
+                    .transition(.slide)
                     
                 }
                     
@@ -174,7 +204,7 @@ struct RouteSheet: View {
 
 struct RouteSheet_Previews: PreviewProvider {
     static var previews: some View {
-        RouteSheet(route: LbRoute(id: 0, title: "Gorecki to Sexton", times: [LbTime](), nextBusTimer: "5 minutes", origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)))
+        RouteSheet(route: LbRoute(id: 0, title: "Gorecki to Sexton", times: [LbTime](), nextBusTimer: "5 minutes", origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), routeController: RouteController())
     }
 }
 

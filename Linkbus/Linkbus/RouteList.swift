@@ -67,7 +67,12 @@ struct RouteList: View {
                                 }
                         }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
-                            AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
+                            if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                                AlertCard(alertText: alert.text, alertColor: "gray", alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
+                            }
+                            else {
+                                AlertCard(alertText: alert.text, alertColor: alert.color, alertRgb: alert.rgb, fullWidth: alert.fullWidth, clickable: alert.clickable, action: alert.action, routeController: routeController)
+                            }
                             //.transition(.opacity)
                         }
                     }
@@ -80,7 +85,12 @@ struct RouteList: View {
                     LazyVStack (alignment: .leading, spacing: 12) {
                         ForEach(routeController.lbBusSchedule.routes) { route in
                             //                    if #available(iOS 13.4, *) {
-                            RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                                RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+                            }
+                            else {
+                                RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+                            }
                             //.animation(.default)
                             //                    } else {
                             //                        // Fallback on earlier versions
@@ -127,10 +137,12 @@ struct RouteList: View {
             .onReceive(timer) { time in
                 if self.counter >= 1 {
                     
+                    print("online stat: " + routeController.onlineStatus)
+                    
                     if routeController.onlineStatus == "offline" {
                         self.menuBarTitle = "Offline"
                     }
-                    else {
+                    else if (routeController.onlineStatus == "online" || routeController.onlineStatus == "back online") {
                         self.menuBarTitle = self.greeting
                     }
                     
@@ -230,6 +242,7 @@ struct RouteList: View {
                         if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
                             AlertCard(alertText: "⚠️ No internet connection. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
                             AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
+                            Divider()
                         }
                         if (routeController.onlineStatus == "back online") {
                             AlertCard(alertText: "Back online. 🥳", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: false, clickable: false, action: "", routeController: routeController)
@@ -252,7 +265,12 @@ struct RouteList: View {
                     VStack (alignment: .leading, spacing: 12) {
                         ForEach(routeController.lbBusSchedule.routes) { route in
                             //                    if #available(iOS 13.4, *) {
-                            RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, buttonHandler: nil)
+                            if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                                RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+                            }
+                            else {
+                                RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+                            }
                             //                                .transition(.opacity)
                             //                                .animation(.default)
                             

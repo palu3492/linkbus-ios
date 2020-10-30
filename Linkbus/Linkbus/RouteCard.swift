@@ -29,9 +29,11 @@ struct RouteCard: View {
         = CGFloat.infinity   // << variant for VStack
     @Environment(\.colorScheme) var colorScheme
     
+    @ObservedObject var routeController: RouteController
+    
     //var landmark: Landmark
     
-    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, route:LbRoute, buttonHandler: (()->())?) {
+    init(title:String, description:String, image:Image, price:Double, peopleCount:Int, ingredientCount:Int, category:String?, route:LbRoute, routeController: RouteController, buttonHandler: (()->())?) {
         
         self.title = title
         self.description = description
@@ -43,7 +45,10 @@ struct RouteCard: View {
         self.buttonHandler = buttonHandler
         self.route = route
         
+        self.routeController = routeController
+        
         self.timer = "Now"
+
     }
     
     var body: some View {
@@ -72,13 +77,13 @@ struct RouteCard: View {
                             Spacer()
                             if (route.nextBusTimer == "Departing now") {
                                 Text(route.nextBusTimer)
-                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    .font(Font.custom("HelveticaNeue", size: 13))
                                     //.font(.footnote)
                                     .padding([.leading, .trailing], 5)
                                     .padding([.top, .bottom], 2.5)
                                     .foregroundColor(Color.white)
                                     //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                    .background(Color.red)
+                                    .background((routeController.onlineStatus == "offline") ?  Color.gray : Color.red)
                                     .cornerRadius(7)
                                     .padding([.top, .bottom], 4)
                             }
@@ -88,28 +93,28 @@ struct RouteCard: View {
                                     print("executed")
                                 }
                                 Text(timer)
-                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    .font(Font.custom("HelveticaNeue", size: 13))
                                     //.fontWeight(.medium)
                                     //.font(.footnote)
                                     .padding([.leading, .trailing], 5)
                                     .padding([.top, .bottom], 2.5)
                                     .foregroundColor(Color.white)
                                     //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                    .background(Color.green)
+                                    .background((routeController.onlineStatus == "offline") ?  Color.gray : Color.green)
                                     .cornerRadius(7)
                                     .padding([.top, .bottom], 4)
                             }
                             else {
                                 
                                 Text(route.nextBusTimer)
-                                    .font(Font.custom("HelveticaNeue", size: 14))
+                                    .font(Font.custom("HelveticaNeue", size: 13))
                                     //.fontWeight(.medium)
                                     //.font(.footnote)
                                     .padding([.leading, .trailing], 5)
                                     .padding([.top, .bottom], 2.5)
                                     .foregroundColor(Color.white)
                                     //                            .background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                    .background(Color.blue)
+                                    .background((routeController.onlineStatus == "offline") ?  Color.gray : Color.blue)
                                     .cornerRadius(7)
                                     .padding([.top, .bottom], 4)
                             }
@@ -158,7 +163,7 @@ struct RouteCard: View {
         .onTapGesture {
             self.showRouteSheet = true
         }.sheet(isPresented: $showRouteSheet) {
-            RouteSheet(route: self.route)
+            RouteSheet(route: self.route, routeController: self.routeController)
         }
     }
     
@@ -240,11 +245,11 @@ struct RouteCard: View {
 //
 
 
-struct ProductCard_Previews: PreviewProvider {
-    static var previews: some View {
-        RouteCard(title: "Gorecki to Sexton", description: "Gorecki Center", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), nextBusTimer: "5 mintutes", origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
-    }
-}
+//struct ProductCard_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RouteCard(title: "Gorecki to Sexton", description: "Gorecki Center", image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: LbRoute(id: 0, title: "Test", times: [LbTime](), nextBusTimer: "5 mintutes", origin: "Gorecki", originLocation: "Gorecki Center, CSB", destination: "Sexton", destinationLocation: "Sexton Commons, SJU", city: "Collegeville", state: "Minnesota", coordinates: Coordinates(longitude: 0, latitude: 0)), buttonHandler: nil)
+//    }
+//}
 
 struct RoundedCorners: Shape {
     var tl: CGFloat = 0.0

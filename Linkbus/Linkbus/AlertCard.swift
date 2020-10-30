@@ -32,7 +32,8 @@ struct AlertCard: View {
             "red": Color.red,
             "blue": Color.blue,
             "green": Color.green,
-            "yellow": Color.yellow
+            "yellow": Color.yellow,
+            "gray": Color.gray
         ]
         
         if alertColor != "" {
