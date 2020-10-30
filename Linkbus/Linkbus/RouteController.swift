@@ -10,14 +10,10 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    // Until we switch to new API, the user and branch need to change depending on current enviroment
-    let LinkbusApiUrl = "https://raw.githubusercontent.com/michaelcarroll/linkbus-ios/dev/Linkbus/Linkbus/Resources/LinkbusAPI.json"
-    // Using both APIs for now
-    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api/alerts"
+    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-//    var linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
-    var linkbusApiResponse = LinkbusApi(alerts: [Alert]())
+    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
@@ -32,7 +28,6 @@ class RouteController: ObservableObject {
         self.dailyMessage = ""
         self.webRequestInProgress = false
         webRequest()
-        
     }
 }
 
@@ -45,9 +40,8 @@ extension RouteController {
             self.localizedDescription = "default"
             
             csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-//            linkbusApiResponse = LinkbusApi(routes: [RouteDetail]())
+            linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
             refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
-            linkbusApiResponse = LinkbusApi(alerts: [Alert]())
             
             let dispatchGroup = DispatchGroup()
             
@@ -63,17 +57,6 @@ extension RouteController {
                 }
             }
             
-            // Alert/route JSON data "API" from GitHub
-//            dispatchGroup.enter()
-//            fetchLinkbusApi { apiResponse in
-//                if apiResponse != nil {
-//                    DispatchQueue.main.async {
-//                        self.linkbusApiResponse = apiResponse!
-//                        dispatchGroup.leave()
-//                    }
-//                }
-//            }
-            
             // Daily message alert
             // Website does not always have a message
             dispatchGroup.enter()
@@ -88,7 +71,7 @@ extension RouteController {
                 
             }
             
-            // New API connected to website for alerts
+            // Linkbus API that connects to website
             dispatchGroup.enter()
             fetchAlerts { apiResponse in
                 if apiResponse != nil {
@@ -105,7 +88,6 @@ extension RouteController {
         }
         
     }
-    
     
     func fetchCsbsjuApi(completionHandler: @escaping (BusSchedule?) -> Void) {
         let url = URL(string: CsbsjuApiUrl)!
@@ -146,30 +128,6 @@ extension RouteController {
         })
         task.resume()
     }
-    
-//    func fetchLinkbusApi(completionHandler: @escaping (LinkbusApi?) -> Void) {
-//        let url = URL(string: LinkbusApiUrl)!
-//
-//        let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-//            if let error = error {
-//                //print("Error with fetching bus schedule from Linkbus API: \(error)")
-//                return
-//            }
-//
-//            guard let httpResponse = response as? HTTPURLResponse,
-//                  (200...299).contains(httpResponse.statusCode) else {
-//                //print("Error with the response, unexpected status code: \(response)")
-//                return
-//            }
-//            //print(httpResponse)
-//
-//            if let data = data,
-//               let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
-//                completionHandler(apiResponse)
-//            }
-//        })
-//        task.resume()
-//    }
     
     /**
      Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
@@ -246,8 +204,8 @@ extension RouteController {
     }
     
     /**
-     Fetches the new Linkbus API json data. Currenly only alert data.
-     - Parameter completionHandler: The callback function to be executed on successful fetching of API JOSN data.
+     Fetches the Linkbus API json data including the alerts and additional route info.
+     - Parameter completionHandler: The callback function to be executed on successful fetching of API json data.
      
      - Returns: calls completion handler with the API response as argument or returns nill on error.
      */
@@ -366,14 +324,14 @@ extension RouteController {
                     tempRoute.times = tempTimes
                     
                     // TODO: add in Linkbus API route data
-//                    let i = linkbusApiResponse.routes.firstIndex(where: {$0.id == tempRoute.id})
-//                    tempRoute.origin = linkbusApiResponse.routes[i!].origin
-//                    tempRoute.originLocation = linkbusApiResponse.routes[i!].originLocation
-//                    tempRoute.destination = linkbusApiResponse.routes[i!].destination
-//                    tempRoute.destinationLocation = linkbusApiResponse.routes[i!].destinationLocation
-//                    tempRoute.city = linkbusApiResponse.routes[i!].city
-//                    tempRoute.state = linkbusApiResponse.routes[i!].state
-//                    tempRoute.coordinates = linkbusApiResponse.routes[i!].coordinates
+                    let i = linkbusApiResponse.routes.firstIndex(where: {$0.routeId == tempRoute.id})
+                    tempRoute.origin = linkbusApiResponse.routes[i!].origin
+                    tempRoute.originLocation = linkbusApiResponse.routes[i!].originLocation
+                    tempRoute.destination = linkbusApiResponse.routes[i!].destination
+                    tempRoute.destinationLocation = linkbusApiResponse.routes[i!].destinationLocation
+                    tempRoute.city = linkbusApiResponse.routes[i!].city
+                    tempRoute.state = linkbusApiResponse.routes[i!].state
+                    tempRoute.coordinates = linkbusApiResponse.routes[i!].coordinates
                     
                     // next bus timer logic:
                     
@@ -409,13 +367,10 @@ extension RouteController {
                     }
                     tempRoute.nextBusTimer = nextBusTimer
                     
-                    
                     refreshedLbBusSchedule.routes.append(tempRoute)
                     lbBusSchedule = refreshedLbBusSchedule
                 }
-                
             }
-            
         }
         
         if (lbBusSchedule.routes.count > 0) {
