@@ -158,6 +158,9 @@ struct RouteCard: View {
         }
         //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
         .background(colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground))
+//        .background(colorScheme == .dark ?
+//                        (routeController.onlineStatus == "offline") ?  Color(UIColor.gray) : Color(UIColor.secondarySystemBackground) // dark
+//                        : (routeController.onlineStatus == "offline") ? Color(UIColor.gray) : Color(UIColor.systemBackground)) // light
         .cornerRadius(15)
         //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
         .onTapGesture {

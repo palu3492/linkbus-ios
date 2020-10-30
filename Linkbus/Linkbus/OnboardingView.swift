@@ -79,7 +79,8 @@ struct InformationDetailView: View {
                 .foregroundColor(.mainColor)
                 .padding()
                 .accessibility(hidden: true)
-                .fixedSize(horizontal: true, vertical: true)
+                .scaledToFit()
+                .frame(width: 40,height:40)
 
             VStack(alignment: .leading) {
                 Text(title)
