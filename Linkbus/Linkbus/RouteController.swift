@@ -9,8 +9,8 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api/"
-    let LinkbusAlertsApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
+    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
+    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
     var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
@@ -18,7 +18,8 @@ class RouteController: ObservableObject {
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     @Published var localizedDescription = ""
-    @Published var onlineStatus = ""
+    @Published var deviceOnlineStatus = ""
+    @Published var csbsjuApiOnlineStatus = ""
     
     private var webRequestInProgress: Bool
     
@@ -51,8 +52,15 @@ extension RouteController {
                 if apiResponse != nil {
                     DispatchQueue.main.async {
                         self.csbsjuApiResponse = apiResponse!
-                        print(self.csbsjuApiResponse)
+                        self.csbsjuApiOnlineStatus = "online"
+                        //print(self.csbsjuApiResponse)
                         dispatchGroup.leave()
+                    }
+                }
+                else {
+                    DispatchQueue.main.async {
+                    self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
+                    dispatchGroup.leave()
                     }
                 }
             }
@@ -74,11 +82,11 @@ extension RouteController {
             // Linkbus API that connects to website
             dispatchGroup.enter()
             fetchAlerts { apiResponse in
-                if apiResponse != nil {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if apiResponse != nil {
                         self.linkbusApiResponse = apiResponse!
-                        dispatchGroup.leave()
                     }
+                        dispatchGroup.leave()
                 }
             }
             
@@ -96,22 +104,22 @@ extension RouteController {
             if let error = error {
                 DispatchQueue.main.async {
                     self.localizedDescription = error.localizedDescription
-                    self.onlineStatus = "offline"
+                    self.deviceOnlineStatus = "offline"
                     self.webRequestInProgress = false
                 }
-                //print("Error with fetching bus schedule from CSBSJU API: \(error)")
+                print("Error with fetching bus schedule from CSBSJU API: \(error)")
                 return
             }
             else {
                 DispatchQueue.main.async {
-                    if self.onlineStatus == "offline" {
-                        self.onlineStatus = "back online"
+                    if self.deviceOnlineStatus == "offline" {
+                        self.deviceOnlineStatus = "back online"
                     }
-                    else if self.onlineStatus == "back online" {
-                        self.onlineStatus = "online"
+                    else if self.deviceOnlineStatus == "back online" {
+                        self.deviceOnlineStatus = "online"
                     }
                     else {
-                        self.onlineStatus = "online"
+                        self.deviceOnlineStatus = "online"
                     }
                     self.localizedDescription = "no error"
                     
@@ -120,13 +128,14 @@ extension RouteController {
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                //print("Error with the response, unexpected status code: \(response)")
+                print("Error with the response, unexpected status code: \(response)")
                 return
             }
-            
-            if let data = data,
-               let apiResponse = try? JSONDecoder().decode(BusSchedule.self, from: data) {
+            do {
+                let apiResponse = try JSONDecoder().decode(BusSchedule.self, from: data!)
                 completionHandler(apiResponse)
+            } catch {
+                completionHandler(nil)
             }
         })
         task.resume()
@@ -149,13 +158,13 @@ extension RouteController {
         var postString = ""
         // These asp.net fields may not work forever!
         // However.. they've worked for a couple months so far.
-//        let specifyData = false
-//        if specifyData {
-//            // Allows for date to be changed. Disabled by default. Implement later.
-//            let date = "9/20/2020"
-//            let dateEncoded = date.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-//            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate=" + dateEncoded!
-//        }
+        //        let specifyData = false
+        //        if specifyData {
+        //            // Allows for date to be changed. Disabled by default. Implement later.
+        //            let date = "9/20/2020"
+        //            let dateEncoded = date.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        //            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate=" + dateEncoded!
+        //        }
         postString += "&__VIEWSTATE=%2FwEPDwUJMjUxNjA1NzE0ZBgGBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAyJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDQkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwMSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkBUpjdGwwMCRCb2R5Q29udGVudCRCdXNTY2hlZHVsZSRSZXBlYXRlclRvZGF5Um91dGVzJGN0bDAzJEdyaWRWaWV3VG9kYXlUaW1lcw88KwAMAQgCAWQFSmN0bDAwJEJvZHlDb250ZW50JEJ1c1NjaGVkdWxlJFJlcGVhdGVyVG9kYXlSb3V0ZXMkY3RsMDAkR3JpZFZpZXdUb2RheVRpbWVzDzwrAAwBCAIBZAVKY3RsMDAkQm9keUNvbnRlbnQkQnVzU2NoZWR1bGUkUmVwZWF0ZXJUb2RheVJvdXRlcyRjdGwwNSRHcmlkVmlld1RvZGF5VGltZXMPPCsADAEIAgFkWGh%2B6w%2BaUlr4YOYVCBNBCh%2FBBLI%3D"
         postString += "&__VIEWSTATEGENERATOR=9BAD42EF"
         postString += "&__EVENTVALIDATION=%2FwEdAAJuu0YtVtaTDWfPQnmvmzb0LRHL%2FnpThEIWeX7N%2BkLIDZtqPuTRCdRUPrjcObmvVnKFIOev"
@@ -168,7 +177,7 @@ extension RouteController {
         // Create url session to send request
         let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             if let error = error {
-                print("Error with fetching daily message: \(error)")
+                //print("Error with fetching daily message: \(error)")
                 return
             }
             guard let httpResponse = response as? HTTPURLResponse,
@@ -213,7 +222,7 @@ extension RouteController {
      - Returns: calls completion handler with the API response as argument or returns nill on error.
      */
     func fetchAlerts(completionHandler: @escaping (LinkbusApi?) -> Void) {
-        let url = URL(string: LinkbusAlertsApiUrl)!
+        let url = URL(string: LinkbusApiUrl)!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
@@ -226,9 +235,11 @@ extension RouteController {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
-            if let data = data,
-               let apiResponse = try? JSONDecoder().decode(LinkbusApi.self, from: data) {
+            do {
+                let apiResponse = try JSONDecoder().decode(LinkbusApi.self, from: data!)
                 completionHandler(apiResponse)
+            } catch {
+                completionHandler(nil)
             }
         })
         task.resume()
@@ -253,8 +264,8 @@ extension RouteController {
             // Only add to alerts if message is not empty string
             let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
             let dailyMessageAlert = Alert(id: "h213h408", active: true, text: self.dailyMessage,
-                                             clickable: true, action: "", fullWidth: false,
-                                             color: "blue", rgb: color, uid: 1, colorCode: "#000")
+                                          clickable: false, action: "", fullWidth: false,
+                                          color: "blue", rgb: color, uid: 1, colorCode: "#000")
             refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
@@ -289,7 +300,7 @@ extension RouteController {
                             if (startDate <= Date()) {
                                 current = true
                             }
-
+                            
                             
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
@@ -338,14 +349,15 @@ extension RouteController {
                     tempRoute.times = tempTimes
                     
                     // TODO: add in Linkbus API route data
-                    let i = linkbusApiResponse.routes.firstIndex(where: {$0.routeId == tempRoute.id})
-                    tempRoute.origin = linkbusApiResponse.routes[i!].origin
-                    tempRoute.originLocation = linkbusApiResponse.routes[i!].originLocation
-                    tempRoute.destination = linkbusApiResponse.routes[i!].destination
-                    tempRoute.destinationLocation = linkbusApiResponse.routes[i!].destinationLocation
-                    tempRoute.city = linkbusApiResponse.routes[i!].city
-                    tempRoute.state = linkbusApiResponse.routes[i!].state
-                    tempRoute.coordinates = linkbusApiResponse.routes[i!].coordinates
+                    if let i = linkbusApiResponse.routes.firstIndex(where: {$0.routeId == tempRoute.id}) {
+                        tempRoute.origin = linkbusApiResponse.routes[i].origin
+                        tempRoute.originLocation = linkbusApiResponse.routes[i].originLocation
+                        tempRoute.destination = linkbusApiResponse.routes[i].destination
+                        tempRoute.destinationLocation = linkbusApiResponse.routes[i].destinationLocation
+                        tempRoute.city = linkbusApiResponse.routes[i].city
+                        tempRoute.state = linkbusApiResponse.routes[i].state
+                        tempRoute.coordinates = linkbusApiResponse.routes[i].coordinates
+                    }
                     
                     // next bus timer logic:
                     

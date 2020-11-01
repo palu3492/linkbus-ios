@@ -9,18 +9,23 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        ScrollView {
-            VStack(alignment: .center) {
-
+        
+        VStack(alignment: .center) {
+                //Spacer(minLength: 20)
                 Spacer()
 
                 TitleView()
-                Spacer(minLength: 30)
+                    .padding(.bottom, 50)
+                //Spacer()
 
                 InformationContainerView()
+                
 
-                Spacer(minLength: 60)
+                Spacer(minLength: 100)
 
                 Button(action: {
                     let generator = UINotificationFeedbackGenerator()
@@ -28,10 +33,17 @@ struct OnboardingView: View {
                 }) {
                     Text("Continue")
                         .customButton()
+                        .onTapGesture {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
                 }
                 .padding(.horizontal)
+                
+                Spacer(minLength: 40)
             }
-        }
+            
+            .frame(maxHeight: .infinity) // <- this
+        
     }
 }
 
@@ -40,13 +52,13 @@ struct TitleView: View {
         VStack {
 
             Text("Welcome to")
-                .font(.title)
-                .fontWeight(.semibold)
+                .font(Font.custom("HelveticaNeue", size: 32))
+                .fontWeight(.bold)
                 //.customTitleText()
 
             Text("Linkbus")
-                .font(.title)
-                .fontWeight(.semibold)
+                .font(Font.custom("HelveticaNeue", size: 32))
+                .fontWeight(.bold)
                 //.customTitleText()
                 //.foregroundColor(.mainColor)
         }
@@ -58,9 +70,9 @@ struct InformationContainerView: View {
         VStack(alignment: .leading) {
             InformationDetailView(title: "Lightweight", subTitle: "Fast and lightweight app makes it easier than ever to view the bus schedule.", imageName: "bus.fill")
 
-            InformationDetailView(title: "Always Accurate", subTitle: "Linkbus pulls data from CSB/SJU servers to provide the most accurate and up-to-date schedule. Any changes are immediately reflected in the app.", imageName: "minus.slash.plus")
+            InformationDetailView(title: "Accurate", subTitle: "Automatically pulls data from csbsju.edu to provide the most accurate and up-to-date schedule.", imageName: "clock")
 
-            InformationDetailView(title: "Community", subTitle: "Made by a Johnnie, for all Johnnies and Bennies.", imageName: "cross"
+            InformationDetailView(title: "Made by a Johnnie", subTitle: "Made by a Johnnie, for my fellow Johnnies and Bennies.", imageName: "AppIcon"
                                   )
         }
         .padding(.horizontal)
@@ -73,28 +85,45 @@ struct InformationDetailView: View {
     var imageName: String = "car"
 
     var body: some View {
+        Group() {
         HStack(alignment: .center) {
+            if (imageName == "AppIcon"){
+                Image(uiImage: UIImage(named: "Linkbus_transparent.png") ?? UIImage())
+                    .resizable()
+                    .frame(width: 40, height: 40)
+
+            }
+            else {
             Image(systemName: imageName)
                 .font(.title)
-                .foregroundColor(.mainColor)
+                .foregroundColor(Color.mainColor)
                 .padding()
                 .accessibility(hidden: true)
                 .scaledToFit()
                 .frame(width: 40,height:40)
+            }
 
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.body)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
                     .foregroundColor(.primary)
                     .accessibility(addTraits: .isHeader)
+                    //.padding(.bottom, 0.1)
+            
+                //Spacer(minLength: 1)
 
                 Text(subTitle)
+                    //.padding(.top, 0.1)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .padding(.horizontal, 5)
+        }
         }
         .padding(.top)
+        .padding(.horizontal, 7)
     }
 }
 
@@ -129,7 +158,7 @@ extension Text {
 }
 
 extension Color {
-    static var mainColor = Color(UIColor.systemRed)
+    static var mainColor = Color(red:205 / 255, green:16 / 255, blue:65 / 255)
 }
 
 struct OnboardingView_Previews: PreviewProvider {

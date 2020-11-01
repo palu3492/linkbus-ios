@@ -17,12 +17,16 @@ struct RouteList: View {
     @State private var counter = 0
     
     var alertPresented: Bool
+    @State var showOnboardingSheet = false
+
     @State var timeOfDay = "default"
     
     @State var menuBarTitle = "Linkbus"
     @State var initial = true
     @State var lastRefreshTime = ""
     @State var greeting = "Linkbus"
+    
+    @State var showUpdated = false
     
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
@@ -53,18 +57,23 @@ struct RouteList: View {
         if #available(iOS 14.0, *) {
             NavigationView {
                 ScrollView {
+                    
                     LazyVStack (alignment: .leading, spacing: 12) {
                         if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
                             AlertCard(alertText: "⚠️ No internet connection. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
                             AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
                         }
-                        if (routeController.onlineStatus == "back online") {
+                        if (routeController.deviceOnlineStatus == "back online") {
                             AlertCard(alertText: "Back online. 🥳", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: false, clickable: false, action: "", routeController: routeController)
                                 .onAppear {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                        routeController.onlineStatus = "online"
+                                        routeController.deviceOnlineStatus = "online"
                                     }
                                 }
+                        }
+                        if (routeController.csbsjuApiOnlineStatus == "CsbsjuApi invalid response") {
+                            AlertCard(alertText: "⚠️ CSB/SJU servers appear to be offline. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
+                            AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
                         }
                         ForEach(routeController.lbBusSchedule.alerts) { alert in
                             if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
@@ -109,11 +118,20 @@ struct RouteList: View {
                     
                     //.listRowBackground((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     
-                    
-                    //                    Text("updated: just now")
-                    //                        .font(.footnote)
-                    //                        .foregroundColor(.gray)
-                    //                        .padding(12)
+//                    if (routeController.onlineStatus == "online" || routeController.onlineStatus == "back online") && (self.showUpdated == true) {
+//                        Text("up to date")
+//                            .font(Font.custom("HelveticaNeue", size: 10))
+//                            .foregroundColor(.gray)
+//                            .padding(12)
+//                            .transition(.opacity)
+//                            .animation(.default)
+//                            .onAppear {
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//                                    self.showUpdated = false
+//                                }
+//                            }
+//
+//                    }
                     
                 }
                 .padding(.top, 1) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
@@ -133,16 +151,34 @@ struct RouteList: View {
                 //                }
                 //            }
             }
+            .onAppear {
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                
+                var isFirstLaunch = appDelegate.isFirstLaunch()
+                print(isFirstLaunch)
+                
+                if (isFirstLaunch) {
+                    self.showOnboardingSheet = true
+
+                }
+                else {
+                    self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
+                    print("isFirstLaunch: ", showOnboardingSheet)
+                }
+            }
+            .sheet(isPresented: $showOnboardingSheet) {
+                OnboardingView()
+            }
             .hoverEffect(.lift)
             .onReceive(timer) { time in
                 if self.counter >= 1 {
                     
-                    print("online stat: " + routeController.onlineStatus)
+                    print("online stat: " + routeController.deviceOnlineStatus)
                     
-                    if routeController.onlineStatus == "offline" {
+                    if routeController.deviceOnlineStatus == "offline" {
                         self.menuBarTitle = "Offline"
                     }
-                    else if (routeController.onlineStatus == "online" || routeController.onlineStatus == "back online") {
+                    else if (routeController.deviceOnlineStatus == "online" || routeController.deviceOnlineStatus == "back online") {
                         self.menuBarTitle = self.greeting
                     }
                     
@@ -225,6 +261,7 @@ struct RouteList: View {
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
+                    self.showUpdated = true
                 }
             }
             
@@ -243,11 +280,11 @@ struct RouteList: View {
                             AlertCard(alertText: "⚠️ No internet connection. Tap to retry.", alertColor: "red", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "webRequest", routeController: routeController)
                             AlertCard(alertText: "Or, tap here to try the bus schedule website.", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: true, clickable: true, action: "https://apps.csbsju.edu/busschedule/", routeController: routeController)
                         }
-                        if (routeController.onlineStatus == "back online") {
+                        if (routeController.deviceOnlineStatus == "back online") {
                             AlertCard(alertText: "Back online. 🥳", alertColor: "blue", alertRgb: RGBColor(red: 1.0, green: 0.0, blue: 0.0, opacity: 0.0), fullWidth: false, clickable: false, action: "", routeController: routeController)
                                 .onAppear {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                        routeController.onlineStatus = "online"
+                                        routeController.deviceOnlineStatus = "online"
                                     }
                                 }
                         }
@@ -311,10 +348,28 @@ struct RouteList: View {
                 //                }
                 //            }
             }
+            .onAppear {
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                
+                var isFirstLaunch = appDelegate.isFirstLaunch()
+                print(isFirstLaunch)
+                
+                if (isFirstLaunch) {
+                    self.showOnboardingSheet = true
+
+                }
+                else {
+                    self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
+                    print("isFirstLaunch: ", showOnboardingSheet)
+                }
+            }
+            .sheet(isPresented: $showOnboardingSheet) {
+                OnboardingView()
+            }
             .onReceive(timer) { time in
                 if self.counter >= 1 {
                     
-                    if routeController.onlineStatus == "offline" {
+                    if routeController.deviceOnlineStatus == "offline" {
                         self.menuBarTitle = "Offline"
                     }
                     else {
@@ -394,9 +449,10 @@ struct RouteList: View {
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
                 
-                print("last ref: " + self.lastRefreshTime)
-                print("current time: " + currentTime)
-                print("local desc: " + routeController.localizedDescription)
+                print ("==== Debug ====")
+                print("Last refresh: " + self.lastRefreshTime)
+                print("Current time: " + currentTime)
+                print("localDescription: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
