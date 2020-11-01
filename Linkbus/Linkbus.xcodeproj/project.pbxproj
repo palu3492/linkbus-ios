@@ -409,7 +409,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbusdev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -433,7 +433,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbusdev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
