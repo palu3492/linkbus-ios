@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C1B431724F1EBCC00BC1EEA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */; };
+		4C38F0E42547BDDE00C92EE6 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C38F0E32547BDDE00C92EE6 /* OnboardingView.swift */; };
 		4CAECD2D24F1DDBB005F6E87 /* RouteCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAECD2C24F1DDBB005F6E87 /* RouteCard.swift */; };
 		4CAECD3124F1E1CE005F6E87 /* apiSample.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CAECD3024F1E1CE005F6E87 /* apiSample.json */; };
 		4CB7628F24F2F3ED001FA9CB /* CsbsjuApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7628E24F2F3ED001FA9CB /* CsbsjuApi.swift */; };
@@ -18,7 +19,6 @@
 		4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */; };
 		4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */; };
 		4CB762DD24F76582001FA9CB /* AlertCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB762DC24F76582001FA9CB /* AlertCard.swift */; };
-		7C67CFB825451D0E001BF8AF /* LinkbusAlertsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67CFB725451D0E001BF8AF /* LinkbusAlertsApi.swift */; };
 		B7394866229F194000C47603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394865229F194000C47603 /* AppDelegate.swift */; };
 		B7394868229F194000C47603 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394867229F194000C47603 /* SceneDelegate.swift */; };
 		B739486C229F194200C47603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B739486B229F194200C47603 /* Assets.xcassets */; };
@@ -33,6 +33,7 @@
 /* Begin PBXFileReference section */
 		32C0591524A7452A1B7C1DE3 /* LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		4C38F0E32547BDDE00C92EE6 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		4CAECD2C24F1DDBB005F6E87 /* RouteCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteCard.swift; sourceTree = "<group>"; };
 		4CAECD3024F1E1CE005F6E87 /* apiSample.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apiSample.json; sourceTree = "<group>"; };
 		4CB7628B24F1F028001FA9CB /* LinkbusAPI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LinkbusAPI.json; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkbusApi.swift; sourceTree = "<group>"; };
 		4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSheet.swift; sourceTree = "<group>"; };
 		4CB762DC24F76582001FA9CB /* AlertCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCard.swift; sourceTree = "<group>"; };
-		7C67CFB725451D0E001BF8AF /* LinkbusAlertsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkbusAlertsApi.swift; sourceTree = "<group>"; };
 		B7394862229F194000C47603 /* Linkbus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkbus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7394865229F194000C47603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B7394867229F194000C47603 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +116,7 @@
 				B7394867229F194000C47603 /* SceneDelegate.swift */,
 				4CB7629224F2FE9C001FA9CB /* RouteController.swift */,
 				B73948A0229F2E1F00C47603 /* RouteList.swift */,
+				4C38F0E32547BDDE00C92EE6 /* OnboardingView.swift */,
 				4CAECD2C24F1DDBB005F6E87 /* RouteCard.swift */,
 				4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */,
 				4CB762DC24F76582001FA9CB /* AlertCard.swift */,
@@ -154,7 +155,6 @@
 				4CB7629824F30B09001FA9CB /* LbBusSchedule.swift */,
 				4CB7629424F30735001FA9CB /* LbRoute.swift */,
 				4CB7629624F30918001FA9CB /* LbTime.swift */,
-				7C67CFB725451D0E001BF8AF /* LinkbusAlertsApi.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -246,11 +246,11 @@
 				4CB7629324F2FE9C001FA9CB /* RouteController.swift in Sources */,
 				B7394882229F28B900C47603 /* Data.swift in Sources */,
 				4CB7629724F30918001FA9CB /* LbTime.swift in Sources */,
+				4C38F0E42547BDDE00C92EE6 /* OnboardingView.swift in Sources */,
 				B7394866229F194000C47603 /* AppDelegate.swift in Sources */,
 				4CB7628F24F2F3ED001FA9CB /* CsbsjuApi.swift in Sources */,
 				4CAECD2D24F1DDBB005F6E87 /* RouteCard.swift in Sources */,
 				4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */,
-				7C67CFB825451D0E001BF8AF /* LinkbusAlertsApi.swift in Sources */,
 				4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */,
 				B739487C229F1B6800C47603 /* MapView.swift in Sources */,
 				B73948A1229F2E1F00C47603 /* RouteList.swift in Sources */,
