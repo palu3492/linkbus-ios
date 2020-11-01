@@ -33,8 +33,8 @@ struct RGBColor: Decodable {
 }
 
 struct RouteDetail: Decodable {
-    let title, origin, originLocation, destination, destinationLocation, city, state, id: String
-    let uid, routeId: Int
+    let title, origin, originLocation, destination, destinationLocation, city, state, id, uid: String
+    let routeId: Int
     let coordinates: Coordinates
 }
 
