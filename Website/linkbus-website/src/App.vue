@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-container id="home-container">
+    <b-container class="px-0">
       <h1 id="title" class="mt-2">Linkbus</h1>
       <Home />
     </b-container>

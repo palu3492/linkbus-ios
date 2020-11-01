@@ -8,22 +8,49 @@ const express = require('express');
 const cors = require('cors')({origin: true});
 const app = express();
 
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+app.get('/alerts', async (req, res) => {
+  const snapshot = await db.collection("alerts")
+      .where('uid', '==', 1)
+      .where('active', '==', true)
+      .get()
+  let alerts = processResponse(snapshot);
+  const alertsJson = {alerts: alerts};
+  res.status(200).send(JSON.stringify(alertsJson));
+});
 
-app.get('/', async (req, res) => {
-  const snapshot = await db.collection('alerts').get();
-  let alerts = [];
+app.get('/routes', async (req, res) => {
+  const snapshot = await db.collection("routes")
+      .where('uid', '==', 1)
+      .get()
+  let routes = processResponse(snapshot);
+  const routesJson = {routes: routes};
+  res.status(200).send(JSON.stringify(routesJson));
+});
+
+const processResponse = (snapshot) => {
+  let docs = [];
   snapshot.forEach(doc => {
     const id = doc.id;
     const data = doc.data();
-    alerts.push({id, ...data});
+    docs.push({id, ...data});
   });
-  res.status(200).send(JSON.stringify(alerts));
+  return docs;
+}
+
+app.get('/', async (req, res) => {
+  const alertsSnapshot = await db.collection("alerts")
+      .where('uid', '==', 1)
+      .where('active', '==', true)
+      .get()
+  const routesSnapshot = await db.collection("routes")
+      .where('uid', '==', 1)
+      .get()
+  let alerts = processResponse(alertsSnapshot);
+  let routes = processResponse(routesSnapshot);
+  const json = {alerts: alerts, routes: routes}
+  res.status(200).send(JSON.stringify(json));
 });
 
 app.use(cors);
 
-exports.alert = functions.https.onRequest(app);
+exports.api = functions.https.onRequest(app);

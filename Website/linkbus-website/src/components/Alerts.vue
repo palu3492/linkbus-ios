@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <div class="d-flex">
-            <h3 class="mr-3" style="flex-grow: 1;">Alerts</h3>
+    <div class="my-3">
+        <div class="d-flex px-2 px-sm-0">
+            <h3 class="mr-3 mb-0" style="flex-grow: 1;">Alerts</h3>
             <b-button size="sm" variant="outline-primary" class="create-button m-1" @click="openCreateModal">
                 <BIconPlus v-if="false"/>
                 Create Alert
@@ -30,9 +30,9 @@
 
 <script>
     import Alert from "./Alert";
-    import DeleteModal from "./DeleteModal";
-    import EditModal from "./EditModal";
-    import CreateModal from "./CreateModal";
+    import DeleteModal from "./DeleteAlertModal";
+    import EditModal from "./EditAlertModal";
+    import CreateModal from "./CreateAlertModal";
     import {BIconPlus} from "bootstrap-vue";
     import {db} from "../firebase";
 

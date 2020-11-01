@@ -1,30 +1,29 @@
 <template>
     <div>
+        <!-- Alert notifications -->
         <b-alert :show="dismissCountDown" dismissible :variant="dbStatus" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged" >
             <p class="mb-1">{{ alertUpdatedReason }}</p>
             <b-progress variant="success" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
-        <h3>General</h3>
-        <hr />
-<!--        <p>Background Color:</p>-->
-<!--        <p>Font Color:</p>-->
-<!--        <p>Show daily message as alert</p>-->
-
+        <!-- GENERAL -->
+        <General />
+        <!-- ALERTS -->
         <Alerts v-bind:updateSuccessAlert="showSuccessAlert"/>
-
-        <h3 class="mt-3">Routes</h3>
-        <hr />
+        <!-- ROUTES -->
+        <Routes />
     </div>
 </template>
 
 <script>
     import Alerts from './Alerts.vue'
+    import Routes from "./Routes";
+    import General from "./General";
 
     export default {
         name: "Home",
         components: {
-            Alerts
+            Routes, Alerts, General
         },
         data() {
             return {
