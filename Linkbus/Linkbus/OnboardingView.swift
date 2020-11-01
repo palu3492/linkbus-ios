@@ -67,6 +67,7 @@ struct TitleView: View {
 
 struct InformationContainerView: View {
     var body: some View {
+        if #available(iOS 14.0, *) {
         VStack(alignment: .leading) {
             InformationDetailView(title: "Lightweight", subTitle: "Fast and lightweight app makes it easier than ever to view the bus schedule.", imageName: "bus.fill")
 
@@ -77,6 +78,18 @@ struct InformationContainerView: View {
         }
         .padding(.horizontal)
     }
+    else {
+    VStack(alignment: .leading) {
+        InformationDetailView(title: "Lightweight", subTitle: "Fast and lightweight app makes it easier than ever to view the bus schedule.", imageName: "wind")
+
+        InformationDetailView(title: "Accurate", subTitle: "Automatically pulls data from csbsju.edu to provide the most accurate and up-to-date schedule.", imageName: "clock")
+
+        InformationDetailView(title: "Made by a Johnnie", subTitle: "Made by a Johnnie, for my fellow Johnnies and Bennies.", imageName: "AppIcon"
+                              )
+    }
+    .padding(.horizontal)
+    }
+}
 }
 
 struct InformationDetailView: View {
