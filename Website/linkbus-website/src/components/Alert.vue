@@ -34,14 +34,9 @@
                         <p v-if="clickable" class="ml-1 mb-0"><a :href="action" target="_blank">{{ action }}</a></p>
                         <BIconXCircle v-else class="ml-2 mt-1" variant="danger" />
                     </b-col>
-
-<!--                    <b-col class="p-0 pt-3 options" md="auto" sm="12">-->
-<!--                        <Option v-for="(optionValue, option, i) in options" v-bind:optionValue="optionValue"-->
-<!--                                v-bind:option="option" v-bind:key="i"/>-->
-
                 </b-row>
             </b-col>
-            <b-col class="pl-md-3 pt-md-0 pr-0 pl-0 pt-3 justify-content-around d-flex" cols="auto">
+            <b-col class="pl-md-3 pt-md-0 pr-0 pl-0 pt-3 justify-content-around d-flex" cols="auto" v-if="signedIn">
                 <BIconPencilSquare variant="dark" class="icon mx-1" title="Edit" @click="openEditModal(alertDoc)" />
                 <BIconXSquare variant="danger" class="icon mx-1" title="Delete" @click="openDeleteModal(alertDoc)" />
             </b-col>
@@ -65,7 +60,8 @@
             fullWidth: Boolean,
             alertDoc: Object,
             openEditModal: Function,
-            openDeleteModal: Function
+            openDeleteModal: Function,
+            signedIn: Boolean
         },
         components: {
             BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle

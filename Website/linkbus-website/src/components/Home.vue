@@ -2,14 +2,14 @@
     <div>
         <!-- Alert notifications -->
         <b-alert :show="dismissCountDown" dismissible :variant="dbStatus" @dismissed="dismissCountDown=0"
-                 @dismiss-count-down="countDownChanged" >
+                 @dismiss-count-down="countDownChanged">
             <p class="mb-1">{{ alertUpdatedReason }}</p>
-            <b-progress variant="success" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
+            <b-progress variant="dbStatus" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
         <!-- GENERAL -->
         <General />
         <!-- ALERTS -->
-        <Alerts v-bind:updateSuccessAlert="showSuccessAlert"/>
+        <Alerts v-bind:updateSuccessAlert="showSuccessAlert" v-bind:signedIn="signedIn" v-bind:user="user"/>
         <!-- ROUTES -->
         <Routes />
     </div>
@@ -24,6 +24,10 @@
         name: "Home",
         components: {
             Routes, Alerts, General
+        },
+        props: {
+            signedIn: Boolean,
+            user: Object
         },
         data() {
             return {

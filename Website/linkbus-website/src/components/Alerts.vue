@@ -14,7 +14,7 @@
                        v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
                        v-bind:openEditModal="openEditModal" v-bind:openDeleteModal="openDeleteModal"
                        v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"
-                       v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" />
+                       v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" v-bind:signedIn="signedIn"/>
             </div>
             <p v-else class="mt-3">No Alerts</p>
         </div>
@@ -22,7 +22,7 @@
         <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal"
                      v-bind:alertDoc="clickedAlert" v-bind:updateSuccessAlert="updateSuccessAlert"/>
         <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alertDoc="clickedAlert"
-                   v-bind:updateSuccessAlert="updateSuccessAlert"/>
+                   v-bind:updateSuccessAlert="updateSuccessAlert" v-bind:user="user"/>
         <CreateModal v-bind:showModal="showCreateModal" v-bind:hideModal="hideCreateModal"
                      v-bind:updateSuccessAlert="updateSuccessAlert"/>
     </div>
@@ -44,7 +44,9 @@
             Alert, DeleteModal, EditModal, CreateModal, BIconPlus
         },
         props: {
-            updateSuccessAlert: Function
+            updateSuccessAlert: Function,
+            signedIn: Boolean,
+            user: Object
         },
         data() {
             return {
