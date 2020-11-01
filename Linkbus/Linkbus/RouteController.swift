@@ -177,12 +177,12 @@ extension RouteController {
         // Create url session to send request
         let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
             if let error = error {
-                //print("Error with fetching daily message: \(error)")
+                print("Error with fetching daily message: \(error)")
                 return
             }
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                //print("Error with the response, unexpected status code: \(String(describing: response))")
+                print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
             // Process HTML into data we care about, the "daily message"
@@ -399,12 +399,12 @@ extension RouteController {
             }
         }
         
-        if (lbBusSchedule.routes.count > 0) {
-            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-            while let time = iterator.next() {
-                print(time.timeString)
-            }
-        }
+//        if (lbBusSchedule.routes.count > 0) {
+//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+//            while let time = iterator.next() {
+//                print(time.timeString)
+//            }
+//        }
         
         self.webRequestInProgress = false
     }

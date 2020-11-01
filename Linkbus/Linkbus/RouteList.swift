@@ -173,7 +173,7 @@ struct RouteList: View {
             .onReceive(timer) { time in
                 if self.counter >= 1 {
                     
-                    print("online stat: " + routeController.deviceOnlineStatus)
+//                    print("online stat: " + routeController.deviceOnlineStatus)
                     
                     if routeController.deviceOnlineStatus == "offline" {
                         self.menuBarTitle = "Offline"
@@ -255,9 +255,9 @@ struct RouteList: View {
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
                 
-                print("last ref: " + self.lastRefreshTime)
-                print("current time: " + currentTime)
-                print("local desc: " + routeController.localizedDescription)
+//                print("last ref: " + self.lastRefreshTime)
+//                print("current time: " + currentTime)
+//                print("local desc: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
