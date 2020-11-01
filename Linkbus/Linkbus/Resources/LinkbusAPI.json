@@ -2,20 +2,6 @@
 	"alerts": [{
 			"id": 1,
 			"active": true,
-			"text": "A face mask is required to ride the CSB/SJU Link.",
-			"clickable": true,
-			"action": "https://www.csbsju.edu/covid-19",
-			"color": "red",
-			"rgb": {
-				"red": 1,
-				"green": 0,
-				"blue": 0,
-				"opacity": 1
-			}
-		},
-		{
-			"id": 2,
-			"active": true,
 			"text": "⚠️ Last bus from CSB to SJU will depart at 10:00 p.m. and the last bus from SJU to CSB will depart at 10:15 p.m.",
 			"clickable": true,
 			"action": "https://www.csbsju.edu/covid-19/campus-communications/103020-campus-update",
@@ -28,9 +14,23 @@
 			}
 		},
 		{
+			"id": 2,
+			"active": true,
+			"text": "A face mask is required to ride the CSB/SJU Link.",
+			"clickable": true,
+			"action": "https://www.csbsju.edu/covid-19",
+			"color": "red",
+			"rgb": {
+				"red": 1,
+				"green": 0,
+				"blue": 0,
+				"opacity": 1
+			}
+		},
+		{
 			"id": 3,
 			"active": false,
-			"text": "Welcome back to campus.",
+			"text": "A new version of Linkbus is available. Please update from the app store.",
 			"clickable": false,
 			"action": "",
 			"color": "blue",
