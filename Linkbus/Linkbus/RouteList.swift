@@ -154,14 +154,12 @@ struct RouteList: View {
             .onAppear {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 
-                var isFirstLaunch = appDelegate.isFirstLaunch()
+                let isFirstLaunch = appDelegate.isFirstLaunch()
                 print(isFirstLaunch)
                 
                 if (isFirstLaunch) {
                     self.showOnboardingSheet = true
-
-                }
-                else {
+                } else {
                     self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
                     print("isFirstLaunch: ", showOnboardingSheet)
                 }
@@ -351,14 +349,12 @@ struct RouteList: View {
             .onAppear {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 
-                var isFirstLaunch = appDelegate.isFirstLaunch()
+                let isFirstLaunch = appDelegate.isFirstLaunch()
                 print(isFirstLaunch)
                 
                 if (isFirstLaunch) {
                     self.showOnboardingSheet = true
-
-                }
-                else {
+                } else {
                     self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
                     print("isFirstLaunch: ", showOnboardingSheet)
                 }

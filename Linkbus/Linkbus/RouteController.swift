@@ -128,7 +128,7 @@ extension RouteController {
             
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
-                print("Error with the response, unexpected status code: \(response)")
+                print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
             do {
@@ -265,7 +265,7 @@ extension RouteController {
             let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
             let dailyMessageAlert = Alert(id: "h213h408", active: true, text: self.dailyMessage,
                                           clickable: false, action: "", fullWidth: false,
-                                          color: "blue", rgb: color, uid: 1, colorCode: "#000")
+                                          color: "blue", rgb: color, uid: "", colorCode: "#000")
             refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
