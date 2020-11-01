@@ -50,8 +50,9 @@
         methods: {
             async updateFirebase() {
                 this.updatingDatabase = true
-                let alertData = this.formData;
+                let alertData = { ...this.formData };
                 alertData.rgb = this.rgb()
+                alertData.uid = this.user.uid
                 try{
                     await db.collection('alerts').add(alertData);
                     this.updateSuccessAlert('Alert Created!', 'success')

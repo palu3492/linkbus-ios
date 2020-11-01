@@ -4,7 +4,7 @@
         <b-alert :show="dismissCountDown" dismissible :variant="dbStatus" @dismissed="dismissCountDown=0"
                  @dismiss-count-down="countDownChanged">
             <p class="mb-1">{{ alertUpdatedReason }}</p>
-            <b-progress variant="dbStatus" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
+            <b-progress :variant="dbStatus" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
         <!-- GENERAL -->
         <General />

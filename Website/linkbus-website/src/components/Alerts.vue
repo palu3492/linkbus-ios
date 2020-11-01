@@ -2,8 +2,8 @@
     <div class="my-3">
         <div class="d-flex px-2 px-sm-0">
             <h3 class="mr-3 mb-0" style="flex-grow: 1;">Alerts</h3>
-            <b-button size="sm" variant="outline-primary" class="create-button m-1" @click="openCreateModal">
-                <BIconPlus v-if="false"/>
+            <b-button size="sm" variant="outline-primary" class="create-button m-1"
+                      @click="openCreateModal" v-if="signedIn">
                 Create Alert
             </b-button>
         </div>
@@ -20,11 +20,12 @@
         </div>
 
         <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal"
-                     v-bind:alertDoc="clickedAlert" v-bind:updateSuccessAlert="updateSuccessAlert"/>
+                     v-bind:alertDoc="clickedAlert" v-bind:updateSuccessAlert="updateSuccessAlert"
+                     v-bind:user="user"/>
         <EditModal v-bind:showModal="showEditModal" v-bind:hideModal="hideEditModal" v-bind:alertDoc="clickedAlert"
                    v-bind:updateSuccessAlert="updateSuccessAlert" v-bind:user="user"/>
         <CreateModal v-bind:showModal="showCreateModal" v-bind:hideModal="hideCreateModal"
-                     v-bind:updateSuccessAlert="updateSuccessAlert"/>
+                     v-bind:updateSuccessAlert="updateSuccessAlert" v-bind:user="user"/>
     </div>
 </template>
 
@@ -33,7 +34,6 @@
     import DeleteModal from "./DeleteAlertModal";
     import EditModal from "./EditAlertModal";
     import CreateModal from "./CreateAlertModal";
-    import {BIconPlus} from "bootstrap-vue";
     import {db} from "../firebase";
 
     const alertsCollection = db.collection('alerts');
@@ -41,7 +41,7 @@
     export default {
         name: "Alerts",
         components: {
-            Alert, DeleteModal, EditModal, CreateModal, BIconPlus
+            Alert, DeleteModal, EditModal, CreateModal
         },
         props: {
             updateSuccessAlert: Function,
