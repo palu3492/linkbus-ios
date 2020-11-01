@@ -154,14 +154,12 @@ struct RouteList: View {
             .onAppear {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 
-                var isFirstLaunch = appDelegate.isFirstLaunch()
+                let isFirstLaunch = appDelegate.isFirstLaunch()
                 print(isFirstLaunch)
                 
                 if (isFirstLaunch) {
                     self.showOnboardingSheet = true
-
-                }
-                else {
+                } else {
                     self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
                     print("isFirstLaunch: ", showOnboardingSheet)
                 }
@@ -173,7 +171,7 @@ struct RouteList: View {
             .onReceive(timer) { time in
                 if self.counter >= 1 {
                     
-                    print("online stat: " + routeController.deviceOnlineStatus)
+//                    print("online stat: " + routeController.deviceOnlineStatus)
                     
                     if routeController.deviceOnlineStatus == "offline" {
                         self.menuBarTitle = "Offline"
@@ -255,9 +253,9 @@ struct RouteList: View {
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
                 
-                print("last ref: " + self.lastRefreshTime)
-                print("current time: " + currentTime)
-                print("local desc: " + routeController.localizedDescription)
+//                print("last ref: " + self.lastRefreshTime)
+//                print("current time: " + currentTime)
+//                print("local desc: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
@@ -351,14 +349,12 @@ struct RouteList: View {
             .onAppear {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 
-                var isFirstLaunch = appDelegate.isFirstLaunch()
+                let isFirstLaunch = appDelegate.isFirstLaunch()
                 print(isFirstLaunch)
                 
                 if (isFirstLaunch) {
                     self.showOnboardingSheet = true
-
-                }
-                else {
+                } else {
                     self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
                     print("isFirstLaunch: ", showOnboardingSheet)
                 }

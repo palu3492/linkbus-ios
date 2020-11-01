@@ -24,7 +24,7 @@ struct Alert: Identifiable, Decodable {
     let fullWidth: Bool
     let color: String
     let rgb: RGBColor
-    let uid: Int
+    let uid: String
     let colorCode: String
 }
 
@@ -33,8 +33,8 @@ struct RGBColor: Decodable {
 }
 
 struct RouteDetail: Decodable {
-    let title, origin, originLocation, destination, destinationLocation, city, state, id: String
-    let uid, routeId: Int
+    let title, origin, originLocation, destination, destinationLocation, city, state, id, uid: String
+    let routeId: Int
     let coordinates: Coordinates
 }
 
