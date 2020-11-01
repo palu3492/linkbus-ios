@@ -52,12 +52,12 @@ struct TitleView: View {
         VStack {
 
             Text("Welcome to")
-                .font(Font.custom("HelveticaNeue", size: 32))
+                .font(Font.custom("HelveticaNeue", size: 34))
                 .fontWeight(.bold)
                 //.customTitleText()
 
             Text("Linkbus")
-                .font(Font.custom("HelveticaNeue", size: 32))
+                .font(Font.custom("HelveticaNeue", size: 34))
                 .fontWeight(.bold)
                 //.customTitleText()
                 //.foregroundColor(.mainColor)
@@ -123,7 +123,7 @@ struct InformationDetailView: View {
         }
         }
         .padding(.top)
-        .padding(.horizontal, 7)
+        .padding(.horizontal, 5)
     }
 }
 
