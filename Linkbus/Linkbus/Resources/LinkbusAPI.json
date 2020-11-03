@@ -14,7 +14,7 @@
 			}
 		},
 		{
-			"id": 2,
+			"id": 3,
 			"active": true,
 			"text": "A face mask is required to ride the CSB/SJU Link.",
 			"clickable": true,
@@ -28,7 +28,7 @@
 			}
 		},
 		{
-			"id": 3,
+			"id": 2,
 			"active": true,
 			"text": "⚠️ Last bus from CSB to SJU will depart at 10:00 p.m. and the last bus from SJU to CSB will depart at 10:15 p.m.",
 			"clickable": true,
