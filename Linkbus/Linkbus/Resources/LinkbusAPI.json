@@ -1,6 +1,6 @@
 {
 	"alerts": [{
-			"id": 3,
+			"id": 1,
 			"active": true,
 			"text": "A new version of Linkbus is available. Please update from the app store.",
 			"clickable": false,
@@ -28,7 +28,7 @@
 			}
 		},
 		{
-			"id": 1,
+			"id": 3,
 			"active": true,
 			"text": "⚠️ Last bus from CSB to SJU will depart at 10:00 p.m. and the last bus from SJU to CSB will depart at 10:15 p.m.",
 			"clickable": true,
