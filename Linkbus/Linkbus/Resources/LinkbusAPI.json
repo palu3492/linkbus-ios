@@ -29,7 +29,7 @@
 		},
 		{
 			"id": 3,
-			"active": false,
+			"active": true,
 			"text": "A new version of Linkbus is available. Please update from the app store.",
 			"clickable": false,
 			"action": "",
