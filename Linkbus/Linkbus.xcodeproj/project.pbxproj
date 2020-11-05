@@ -10,7 +10,7 @@
 		4C1B431724F1EBCC00BC1EEA /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */; };
 		4C38F0E42547BDDE00C92EE6 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C38F0E32547BDDE00C92EE6 /* OnboardingView.swift */; };
 		4CAECD2D24F1DDBB005F6E87 /* RouteCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAECD2C24F1DDBB005F6E87 /* RouteCard.swift */; };
-		4CAECD3124F1E1CE005F6E87 /* apiSample.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CAECD3024F1E1CE005F6E87 /* apiSample.json */; };
+		4CAECD3124F1E1CE005F6E87 /* sampleClassDay11032020.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CAECD3024F1E1CE005F6E87 /* sampleClassDay11032020.json */; };
 		4CB7628F24F2F3ED001FA9CB /* CsbsjuApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7628E24F2F3ED001FA9CB /* CsbsjuApi.swift */; };
 		4CB7629324F2FE9C001FA9CB /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629224F2FE9C001FA9CB /* RouteController.swift */; };
 		4CB7629524F30736001FA9CB /* LbRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629424F30735001FA9CB /* LbRoute.swift */; };
@@ -35,7 +35,7 @@
 		4C1B431624F1EBCC00BC1EEA /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C38F0E32547BDDE00C92EE6 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		4CAECD2C24F1DDBB005F6E87 /* RouteCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteCard.swift; sourceTree = "<group>"; };
-		4CAECD3024F1E1CE005F6E87 /* apiSample.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apiSample.json; sourceTree = "<group>"; };
+		4CAECD3024F1E1CE005F6E87 /* sampleClassDay11032020.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sampleClassDay11032020.json; sourceTree = "<group>"; };
 		4CB7628B24F1F028001FA9CB /* LinkbusAPI.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LinkbusAPI.json; sourceTree = "<group>"; };
 		4CB7628E24F2F3ED001FA9CB /* CsbsjuApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsbsjuApi.swift; sourceTree = "<group>"; };
 		4CB7629224F2FE9C001FA9CB /* RouteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteController.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		B7394883229F291A00C47603 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4CAECD3024F1E1CE005F6E87 /* apiSample.json */,
+				4CAECD3024F1E1CE005F6E87 /* sampleClassDay11032020.json */,
 				B739488E229F292E00C47603 /* landmarkData.json */,
 				4CB7628B24F1F028001FA9CB /* LinkbusAPI.json */,
 			);
@@ -229,7 +229,7 @@
 			files = (
 				B7394872229F194200C47603 /* LaunchScreen.storyboard in Resources */,
 				B739486F229F194200C47603 /* Preview Assets.xcassets in Resources */,
-				4CAECD3124F1E1CE005F6E87 /* apiSample.json in Resources */,
+				4CAECD3124F1E1CE005F6E87 /* sampleClassDay11032020.json in Resources */,
 				B739486C229F194200C47603 /* Assets.xcassets in Resources */,
 				4C1B431724F1EBCC00BC1EEA /* Default-568h@2x.png in Resources */,
 				B739489B229F292F00C47603 /* landmarkData.json in Resources */,
@@ -399,7 +399,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
 				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
@@ -408,7 +408,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -423,7 +423,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
 				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
@@ -432,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";

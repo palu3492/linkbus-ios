@@ -134,7 +134,7 @@ struct RouteList: View {
 //                    }
                     
                 }
-                .padding(.top, 1) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
+                .padding(.top, 0.3) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
                 
                 //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                 
@@ -253,9 +253,9 @@ struct RouteList: View {
                 timeFormatter.dateFormat = "HH:mm"
                 let currentTime = timeFormatter.string(from: time)
                 
-//                print("last ref: " + self.lastRefreshTime)
-//                print("current time: " + currentTime)
-//                print("local desc: " + routeController.localizedDescription)
+                print("last ref: " + self.lastRefreshTime)
+                print("current time: " + currentTime)
+                print("local desc: " + routeController.localizedDescription)
                 if self.lastRefreshTime != currentTime {
                     self.routeController.webRequest()
                     self.lastRefreshTime = currentTime
@@ -442,7 +442,7 @@ struct RouteList: View {
                 
                 let time = Date()
                 let timeFormatter = DateFormatter()
-                timeFormatter.dateFormat = "HH:mm"
+                timeFormatter.dateFormat = "MM/dd/yyyy h:mm"
                 let currentTime = timeFormatter.string(from: time)
                 
                 print ("==== Debug ====")
