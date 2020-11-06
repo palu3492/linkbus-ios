@@ -46,13 +46,14 @@ struct Routes: View {
     var body: some View {
         ForEach(routeController.lbBusSchedule.routes) { route in
             if (routeController.localizedDescription == "The Internet connection appears to be offline.") {
+                // TODO: Get rid of the old values like image and price
                 RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
             }
             else {
                 RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
             }
         }
-//        .hoverEffect(.lift)
+        // .hoverEffect(.lift)
         .shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
     }
 }
