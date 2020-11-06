@@ -394,9 +394,9 @@ extension RouteController {
                     tempRoute.nextBusTimer = nextBusTimer
                     
                     refreshedLbBusSchedule.routes.append(tempRoute)
-                    lbBusSchedule = refreshedLbBusSchedule
                 }
             }
+            lbBusSchedule = refreshedLbBusSchedule
         }
         
 //        if (lbBusSchedule.routes.count > 0) {

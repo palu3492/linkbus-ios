@@ -43,9 +43,9 @@ struct RouteSheet: View {
                     
                     VStack(alignment: .leading) {
                         
-//                        RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
-//                            .transition(.scale)
-//                            .animation(.easeInOut)
+                        //                        RouteCard(title: route.title, description: route.originLocation, image: Image("Smoothie_Bowl"), price: 15.00, peopleCount: 2, ingredientCount: 2, category: "5 minutes", route: route, routeController: self.routeController, buttonHandler: nil)
+                        //                            .transition(.scale)
+                        //                            .animation(.easeInOut)
                         
                         // origin
                         HStack(alignment: .firstTextBaseline) {
@@ -54,14 +54,14 @@ struct RouteSheet: View {
                                 //.foregroundColor(Color(red: 43/255, green: 175/255, blue: 187/255))
                                 .foregroundColor(Color.blue)
                                 //.font(.subheadline) //weight: .ultralight))
-                                                                .font(.system(size: 25))
+                                .font(.system(size: 25))
                                 .padding(.leading)
                             
                             
                             Text(route.origin)
                                 .font(.system(size: 25))
                                 .padding(.leading)
-            
+                            
                             Spacer()
                         }
                         .padding([.top], 5)
@@ -85,7 +85,7 @@ struct RouteSheet: View {
                         HStack(alignment: .firstTextBaseline) {
                             Image(systemName: "ellipsis")
                                 .rotationEffect(.degrees(90.0))
-                                                                .font(.system(size: 20))
+                                .font(.system(size: 20))
                                 .padding(.leading)
                                 .foregroundColor(Color.gray)
                         }
@@ -102,7 +102,7 @@ struct RouteSheet: View {
                                 .padding(.leading)
                             Text(route.destination)
                                 //.font(.title)
-                                                                .font(.system(size: 25))
+                                .font(.system(size: 25))
                                 .padding(.leading)
                             Spacer()
                         }
@@ -151,15 +151,27 @@ struct RouteSheet: View {
                                                 .padding([.bottom], 5)
                                         }
                                         else if (route.nextBusTimer.contains("Now") && time.current) {
-                                        Text(time.timeString)
-                                            .font(Font.custom("HelveticaNeue", size: 12))
-                                            .padding([.leading, .trailing], 10)
-                                            .padding([.top, .bottom], 5)
-                                            .foregroundColor(Color.white)
-                                            //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
-                                            .background(Color.green)
-                                            .cornerRadius(7)
-                                            .padding([.bottom], 5)
+                                            Text(time.timeString)
+                                                .font(Font.custom("HelveticaNeue", size: 12))
+                                                .padding([.leading, .trailing], 10)
+                                                .padding([.top, .bottom], 5)
+                                                .foregroundColor(Color.white)
+                                                //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                                .background(Color.green)
+                                                .cornerRadius(7)
+                                                .padding([.bottom], 5)
+                                        }
+                                        else if (routeController.localizedDescription == "The Internet connection appears to be offline.") ||
+                                                    (routeController.csbsjuApiOnlineStatus == "CsbsjuApi invalid response") {
+                                            Text(time.timeString)
+                                                .font(Font.custom("HelveticaNeue", size: 12))
+                                                .padding([.leading, .trailing], 10)
+                                                .padding([.top, .bottom], 5)
+                                                .foregroundColor(Color.white)
+                                                //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                                                .background(Color.gray)
+                                                .cornerRadius(7)
+                                                .padding([.bottom], 5)
                                         }
                                         else {
                                             Text(time.timeString)
@@ -189,8 +201,8 @@ struct RouteSheet: View {
                     .transition(.slide)
                     
                 }
-                    
-                    
+                
+                
                 .navigationBarTitle("", displayMode: .inline)
                 .navigationBarHidden(true)
                 

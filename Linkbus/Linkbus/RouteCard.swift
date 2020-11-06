@@ -77,6 +77,9 @@ struct RouteCard: View {
                         HStack(alignment: .center) {
                             Spacer()
                             if (route.nextBusTimer == "Departing now") {
+                                let delay = Timer.scheduledTimer(withTimeInterval: 0, repeats: false) { (delay) in
+                                    self.timer = "Now" // Reset
+                                }
                                 Text(route.nextBusTimer)
                                     .font(Font.custom("HelveticaNeue", size: 13))
                                     //.font(.footnote)
@@ -106,7 +109,9 @@ struct RouteCard: View {
                                     .padding([.top, .bottom], 4)
                             }
                             else {
-                                
+                                let delay = Timer.scheduledTimer(withTimeInterval: 0, repeats: false) { (delay) in
+                                    self.timer = "Now" // Reset
+                                }
                                 Text(route.nextBusTimer)
                                     .font(Font.custom("HelveticaNeue", size: 13))
                                     //.fontWeight(.medium)
@@ -120,6 +125,7 @@ struct RouteCard: View {
                                     .padding([.top, .bottom], 4)
                             }
                         }
+                        
                         .transition(.scale)
                         .animation(.default)
                     }
