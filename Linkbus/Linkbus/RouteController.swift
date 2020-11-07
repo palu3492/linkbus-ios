@@ -22,12 +22,14 @@ class RouteController: ObservableObject {
     @Published var csbsjuApiOnlineStatus = ""
     
     private var webRequestInProgress: Bool
+    public var initalWebRequestFinished: Bool // Used by main view
     
     private var dailyMessage: String
     
     init() {
         self.dailyMessage = ""
         self.webRequestInProgress = false
+        self.initalWebRequestFinished = false
         webRequest()
     }
 }
@@ -413,5 +415,9 @@ extension RouteController {
 //        }
         
         self.webRequestInProgress = false
+        // Only change this once
+        if(!self.initalWebRequestFinished){
+            self.initalWebRequestFinished = true
+        }
     }
 }

@@ -41,31 +41,38 @@ struct Home: View {
         timeFormatter.dateFormat = "HH:mm"
         //self.lastRefreshTime = timeFormatter.string(from: time)
         _lastRefreshTime = State(initialValue: timeFormatter.string(from: time))
-        
     }
-    
     
     var body: some View {
             NavigationView {
-                if #available(iOS 14.0, *) { // iOS 14
-                    ScrollView {
-                        AlertList(routeController: routeController)
-                        RouteList(routeController: routeController)
+                if(routeController.initalWebRequestFinished) {
+                    if #available(iOS 14.0, *) { // iOS 14
+                        ScrollView {
+                            AlertList(routeController: routeController)
+                            RouteList(routeController: routeController)
+                        }
+                        // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
+                        .padding(.top, 1) // TODO: alex this was changed to 0.4 take a look at mic's new commits
+                        .navigationBarTitle(self.menuBarTitle)
+                        //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                    } else { // iOS 13
+                        List {
+                            AlertList(routeController: routeController)
+                            RouteList(routeController: routeController)
+                        }
+                        .transition(.opacity)
+                        .animation(.default)
+                        .navigationBarTitle(self.menuBarTitle)
+                        //.transition(.opacity)
+                        //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     }
-                    // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
-                    .padding(.top, 1) // TODO: alex this was changed to 0.4 take a look at mic's new commits
-                    .navigationBarTitle(self.menuBarTitle)
-                    //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                } else { // iOS 13
-                    List {
-                        AlertList(routeController: routeController)
-                        RouteList(routeController: routeController)
+                } else {
+                    VStack() {
+//                        Text("Loading")
+                        ActivityIndicator(isAnimating: .constant(true), style: .large)
                     }
-                    .transition(.opacity)
-                    .animation(.default)
                     .navigationBarTitle(self.menuBarTitle)
-                    //.transition(.opacity)
-                    //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                    Spacer() // Makes the alerts and routes animate in from bottom
                 }
             }
             .onAppear {
@@ -94,6 +101,17 @@ struct Home: View {
                 // Auto refresh
                 autoRefreshData(self: self)
             }
+    }
+}
+
+struct ActivityIndicator: UIViewRepresentable {
+    @Binding var isAnimating: Bool
+    let style: UIActivityIndicatorView.Style
+    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+        return UIActivityIndicatorView(style: style)
+    }
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
     }
 }
 
