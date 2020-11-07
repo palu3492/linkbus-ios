@@ -249,8 +249,12 @@ extension RouteController {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
-        refreshedLbBusSchedule.msg = csbsjuApiResponse.msg!
-        refreshedLbBusSchedule.attention = csbsjuApiResponse.attention!
+        if(csbsjuApiResponse.msg != nil){
+            refreshedLbBusSchedule.msg = csbsjuApiResponse.msg!
+        }
+        if(csbsjuApiResponse.attention != nil){
+            refreshedLbBusSchedule.attention = csbsjuApiResponse.attention!
+        }
         
         for apiAlert in linkbusApiResponse.alerts {
             if (apiAlert.active) {
@@ -269,7 +273,7 @@ extension RouteController {
             refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
-        if !(csbsjuApiResponse.routes!.isEmpty) {
+        if (!csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
                 tempRoute.id = apiRoute.id!
@@ -398,6 +402,8 @@ extension RouteController {
             }
             lbBusSchedule = refreshedLbBusSchedule
         }
+        
+        lbBusSchedule = refreshedLbBusSchedule
         
 //        if (lbBusSchedule.routes.count > 0) {
 //            var iterator = lbBusSchedule.routes[0].times.makeIterator()
