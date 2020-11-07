@@ -404,7 +404,7 @@ struct RouteList: View {
                     if (timeOfDayChanged) {
                         
                         if (self.timeOfDay == "night") {
-                            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 😴"]
+                            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 🌌", "Goodnight 😴"]
                             let randomGreeting = nightGreetings.randomElement()
                             self.greeting = randomGreeting!
                         }
