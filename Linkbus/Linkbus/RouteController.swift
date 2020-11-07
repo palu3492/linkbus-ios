@@ -400,6 +400,7 @@ extension RouteController {
                     refreshedLbBusSchedule.routes.append(tempRoute)
                 }
             }
+            lbBusSchedule = refreshedLbBusSchedule
         }
         
         lbBusSchedule = refreshedLbBusSchedule
