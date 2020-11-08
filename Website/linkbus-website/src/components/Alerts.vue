@@ -16,7 +16,7 @@
                        v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"
                        v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" v-bind:signedIn="signedIn"/>
             </div>
-            <p v-else class="mt-3">No Alerts</p>
+            <p v-else class="m-3">No Alerts</p>
         </div>
 
         <DeleteModal v-bind:showModal="showDeleteModal" v-bind:hideModal="hideDeleteModal"
@@ -37,6 +37,7 @@
     import {db} from "../firebase";
 
     const alertsCollection = db.collection('alerts');
+    const adminUserId = "mZK3hiDTGbaejz9vBfdm9d92kdf1"
 
     export default {
         name: "Alerts",
@@ -60,7 +61,7 @@
         },
         firestore() {
             const alertDocs = alertsCollection
-                .where('uid', '==', 1);
+                .where('uid', '==', adminUserId);
             return {
                 alerts: alertDocs
             }

@@ -20,7 +20,7 @@
                 <b-form-checkbox switch v-model="formData.clickable"></b-form-checkbox>
             </b-input-group-prepend>
             <b-form-input url v-model="formData.action" :disabled="!formData.clickable"
-                          :state="validUrl" placeholder="http://www.example.com"></b-form-input>
+                          :state="validUrl" placeholder="https://www.example.com"></b-form-input>
         </b-input-group>
 
         <p class="mb-0 mt-3">Background Color</p>
@@ -37,25 +37,53 @@
                 <b-form-input type="color" v-model="formData.colorCode" :disabled="formData.color !== ''"></b-form-input>
             </b-col>
         </b-row>
+        <b-row class="mb-0 mt-3">
+            <b-col>
+                <p class="mb-1">Start time</p>
+                <ChangeDate v-bind:disabled="false" v-bind:dateTime="start"/>
+<!--                v-bind:dateProp="endDate" v-bind:timeProp="endTime"-->
+            </b-col>
+            <b-col>
+                <div class="mb-1 d-flex flex-column flex-sm-row">
+                    <p class="mb-1 flex-grow-1">End time</p>
+                    <div class="d-flex flex-sm-row">
+                        <span class="mr-2">Indefinite</span>
+                        <b-form-checkbox switch v-model="indefinite.indefinite"></b-form-checkbox>
+                    </div>
+                </div>
+                <ChangeDate v-bind:disabled="indefinite.indefinite" v-bind:dateTime="endDateTime"/>
+<!--                v-bind:dateProp="endDate" v-bind:timeProp="endTime"-->
+            </b-col>
+        </b-row>
     </b-form>
 </template>
 
 <script>
+    import ChangeDate from "./ChangeDate";
+
     export default {
         name: "AlertModal",
+        components: {
+            ChangeDate
+        },
         props: {
-            formData: Object
+            formData: Object,
+            start: Object,
+            end: Object,
+            indefinite: Object
         },
         data() {
             return {
                 colorOptions: [
-                    {value: '', text: 'Select'},
+                    {value: '', text: 'Use RGB -->'},
                     {value: 'red', text: 'Red'},
                     {value: 'green', text: 'Green'},
                     {value: 'blue', text: 'Blue'},
                     {value: 'yellow', text: 'Yellow'},
                 ]
             }
+        },
+        methods: {
         },
         computed: {
             validUrl() {
@@ -79,7 +107,34 @@
                     return false;
                 }
                 return true;
+            },
+            endDateTime() {
+                if(this.indefinite.indefinite) {
+                    return {
+                        start: "",
+                        end: ""
+                    }
+                }
+                // this.formData.end.date = this.formData.start.date
+                // this.formData.end.time = this.formData.start.time
+                return this.end
             }
+            // startComp() {
+            //     const [date, time] = this.formData.start.split(" ")
+            //     this.start = {
+            //         time: time,
+            //         date: date
+            //     }
+            //     return this.start
+            // },
+            // endComp() {
+            //     const [date, time] = this.formData.end.split(" ")
+            //     this.end = {
+            //         time: time,
+            //         date: date
+            //     }
+            //     return this.end
+            // }
         }
     }
 </script>

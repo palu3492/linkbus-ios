@@ -4,8 +4,9 @@
             <h5 class="modal-title">Create New Alert</h5>
             <button type="button" aria-label="Close" class="close" @click="hideModal(); reset();">×</button>
         </div>
-        <b-overlay :show="updatingDatabase" rounded="sm" :variant="'light'" spinner-variant="primary">
-            <AlertCustomizeModal v-bind:formData="formData"/>
+        <b-overlay :show="updatingDatabase" rounded="sm" variant="light" spinner-variant="primary">
+            <AlertCustomizeModal v-bind:formData="formData" v-bind:start="start" v-bind:end="end"
+                                 v-bind:indefinite="indefinite"/>
         </b-overlay>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal(); reset();">Cancel</b-button>
@@ -17,16 +18,38 @@
 <script>
     import AlertCustomizeModal from "./AlertCustomizeModal";
     import {db} from "../firebase";
+    import firebase from 'firebase/app'
+    const { serverTimestamp } = firebase.firestore.FieldValue;
+
+    const getDate = () => {
+        const today = new Date();
+        const dd = today.getDate();
+        const mm = today.getMonth()+1;
+        const yyyy = today.getFullYear();
+        return `${yyyy}-${mm}-${dd}`
+    }
+    const getTime = () => {
+        const today = new Date();
+        const hour = today.getHours()
+        const minute = today.getMinutes()
+        return `${hour}:${minute}:00`
+    }
+    const getDateTime = (dateTime) => {
+        // console.log(dateTime)
+        if(dateTime.date === ""){
+            return ""
+        }
+        return `${dateTime.date} ${dateTime.time}`
+    }
 
     const formDataDefault = {
         text: "",
         active: true,
         clickable: false,
         action: "",
-        color: "",
-        colorCode: "#000000",
-        fullWidth: false,
-        uid: 1
+        color: "red",
+        colorCode: "#46d8e2",
+        fullWidth: false
     };
 
     export default {
@@ -35,26 +58,45 @@
             AlertCustomizeModal
         },
         props: {
-            alertDoc: Object,
             showModal: Boolean,
             hideModal: Function,
-            updateSuccessAlert: Function
+            updateSuccessAlert: Function,
+            user: Object
         },
         data() {
             return {
                 formData: { ...formDataDefault },
                 updatingDatabase: false,
-                showModalValue: false
+                indefinite: {
+                    indefinite: true
+                },
+                start: {
+                    date: getDate(),
+                    time: getTime()
+                },
+                end: {
+                    date: getDate(),
+                    time: getTime()
+                }
             }
         },
         methods: {
             async updateFirebase() {
                 this.updatingDatabase = true
-                let alertData = { ...this.formData };
+                const alertData = { ...this.formData };
                 alertData.rgb = this.rgb()
                 alertData.uid = this.user.uid
+                alertData.created = serverTimestamp()
+                alertData.updated = null
+                alertData.start = getDateTime(this.start);
+                if(!this.indefinite.indefinite){
+                    alertData.end = getDateTime(this.end);
+                } else {
+                    alertData.end = ""
+                }
                 try{
-                    await db.collection('alerts').add(alertData);
+                    const collection = await db.collection('alerts').add(alertData)
+                    console.log(collection)
                     this.updateSuccessAlert('Alert Created!', 'success')
                 } catch(error) {
                     console.log('ERROR:')
@@ -63,7 +105,7 @@
                 }
                 this.hideModal()
                 this.updatingDatabase = false
-                this.formData = { ...formDataDefault }
+                this.reset()
             },
             rgb() {
                 const hexToRgb = (color, start, end) => {
@@ -88,6 +130,14 @@
             },
             reset() {
                 this.formData = { ...formDataDefault }
+                this.start = {
+                    date: getDate(),
+                    time: getTime()
+                }
+                this.end = {
+                    date: getDate(),
+                    time: getTime()
+                }
             },
             handleHideEvent() {
                 if(this.showModal === true){

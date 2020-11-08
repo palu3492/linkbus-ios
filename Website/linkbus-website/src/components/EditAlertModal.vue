@@ -7,8 +7,9 @@
             </div>
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
         </div>
-        <b-overlay :show="updatingDatabase" rounded="sm" :variant="'light'" spinner-variant="primary">
-            <AlertCustomizeModal v-bind:formData="formData"/>
+        <b-overlay :show="updatingDatabase" rounded="sm" variant="light" spinner-variant="primary">
+            <AlertCustomizeModal v-bind:formData="formData" v-bind:start="start" v-bind:end="end"
+                                 v-bind:indefinite="indefinite"/>
         </b-overlay>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
@@ -23,6 +24,11 @@
     import AlertCustomizeModal from "./AlertCustomizeModal";
     import firebase from 'firebase/app'
     const { serverTimestamp } = firebase.firestore.FieldValue;
+
+    const getDateTime = (dateTime) => {
+        // console.log(dateTime)
+        return `${dateTime.date} ${dateTime.time}`
+    }
 
     export default {
         name: "CustomModal",
@@ -48,17 +54,37 @@
                     // rgb: "#000",
                     // fullWidth: false,
                 },
-                updatingDatabase: false
+                updatingDatabase: false,
+                indefinite: {
+                    indefinite: true
+                },
+                start: {
+                    date: "",
+                    time: ""
+                },
+                end: {
+                    date: "",
+                    time: ""
+                }
             }
         },
         methods: {
             async updateFirebase() {
                 this.updatingDatabase = true
-                this.formData.serverTimestamp = serverTimestamp()
-                this.formData.uid = this.user.uid
+                const alertData = { ...this.formData }
+                alertData.updated = serverTimestamp()
+                alertData.created = this.alertDoc.created
+                alertData.id = this.alertDoc.id
+                alertData.uid = this.user.uid
+                alertData.start = getDateTime(this.start);
+                if(!this.indefinite.indefinite){
+                    alertData.end = getDateTime(this.end);
+                } else {
+                    alertData.end = ""
+                }
                 // Convert rgb to color code
                 try{
-                    await db.doc(`alerts/${this.alertDoc.id}`).set(this.formData);
+                    await db.doc(`alerts/${this.alertDoc.id}`).set(alertData);
                     this.updateSuccessAlert('Alert Saved!', 'success')
                 } catch(error) {
                     console.log('ERROR:')
@@ -67,6 +93,22 @@
                 }
                 this.hideModal()
                 this.updatingDatabase = false
+            },
+            parseDateTime() {
+                // if(typeof this.formData.start === "string" && this.formData.start !== ""){
+                const [startDate, startTime] = this.formData.start.split(" ")
+                this.start.date = startDate
+                this.start.time = startTime
+                if(this.formData.end !== "") {
+                    this.indefinite.indefinite = false
+                    const [endDate, endTime] = this.formData.end.split(" ")
+                    this.end.date = endDate
+                    this.end.time = endTime
+                } else {
+                    this.indefinite.indefinite = true
+                    this.end.date = this.start.date
+                    this.end.time = this.start.time
+                }
             }
         },
         computed: {
@@ -79,9 +121,10 @@
         watch: {
             alertDoc: {
                 handler(alertDoc) {
-                    // Convert rgb to color code
-                    this.formData = { ...alertDoc }
-                    this.formData.id = alertDoc.id
+                    if(alertDoc.start !== undefined && alertDoc.text !== undefined){
+                        this.formData = { ...alertDoc }
+                        this.parseDateTime()
+                    }
                 },
             },
         }

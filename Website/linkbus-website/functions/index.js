@@ -8,9 +8,11 @@ const express = require('express');
 const cors = require('cors')({origin: true});
 const app = express();
 
+const adminUserId = "mZK3hiDTGbaejz9vBfdm9d92kdf1"
+
 app.get('/alerts', async (req, res) => {
   const snapshot = await db.collection("alerts")
-      .where('uid', '==', 1)
+      .where('uid', '==', adminUserId)
       .where('active', '==', true)
       .get()
   let alerts = processResponse(snapshot);
@@ -20,7 +22,7 @@ app.get('/alerts', async (req, res) => {
 
 app.get('/routes', async (req, res) => {
   const snapshot = await db.collection("routes")
-      .where('uid', '==', 1)
+      .where('uid', '==', adminUserId)
       .get()
   let routes = processResponse(snapshot);
   const routesJson = {routes: routes};
@@ -39,11 +41,11 @@ const processResponse = (snapshot) => {
 
 app.get('/', async (req, res) => {
   const alertsSnapshot = await db.collection("alerts")
-      .where('uid', '==', 1)
+      .where('uid', '==', adminUserId)
       .where('active', '==', true)
       .get()
   const routesSnapshot = await db.collection("routes")
-      .where('uid', '==', 1)
+      .where('uid', '==', adminUserId)
       .get()
   let alerts = processResponse(alertsSnapshot);
   let routes = processResponse(routesSnapshot);

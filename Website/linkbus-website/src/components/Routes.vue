@@ -20,6 +20,7 @@
     import {db} from "../firebase";
 
     const alertsCollection = db.collection('routes');
+    const adminUserId = "mZK3hiDTGbaejz9vBfdm9d92kdf1"
 
     export default {
         name: "Routes",
@@ -37,7 +38,7 @@
         },
         firestore() {
             const routeDocs = alertsCollection
-                .where('uid', '==', 1);
+                .where('uid', '==', adminUserId);
             return {
                 routes: routeDocs
             }

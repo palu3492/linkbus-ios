@@ -75,19 +75,24 @@ export default {
       this.signedIn = true
     },
     signOut() {
-      this.auth.signOut().then(function() {
-        this.signedIn = false
-      }.bind(this))
-    }
+      this.auth.signOut()
+    },
+    userSignedOut(){
+      this.user = null
+      this.signedIn = false
+    },
   },
   created() {
-    this.auth.onAuthStateChanged(user => {
-      // Signed in
+    this.auth.onAuthStateChanged(function(user) {
       if(user){
+        // Signed in
+        this.user = user
         this.userSignedIn()
+      } else {
+        // Signed out
+        this.userSignedOut()
       }
-      // Signed out
-    })
+    }.bind(this))
   }
 }
 </script>

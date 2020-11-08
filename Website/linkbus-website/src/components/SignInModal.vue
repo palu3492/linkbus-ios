@@ -16,7 +16,7 @@
         </b-overlay>
         <div slot="modal-footer">
             <b-button class="mx-1" variant="dark" @click="hideModal">Cancel</b-button>
-            <b-button class="mx-1" variant="danger" @click="signIn">Sign In</b-button>
+            <b-button class="mx-1" variant="primary" @click="signIn">Sign In</b-button>
         </div>
     </b-modal>
 </template>
@@ -32,7 +32,6 @@
         },
         data() {
             return {
-                showOverlay: false,
                 email: null,
                 password: null,
                 signingIn: false
@@ -46,12 +45,6 @@
                         .then(function() {
                             this.signInSuccessful()
                         }.bind(this))
-
-                    //     .then(function(result) {
-                    //     this.user = result.user;
-                    //     console.log(this.user);
-                    //     this.signInSuccessful()
-                    // }.bind(this)); // bind context
                 }
             },
             signInSuccessful() {
