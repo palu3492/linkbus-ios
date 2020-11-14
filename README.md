@@ -13,11 +13,11 @@
     <img src="https://badge.fury.io/gh/michaelcarroll%2Flinkbus-ios.svg" alt="App Store">
   </a>
   <!-- Build Status -->
-  <a href="https://beta.stats.uptimerobot.com/XnOnXhnpn2">
+  <a href="https://stats.uptimerobot.com/XnOnXhnpn2">
     <img src="https://img.shields.io/uptimerobot/status/m786324991-be97368f7f3b6614eec26594?label=Linkbus%20API" alt="build">
   </a>
   <!-- Build Status -->
-  <a href="https://beta.stats.uptimerobot.com/XnOnXhnpn2">
+  <a href="https://stats.uptimerobot.com/XnOnXhnpn2">
     <img src="https://img.shields.io/uptimerobot/status/m786324985-51d04fcadc623ecf27480738?label=CSB%2FSJU%20API" alt="build">
   </a>
 <br>
