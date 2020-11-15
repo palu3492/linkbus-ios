@@ -7,7 +7,7 @@
             <b-progress :variant="dbStatus" :max="dismissSecs" :value="dismissCountDown" height="4px"></b-progress>
         </b-alert>
         <!-- GENERAL -->
-        <General />
+        <General v-bind:updateSuccessAlert="showSuccessAlert"/>
         <!-- ALERTS -->
         <Alerts v-bind:updateSuccessAlert="showSuccessAlert" v-bind:signedIn="signedIn" v-bind:user="user"/>
         <!-- ROUTES -->

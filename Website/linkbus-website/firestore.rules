@@ -10,8 +10,11 @@ service cloud.firestore {
     match /routes/{routeId} {
     	allow read, write: if request.auth.uid == "1J6yYtccJ3c7ZeiAqUOuDpAgZvo1" // PRODUCTION VARIABLE
     }
+    match /messages/{messageId} {
+    	allow read, write: if request.auth.uid == "1J6yYtccJ3c7ZeiAqUOuDpAgZvo1" // PRODUCTION VARIABLE
+    }
   }
 }
 // Production: mZK3hiDTGbaejz9vBfdm9d92kdf1
 // Staging: 0ZUHsGrupYcTLfxMXuriAZZEElp2
-// Development: 1J6yYtccJ3c7ZeiAqUOuDpAgZvo1
+// Development:1J6yYtccJ3c7ZeiAqUOuDpAgZvo1

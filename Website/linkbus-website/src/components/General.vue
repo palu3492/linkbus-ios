@@ -4,6 +4,7 @@
             <h3 class="m-0">General</h3>
         </div>
         <hr class="m-0"/>
+        <BusMessage v-bind:updateSuccessAlert="updateSuccessAlert"/>
         <!--        <p>Background Color:</p>-->
         <!--        <p>Font Color:</p>-->
         <!--        <p>Show daily message as alert</p>-->
@@ -11,8 +12,15 @@
 </template>
 
 <script>
+    import BusMessage from "./BusMessage";
     export default {
-        name: "General"
+        name: "General",
+        components: {
+            BusMessage
+        },
+        props: {
+            updateSuccessAlert: Function
+        }
     }
 </script>
 

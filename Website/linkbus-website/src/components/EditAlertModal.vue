@@ -73,9 +73,9 @@
                 this.updatingDatabase = true
                 const alertData = { ...this.formData }
                 alertData.updated = serverTimestamp()
-                alertData.created = this.alertDoc.created
-                alertData.id = this.alertDoc.id
-                alertData.uid = this.user.uid
+                // alertData.created = this.alertDoc.created // Alert data already has created
+                // alertData.id = this.alertDoc.id // Alert doc carries the id
+                // alertData.uid = this.user.uid // Don't need this as alert will already have it
                 alertData.start = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.start)));
                 if(!this.indefinite.indefinite){
                     alertData.end = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.end)));
@@ -128,13 +128,6 @@
                 }
             }
         },
-        computed: {
-            rgb() {
-                return{
-                    value: this.formData.colorCode
-                }
-            }
-        },
         watch: {
             alertDoc: {
                 handler(alertDoc) {
@@ -145,8 +138,8 @@
                         this.formData = { ...alertDoc }
                         this.parseDateTime()
                     }
-                },
-            },
+                }
+            }
         }
     }
 </script>
