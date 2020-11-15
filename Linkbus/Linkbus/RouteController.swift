@@ -10,10 +10,11 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
-    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
+//  let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
+    let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
+    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), dailyMessage: DailyMessageSettings(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
@@ -43,7 +44,7 @@ extension RouteController {
             self.localizedDescription = "default"
             
             csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-            linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail]())
+            linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), dailyMessage: DailyMessageSettings(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
             refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
             
             let dispatchGroup = DispatchGroup()
@@ -83,7 +84,7 @@ extension RouteController {
             
             // Linkbus API that connects to website
             dispatchGroup.enter()
-            fetchAlerts { apiResponse in
+            fetchLinkbusApi { apiResponse in
                 DispatchQueue.main.async {
                     if apiResponse != nil {
                         self.linkbusApiResponse = apiResponse!
@@ -137,6 +138,7 @@ extension RouteController {
                 let apiResponse = try JSONDecoder().decode(BusSchedule.self, from: data!)
                 completionHandler(apiResponse)
             } catch {
+                print("CSB/SJU API error!")
                 completionHandler(nil)
             }
         })
@@ -223,7 +225,7 @@ extension RouteController {
      
      - Returns: calls completion handler with the API response as argument or returns nill on error.
      */
-    func fetchAlerts(completionHandler: @escaping (LinkbusApi?) -> Void) {
+    func fetchLinkbusApi(completionHandler: @escaping (LinkbusApi?) -> Void) {
         let url = URL(string: LinkbusApiUrl)!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
@@ -237,10 +239,12 @@ extension RouteController {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
+//            print(JSONDecoder().decode(LinkbusApi.self, from: data!))
             do {
                 let apiResponse = try JSONDecoder().decode(LinkbusApi.self, from: data!)
                 completionHandler(apiResponse)
             } catch {
+                print("Linkbus API error!")
                 completionHandler(nil)
             }
         })
@@ -268,10 +272,13 @@ extension RouteController {
         // Website will be able to customize this in the near future
         if self.dailyMessage != "" {
             // Only add to alerts if message is not empty string
-            let color = RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)
-            let dailyMessageAlert = Alert(id: "h213h408", active: true, text: self.dailyMessage,
-                                          clickable: false, action: "", fullWidth: false,
-                                          color: "blue", rgb: color, uid: "", colorCode: "#000")
+            let dailyMessageAlert: Alert;
+            // Will be default if not overwritten by our API
+            let dailyMessageSettings = linkbusApiResponse.dailyMessage
+            dailyMessageAlert = Alert(id: dailyMessageSettings.id, active: dailyMessageSettings.active, text: self.dailyMessage,
+                                      clickable: dailyMessageSettings.clickable, action: dailyMessageSettings.action,
+                                      fullWidth: dailyMessageSettings.fullWidth, color: dailyMessageSettings.color,
+                                      rgb: dailyMessageSettings.rgb)
             refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
@@ -402,9 +409,8 @@ extension RouteController {
                     refreshedLbBusSchedule.routes.append(tempRoute)
                 }
             }
-            lbBusSchedule = refreshedLbBusSchedule
         }
-        
+        print(refreshedLbBusSchedule)
         lbBusSchedule = refreshedLbBusSchedule
         
 //        if (lbBusSchedule.routes.count > 0) {
