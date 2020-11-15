@@ -88,15 +88,14 @@
                 alertData.uid = this.user.uid
                 alertData.created = serverTimestamp()
                 alertData.updated = null
-                alertData.start = getDateTime(this.start);
+                alertData.start = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.start)));
                 if(!this.indefinite.indefinite){
-                    alertData.end = getDateTime(this.end);
+                    alertData.end = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.end)));
                 } else {
                     alertData.end = ""
                 }
                 try{
-                    const collection = await db.collection('alerts').add(alertData)
-                    console.log(collection)
+                    await db.collection('alerts').add(alertData)
                     this.updateSuccessAlert('Alert Created!', 'success')
                 } catch(error) {
                     console.log('ERROR:')
@@ -138,6 +137,7 @@
                     date: getDate(),
                     time: getTime()
                 }
+                this.indefinite.indefinite = true
             },
             handleHideEvent() {
                 if(this.showModal === true){

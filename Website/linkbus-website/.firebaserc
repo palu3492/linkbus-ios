@@ -1,6 +1,8 @@
 {
   "projects": {
     "default": "linkbus-website",
-    "production": "linkbus-website"
+    "production": "linkbus-website",
+    "staging": "linkbus-website-staging",
+    "development": "linkbus-website-development"
   }
 }

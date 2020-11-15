@@ -2,7 +2,18 @@
   <div id="app">
     <b-container class="px-0 d-flex flex-column">
         <b-row class="m-0">
-          <b-col cols="3"/>
+          <b-col cols="3">
+            <div v-if="staging">
+              <p class="staging p-1 m-1 d-inline-block">STAGING</p>
+              <br />
+              <a href="https://linkbus-website.web.app/">Production website</a>
+            </div>
+            <div v-else-if="development">
+              <p class="staging p-1 m-1 d-inline-block">DEVELOPMENT</p>
+              <br />
+              <a href="https://linkbus-website.web.app/">Production website</a>
+            </div>
+          </b-col>
           <b-col cols="6">
             <h1 id="title" class="mt-2">Linkbus</h1>
           </b-col>
@@ -36,6 +47,10 @@ import "firebase/auth";
 import { BIconPerson } from 'bootstrap-vue'
 import SignInModal from "./components/SignInModal";
 
+// const production = false; // PRODUCTION VARIABLE
+const staging = false; // STAGING VARIABLE
+const development = true; // DEVELOPMENT VARIABLE
+
 export default {
 
   name: 'App',
@@ -49,7 +64,9 @@ export default {
       token: null,
       user: null,
       showSignInModal: false,
-      auth: firebase.auth()
+      auth: firebase.auth(),
+      staging: staging,
+      development: development,
     }
   },
   methods: {
@@ -106,5 +123,10 @@ export default {
   }
   #title {
     text-align: center;
+  }
+  .staging {
+    background: blue;
+    color: white;
+    font-weight: 600;
   }
 </style>

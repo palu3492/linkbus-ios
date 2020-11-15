@@ -75,7 +75,7 @@
         data() {
             return {
                 colorOptions: [
-                    {value: '', text: 'Use RGB -->'},
+                    {value: '', text: 'Use RGB'},
                     {value: 'red', text: 'Red'},
                     {value: 'green', text: 'Green'},
                     {value: 'blue', text: 'Blue'},

@@ -3,7 +3,7 @@
         <div slot="modal-header" class="m-modal-header">
             <div>
                 <h5 class="modal-title">Edit Alert</h5>
-                <p class="m-0 small text-muted">ID: {{ formData.id }}</p>
+                <p class="m-0 small text-muted">ID: {{ alertDoc.id }}</p>
             </div>
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
         </div>
@@ -76,9 +76,9 @@
                 alertData.created = this.alertDoc.created
                 alertData.id = this.alertDoc.id
                 alertData.uid = this.user.uid
-                alertData.start = getDateTime(this.start);
+                alertData.start = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.start)));
                 if(!this.indefinite.indefinite){
-                    alertData.end = getDateTime(this.end);
+                    alertData.end = firebase.firestore.Timestamp.fromDate(new Date(getDateTime(this.end)));
                 } else {
                     alertData.end = ""
                 }
@@ -96,14 +96,31 @@
             },
             parseDateTime() {
                 // if(typeof this.formData.start === "string" && this.formData.start !== ""){
-                const [startDate, startTime] = this.formData.start.split(" ")
-                this.start.date = startDate
-                this.start.time = startTime
+                // const [startDate, startTime] = this.formData.start.split(" ")
+                function toDateTime(seconds) {
+                    const time = new Date(Date.UTC(1970, 0, 1)); // Epoch
+                    time.setUTCSeconds(seconds);
+                    return time;
+                }
+                const getDate = (date) => {
+                    const dd = date.getDate();
+                    const mm = date.getMonth()+1;
+                    const yyyy = date.getFullYear();
+                    return `${yyyy}-${mm}-${dd}`
+                }
+                const getTime = (time) => {
+                    const hour = time.getHours()
+                    const minute = time.getMinutes()
+                    return `${hour}:${minute}:00`
+                }
+                const start = toDateTime(this.formData.start.seconds)
+                this.start.date = getDate(start)
+                this.start.time = getTime(start)
                 if(this.formData.end !== "") {
                     this.indefinite.indefinite = false
-                    const [endDate, endTime] = this.formData.end.split(" ")
-                    this.end.date = endDate
-                    this.end.time = endTime
+                    const end = toDateTime(this.formData.end.seconds)
+                    this.end.date = getDate(end)
+                    this.end.time = getTime(end)
                 } else {
                     this.indefinite.indefinite = true
                     this.end.date = this.start.date
@@ -122,6 +139,9 @@
             alertDoc: {
                 handler(alertDoc) {
                     if(alertDoc.start !== undefined && alertDoc.text !== undefined){
+                        // console.log(alertDoc.start);
+                        // console.log(alertDoc.end.seconds);
+                        // console.log(firebase.firestore.Timestamp.now().seconds)
                         this.formData = { ...alertDoc }
                         this.parseDateTime()
                     }
