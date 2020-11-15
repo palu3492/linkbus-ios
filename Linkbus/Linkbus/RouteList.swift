@@ -67,6 +67,15 @@ struct Routes: View {
 //        }
 //    }
 //}
+struct LandmarkList_Previews: PreviewProvider {
+    static var previews: some View {
+        ForEach(["iPhone XS Max"], id: \.self) { deviceName in
+            RouteList()
+                .previewDevice(PreviewDevice(rawValue: deviceName))
+                .previewDisplayName(deviceName)
+        }
+    }
+}
 
 // TRANSLUCENT MENU BAR TETING....
 //extension UINavigationController {

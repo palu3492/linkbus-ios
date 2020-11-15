@@ -62,8 +62,8 @@ extension RouteController {
                 }
                 else {
                     DispatchQueue.main.async {
-                    self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
-                    dispatchGroup.leave()
+                        self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
+                        dispatchGroup.leave()
                     }
                 }
             }
@@ -89,7 +89,7 @@ extension RouteController {
                     if apiResponse != nil {
                         self.linkbusApiResponse = apiResponse!
                     }
-                        dispatchGroup.leave()
+                    dispatchGroup.leave()
                 }
             }
             
@@ -254,9 +254,11 @@ extension RouteController {
         if(csbsjuApiResponse.msg != nil){
             refreshedLbBusSchedule.msg = csbsjuApiResponse.msg!
         }
+        else { refreshedLbBusSchedule.msg = "" }
         if(csbsjuApiResponse.attention != nil){
             refreshedLbBusSchedule.attention = csbsjuApiResponse.attention!
         }
+        else { refreshedLbBusSchedule.attention = "" }
         
         for apiAlert in linkbusApiResponse.alerts {
             if (apiAlert.active) {
@@ -409,12 +411,12 @@ extension RouteController {
 //        print(refreshedLbBusSchedule)
         lbBusSchedule = refreshedLbBusSchedule
         
-//        if (lbBusSchedule.routes.count > 0) {
-//            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-//            while let time = iterator.next() {
-//                print(time.timeString)
-//            }
-//        }
+        //        if (lbBusSchedule.routes.count > 0) {
+        //            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+        //            while let time = iterator.next() {
+        //                print(time.timeString)
+        //            }
+        //        }
         
         self.webRequestInProgress = false
         // Only change this once

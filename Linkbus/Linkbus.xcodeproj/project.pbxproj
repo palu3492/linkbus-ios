@@ -416,7 +416,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -440,7 +440,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.michaelcarroll.Linkbus;
 				PRODUCT_NAME = Linkbus;
 				PROVISIONING_PROFILE_SPECIFIER = "";
