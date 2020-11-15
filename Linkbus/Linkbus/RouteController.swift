@@ -10,7 +10,7 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
-//  let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api"
+//  let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
@@ -138,7 +138,7 @@ extension RouteController {
                 let apiResponse = try JSONDecoder().decode(BusSchedule.self, from: data!)
                 completionHandler(apiResponse)
             } catch {
-                print("CSB/SJU API error!")
+                print("Error decoding CSB/SJU API!")
                 completionHandler(nil)
             }
         })
@@ -160,8 +160,6 @@ extension RouteController {
         request.httpMethod = "POST"
         // Add body (form data)
         var postString = ""
-        // These asp.net fields may not work forever!
-        // However.. they've worked for a couple months so far.
         //        let specifyData = false
         //        if specifyData {
         //            // Allows for date to be changed. Disabled by default. Implement later.
@@ -197,7 +195,6 @@ extension RouteController {
     }
     
     /**
-     
      Processes the daily message website HTML into just the daily message string.
      - Parameter data: The fetched bus schedule website HTML.
      
@@ -239,12 +236,11 @@ extension RouteController {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
                 return
             }
-//            print(JSONDecoder().decode(LinkbusApi.self, from: data!))
             do {
                 let apiResponse = try JSONDecoder().decode(LinkbusApi.self, from: data!)
                 completionHandler(apiResponse)
             } catch {
-                print("Linkbus API error!")
+                print("Error decoding Linkbus API!")
                 completionHandler(nil)
             }
         })
@@ -410,7 +406,7 @@ extension RouteController {
                 }
             }
         }
-        print(refreshedLbBusSchedule)
+//        print(refreshedLbBusSchedule)
         lbBusSchedule = refreshedLbBusSchedule
         
 //        if (lbBusSchedule.routes.count > 0) {
