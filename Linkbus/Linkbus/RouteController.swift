@@ -47,6 +47,10 @@ extension RouteController {
             linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), dailyMessage: DailyMessageSettings(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
             refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
             
+            // TODO: Load CSB/SJU API as one group and our API plus daily message requests as another group.
+            // We can then display routes when they load and displays alerts after, once they load.
+            // Route data from our API can be injected into routes after the fact.
+            
             let dispatchGroup = DispatchGroup()
             
             // CSBSJU API
@@ -77,9 +81,7 @@ extension RouteController {
                         self.dailyMessage = response!
                         dispatchGroup.leave()
                     }
-                    
                 }
-                
             }
             
             // Linkbus API that connects to website
@@ -258,6 +260,7 @@ extension RouteController {
         if(csbsjuApiResponse.attention != nil){
             refreshedLbBusSchedule.attention = csbsjuApiResponse.attention!
         }
+        // Already set to empty string, see refreshedLbBusSchedule declaration
         else { refreshedLbBusSchedule.attention = "" }
         
         for apiAlert in linkbusApiResponse.alerts {
@@ -280,6 +283,7 @@ extension RouteController {
             refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
         }
         
+        // Routes
         if (!csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))

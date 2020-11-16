@@ -51,8 +51,7 @@ struct Home: View {
                             AlertList(routeController: routeController)
                             RouteList(routeController: routeController)
                         }
-                        // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
-                        .padding(.top, 1) // TODO: alex this was changed to 0.4 take a look at mic's new commits
+                        .padding(.top, 0.3) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
                         .navigationBarTitle(self.menuBarTitle)
                         //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     } else { // iOS 13
@@ -153,7 +152,7 @@ func titleGretting(self: Home) {
     
     if (timeOfDayChanged) {
         if (self.timeOfDay == "night") {
-            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 😴"]
+            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 🌌", "Goodnight 😴"]
             let randomGreeting = nightGreetings.randomElement()
             self.greeting = randomGreeting!
         } else if (self.timeOfDay == "morning") {
