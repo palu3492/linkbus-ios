@@ -17,7 +17,8 @@
                        v-bind:action="alert.action" v-bind:clickable="alert.clickable" v-bind:alertDoc="alert"
                        v-bind:openEditModal="openEditModal" v-bind:openDeleteModal="openDeleteModal"
                        v-bind:active="alert.active" v-bind:fullWidth="alert.fullWidth"
-                       v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" v-bind:signedIn="signedIn"/>
+                       v-bind:color="alert.color" v-bind:colorCode="alert.colorCode" v-bind:signedIn="signedIn"
+                       v-bind:start="alert.start" v-bind:end="alert.end" />
             </div>
             <p v-else class="ml-2 mt-3 mb-0">No Alerts</p>
         </div>

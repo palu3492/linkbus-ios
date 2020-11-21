@@ -63,7 +63,19 @@ const processRoutesResponse = (snapshot) => {
   });
   return docs;
 }
-
+const processDailyMessageResponse = (snapshot) => {
+  let dailyMessageOptions = {};
+  let i = 0;
+  snapshot.forEach(doc => {
+    if(i === 0) {
+      const data = doc.data();
+      const id = doc.id;
+      dailyMessageOptions = {id, ...data};
+    }
+    i++;
+  });
+  return dailyMessageOptions;
+}
 app.get('/', async (req, res) => {
   const alertsSnapshot = await db.collection("alerts")
       .where('uid', '==', adminUserId)
@@ -73,9 +85,12 @@ app.get('/', async (req, res) => {
   const routesSnapshot = await db.collection("routes")
       .where('uid', '==', adminUserId)
       .get()
+  const dailyMessageSnapshot = await db.collection("messages")
+      .get()
   let alerts = processAlertsResponse(alertsSnapshot);
   let routes = processRoutesResponse(routesSnapshot);
-  const json = {alerts: alerts, routes: routes}
+  let dailyMessage = processDailyMessageResponse(dailyMessageSnapshot);
+  const json = {alerts: alerts, routes: routes, dailyMessage: dailyMessage}
   res.status(200).send(JSON.stringify(json));
 });
 

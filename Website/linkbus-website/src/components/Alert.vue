@@ -34,6 +34,12 @@
                         <p v-if="clickable" class="ml-1 mb-0"><a :href="action" target="_blank">{{ action }}</a></p>
                         <BIconXCircle v-else class="ml-2 mt-1" variant="danger" />
                     </b-col>
+                    <b-col cols="auto" class="px-2 d-flex mt-4">
+                        <BIconClock class="mr-1 mt-1" />
+                        <p class="">{{ startDate }}</p>
+                        <BIconArrowRight class="mx-2 mt-1"/>
+                        <p class="">{{ endDate }}</p>
+                    </b-col>
                 </b-row>
             </b-col>
             <b-col class="pl-md-3 pt-md-0 pr-0 pl-0 pt-3 justify-content-around d-flex" cols="auto" v-if="signedIn">
@@ -46,8 +52,9 @@
 </template>
 
 <script>
-    import { BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle } from 'bootstrap-vue'
+    import { BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle, BIconClock, BIconArrowRight } from 'bootstrap-vue'
     // import Option from "./Option";
+    import moment from "moment";
     export default {
         name: "Alert",
         props: {
@@ -61,10 +68,12 @@
             alertDoc: Object,
             openEditModal: Function,
             openDeleteModal: Function,
-            signedIn: Boolean
+            signedIn: Boolean,
+            start: Object,
+            end: Object
         },
         components: {
-            BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle
+            BIconPencilSquare, BIconXSquare, BIconCheckCircle, BIconXCircle, BIconClock, BIconArrowRight
         },
         // data() {
         //     return {
@@ -80,7 +89,18 @@
                     bg = this.color;
                 }
                 return `background-color: ${bg}`;
-            }
+            },
+            startDate() {
+                const date = moment(this.start.toDate());
+                return date.format('L LT');
+            },
+            endDate() {
+                if(this.end.length === 0) {
+                    return "Indefinite";
+                }
+                const date = moment(this.end.toDate());
+                return date.calendar();
+            },
         }
     }
 </script>
