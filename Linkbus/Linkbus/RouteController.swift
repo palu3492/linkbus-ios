@@ -9,8 +9,8 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
-//  let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
+    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api" // /?date=11/23/2020
+//    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
@@ -276,11 +276,14 @@ extension RouteController {
             let dailyMessageAlert: Alert;
             // Will be default if not overwritten by our API
             let dailyMessageSettings = linkbusApiResponse.dailyMessage
-            dailyMessageAlert = Alert(id: dailyMessageSettings.id, active: dailyMessageSettings.active, text: self.dailyMessage,
-                                      clickable: dailyMessageSettings.clickable, action: dailyMessageSettings.action,
-                                      fullWidth: dailyMessageSettings.fullWidth, color: dailyMessageSettings.color,
-                                      rgb: dailyMessageSettings.rgb)
-            refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
+            // Only render if active
+            if(dailyMessageSettings.active) {
+                dailyMessageAlert = Alert(id: dailyMessageSettings.id, active: dailyMessageSettings.active, text: self.dailyMessage,
+                                          clickable: dailyMessageSettings.clickable, action: dailyMessageSettings.action,
+                                          fullWidth: dailyMessageSettings.fullWidth, color: dailyMessageSettings.color,
+                                          rgb: dailyMessageSettings.rgb)
+                refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
+            }
         }
         
         // Routes

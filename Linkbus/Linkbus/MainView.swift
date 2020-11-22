@@ -45,7 +45,7 @@ struct Home: View {
     
     var body: some View {
             NavigationView {
-                if(routeController.initalWebRequestFinished) {
+//                if(routeController.initalWebRequestFinished) {
                     if #available(iOS 14.0, *) { // iOS 14
                         ScrollView {
                             AlertList(routeController: routeController)
@@ -65,15 +65,15 @@ struct Home: View {
                         //.transition(.opacity)
                         //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
                     }
-                } else {
-                    VStack() {
-//                        Text("Loading")
-                        ActivityIndicator(isAnimating: .constant(true), style: .large)
-                    }
-                    .navigationBarTitle(self.menuBarTitle)
-                    Spacer() // Makes the alerts and routes animate in from bottom
+//                } else {
+//                    VStack() {
+////                        Text("Loading")
+//                        ActivityIndicator(isAnimating: .constant(true), style: .large)
+//                    }
+//                    .navigationBarTitle(self.menuBarTitle)
+//                    Spacer() // Makes the alerts and routes animate in from bottom
                 }
-            }
+//            }
             .onAppear {
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 let isFirstLaunch = appDelegate.isFirstLaunch()
@@ -94,7 +94,7 @@ struct Home: View {
                     // Online Status
                     titleOnlineStatus(self: self, routeController: self.routeController)
                     // Greeting
-                    titleGretting(self: self)
+                    titleGreeting(self: self)
                 }
                 self.counter += 1
                 // Auto refresh
@@ -124,7 +124,7 @@ func titleOnlineStatus(self: Home, routeController: RouteController) {
     }
 }
 
-func titleGretting(self: Home) {
+func titleGreeting(self: Home) {
     let currentDate = Date()
     let calendar = Calendar(identifier: .gregorian)
     let hour = calendar.component(.hour, from: currentDate)
