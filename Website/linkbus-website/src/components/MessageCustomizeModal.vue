@@ -2,7 +2,7 @@
     <b-modal id="bv-modal-message" v-model="showModal">
         <div slot="modal-header" class="m-modal-header">
             <div>
-                <h5 class="modal-title">Customize Message</h5>
+                <h5 class="modal-title">Customize Daily Message</h5>
             </div>
             <button type="button" aria-label="Close" class="close" @click="hideModal">×</button>
         </div>

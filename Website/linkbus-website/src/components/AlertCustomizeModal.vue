@@ -1,5 +1,11 @@
 <template>
     <b-form>
+        <div class="mb-2">
+            <div class="alert-container m-0 d-flex" style="background-color: #00000012">
+                <span class="alert-preview m-0" :style="alertPreviewStyle">{{ alertText }}</span>
+            </div>
+        </div>
+
         <div class="d-flex">
             <b-input-group style="width: auto">
                 <span class="mr-2">Active</span>
@@ -118,27 +124,42 @@
                 // this.formData.end.date = this.formData.start.date
                 // this.formData.end.time = this.formData.start.time
                 return this.end
+            },
+            alertPreviewStyle() {
+                let bg = ''
+                if(this.formData.color === ''){
+                    bg = this.formData.colorCode;
+                } else {
+                    bg = this.formData.color;
+                }
+                let width = ""
+                if(this.formData.fullWidth) {
+                    width = "100%";
+                } else {
+                    width = "auto";
+                }
+                return `background-color: ${bg}; width: ${width}`;
+            },
+            alertText() {
+                if(this.formData.text.length === 0){
+                    return "Sample alert message"
+                }
+                return this.formData.text;
             }
-            // startComp() {
-            //     const [date, time] = this.formData.start.split(" ")
-            //     this.start = {
-            //         time: time,
-            //         date: date
-            //     }
-            //     return this.start
-            // },
-            // endComp() {
-            //     const [date, time] = this.formData.end.split(" ")
-            //     this.end = {
-            //         time: time,
-            //         date: date
-            //     }
-            //     return this.end
-            // }
         }
     }
 </script>
 
 <style scoped>
-
+    .alert-container {
+        border: solid 0;
+        border-radius: 1em;
+    }
+    .alert-preview {
+        color: white;
+        font-size: 1em;
+        border: solid 0;
+        border-radius: 1em;
+        padding: 0.5em;
+    }
 </style>

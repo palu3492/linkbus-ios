@@ -61,7 +61,8 @@
             showModal: Boolean,
             hideModal: Function,
             updateSuccessAlert: Function,
-            user: Object
+            user: Object,
+            order: Number
         },
         data() {
             return {
@@ -94,6 +95,7 @@
                 } else {
                     alertData.end = ""
                 }
+                alertData.order = this.order;
                 try{
                     await db.collection('alerts').add(alertData)
                     this.updateSuccessAlert('Alert Created!', 'success')

@@ -2,7 +2,7 @@
     <div>
         <!-- @click="openCreateModal" v-if="signedIn" -->
         <b-button size="sm" variant="outline-primary" class="m-1 mt-3" @click="openModal">
-            Customize Message
+            Customize Daily Message
         </b-button>
         <MessageCustomizeModal v-bind:showModal="showModal" v-bind:hideModal="hideModal" v-bind:message="message"
                                v-bind:updateSuccessAlert="updateSuccessAlert"/>
