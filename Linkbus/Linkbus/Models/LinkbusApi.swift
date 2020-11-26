@@ -25,6 +25,7 @@ struct Alert: Identifiable, Decodable {
     let fullWidth: Bool
     let color: String
     let rgb: RGBColor
+    let order: Int
 }
 
 struct RGBColor: Decodable {

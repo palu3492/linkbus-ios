@@ -29,13 +29,12 @@ struct Home: View {
         
         //UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
-        
+
         //        UITableView.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        UITableViewCell.appearance().backgroundColor = .clear
         //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        print(colorScheme)
-        
-        
+
         let time = Date()
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"

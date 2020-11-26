@@ -268,7 +268,9 @@ extension RouteController {
                 refreshedLbBusSchedule.alerts.append(apiAlert)
             }
         }
-        
+
+        refreshedLbBusSchedule.alerts = refreshedLbBusSchedule.alerts.sorted(by: { $0.order < $1.order });
+
         // Create alert from daily message
         // Website will be able to customize this in the near future
         if self.dailyMessage != "" {
@@ -281,7 +283,7 @@ extension RouteController {
                 dailyMessageAlert = Alert(id: dailyMessageSettings.id, active: dailyMessageSettings.active, text: self.dailyMessage,
                                           clickable: dailyMessageSettings.clickable, action: dailyMessageSettings.action,
                                           fullWidth: dailyMessageSettings.fullWidth, color: dailyMessageSettings.color,
-                                          rgb: dailyMessageSettings.rgb)
+                                          rgb: dailyMessageSettings.rgb, order: 99)
                 refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
             }
         }
