@@ -13,7 +13,7 @@ import SwiftUI
 struct LinkbusApi: Decodable {
     let alerts: [Alert]
     let routes: [RouteDetail]
-    let dailyMessage: DailyMessageSettings
+    let schoolAlertsSettings: [SchoolAlertsSettings]
 }
 
 struct Alert: Identifiable, Decodable {
@@ -42,7 +42,7 @@ struct Coordinates: Decodable {
     let longitude, latitude: Double
 }
 
-struct DailyMessageSettings: Decodable {
+struct SchoolAlertsSettings: Decodable {
     let id: String
     let active: Bool
     let clickable: Bool
@@ -50,4 +50,6 @@ struct DailyMessageSettings: Decodable {
     let fullWidth: Bool
     let color: String
     let rgb: RGBColor
+    let order: Int
+    let msgId: Int
 }

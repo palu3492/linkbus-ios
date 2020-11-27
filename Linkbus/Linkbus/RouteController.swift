@@ -14,7 +14,7 @@ class RouteController: ObservableObject {
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), dailyMessage: DailyMessageSettings(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
+    var linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), schoolAlertsSettings: [SchoolAlertsSettings]())
     
     @Published var lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
     @Published var refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
@@ -25,10 +25,12 @@ class RouteController: ObservableObject {
     private var webRequestInProgress: Bool
     public var initalWebRequestFinished: Bool // Used by main view
     
-    private var dailyMessage: String
+    private var dailyMessage = ""
+    private var campusAlert = ""
+    private var campusAlertLink = ""
     
     init() {
-        self.dailyMessage = ""
+//        self.dailyMessage = ""
         self.webRequestInProgress = false
         self.initalWebRequestFinished = false
         webRequest()
@@ -44,7 +46,7 @@ extension RouteController {
             self.localizedDescription = "default"
             
             csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
-            linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), dailyMessage: DailyMessageSettings(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
+            linkbusApiResponse = LinkbusApi(alerts: [Alert](), routes: [RouteDetail](), schoolAlertsSettings: [SchoolAlertsSettings]())
             refreshedLbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
             
             // TODO: Load CSB/SJU API as one group and our API plus daily message requests as another group.
@@ -56,19 +58,14 @@ extension RouteController {
             // CSBSJU API
             dispatchGroup.enter()
             fetchCsbsjuApi { apiResponse in
-                if apiResponse != nil {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if apiResponse != nil {
                         self.csbsjuApiResponse = apiResponse!
                         self.csbsjuApiOnlineStatus = "online"
-                        //print(self.csbsjuApiResponse)
-                        dispatchGroup.leave()
-                    }
-                }
-                else {
-                    DispatchQueue.main.async {
+                    } else {
                         self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
-                        dispatchGroup.leave()
                     }
+                    dispatchGroup.leave()
                 }
             }
             
@@ -76,11 +73,22 @@ extension RouteController {
             // Website does not always have a message
             dispatchGroup.enter()
             fetchDailyMessage { response in
-                if response != nil {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if response != nil {
                         self.dailyMessage = response!
-                        dispatchGroup.leave()
                     }
+                    dispatchGroup.leave()
+                }
+            }
+            
+            // Campus alert
+            dispatchGroup.enter()
+            fetchCampusAlert { response in
+                DispatchQueue.main.async {
+                    if response != nil {
+                        self.processCampusAlert(data: response!)
+                    }
+                    dispatchGroup.leave()
                 }
             }
             
@@ -149,7 +157,7 @@ extension RouteController {
     
     /**
      Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
-     After fetching the data, processDailyMessage() is called to grok the data into just the daily message string.
+     After fetching the data, processDailyMessage() is called to parse the data into just the daily message string.
      - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
      
      - Returns: calls completion handler with daily message as argument or returns nill on error.
@@ -217,6 +225,76 @@ extension RouteController {
         // Return empty string if regex does not work
         return ""
     }
+
+    /**
+     Fetches the csbsju.com html and parses into the campus alert message text and link
+     - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
+     
+     - Returns: calls completion handler with daily message as argument or returns nill on error.
+     */
+    func fetchCampusAlert(completionHandler: @escaping (Data?) -> Void) {
+        let url = URL(string: "https://csbsju.edu/")
+        // Create request
+        let request = URLRequest(url: url!)
+        // Create url session to send request
+        let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            if let error = error {
+                print("Error with fetching daily message: \(error)")
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print("Error with the response, unexpected status code: \(String(describing: response))")
+                return
+            }
+            // Process HTML into data we care about, the "daily message"
+//            let campusAlert = self.processCampusAlert(data: data!)
+            completionHandler(data)
+        })
+        task.resume()
+    }
+
+    /**
+     Processes the csbaju.com html into the campus alert text and link strings.
+     - Parameter data: The fetched bus schedule website HTML.
+     
+     - Returns: Daily message string or empty string.
+     */
+    func processCampusAlert(data: Data) {
+        // Use regex to parse HTML
+        let dataString = String(decoding: data, as: UTF8.self)
+        let pattern = #"CampusAlert"><h5>(?><a href="([^"]+?)"[^>]*?>([^<]+?)<|([^<]+?)<)"#
+        // Capture both text and link or just text if no link
+        var regex: NSRegularExpression
+            do {
+                regex = try NSRegularExpression(pattern: pattern)
+            } catch {
+                return
+            }
+        let searchRange = NSRange(location: 0, length: dataString.utf16.count)
+        let matches = regex.matches(in: dataString, options: [], range: searchRange)
+        guard let match = matches.first else { return }
+        if match.numberOfRanges > 2 {
+            let lastRangeIndex = match.numberOfRanges - 2
+            // Two groups captured
+            if lastRangeIndex > 1 {
+                // 1st capture group: Link of Campus Alert
+                var capturedGroupIndex = match.range(at: 1)
+                var matchedString = (dataString as NSString).substring(with: capturedGroupIndex)
+                self.campusAlertLink = matchedString
+                // 2st capture group: Text of Campus Alert
+                capturedGroupIndex = match.range(at: 2)
+                matchedString = (dataString as NSString).substring(with: capturedGroupIndex)
+                self.campusAlert = matchedString
+            // One goup captured
+            } else {
+                // 1st capture group: Text of Campus Alert
+                let capturedGroupIndex = match.range(at: 1)
+                let matchedString = (dataString as NSString).substring(with: capturedGroupIndex)
+                self.campusAlert = matchedString
+            }
+        }
+    }
     
     /**
      Fetches the Linkbus API json data including the alerts and additional route info.
@@ -249,6 +327,50 @@ extension RouteController {
         task.resume()
     }
     
+    func addSchoolMessageAlerts() {
+        // )(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
+        if linkbusApiResponse.schoolAlertsSettings.count == 2 {
+            // Create alert from Bus Message
+            // Only add alert if message is not empty string
+            if self.dailyMessage != "" {
+                // Will be default if not overwritten by our API
+                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 0})
+                let busMessageSettings = linkbusApiResponse.schoolAlertsSettings[index!]
+                // Only render if active
+                if(busMessageSettings.active) {
+                    let dailyMessageAlert = Alert(id: busMessageSettings.id, active: busMessageSettings.active, text: self.dailyMessage,
+                                              clickable: busMessageSettings.clickable, action: busMessageSettings.action,
+                                              fullWidth: busMessageSettings.fullWidth, color: busMessageSettings.color,
+                                              rgb: busMessageSettings.rgb, order: busMessageSettings.order)
+                    refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
+                }
+            }
+            
+            // Create alert from daily message
+            // Website will be able to customize this in the near future
+            
+            if self.campusAlert != "" {
+                // Will be default if not overwritten by our API
+                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 1})
+                let campusAlertSettings = linkbusApiResponse.schoolAlertsSettings[index!]
+                // Only render if active
+                if(campusAlertSettings.active) {
+                    var action = ""
+                    var clickable = false
+                    if(self.campusAlertLink != "") {
+                        action = self.campusAlertLink
+                        clickable = true
+                    }
+                    let campusAlertAlert = Alert(id: campusAlertSettings.id, active: campusAlertSettings.active, text: self.campusAlert,
+                                              clickable: clickable, action: action,
+                                              fullWidth: campusAlertSettings.fullWidth, color: campusAlertSettings.color,
+                                              rgb: campusAlertSettings.rgb, order: campusAlertSettings.order)
+                    refreshedLbBusSchedule.alerts.append(campusAlertAlert)
+                }
+            }
+        }
+    }
+    
     func processJson() {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
@@ -268,25 +390,12 @@ extension RouteController {
                 refreshedLbBusSchedule.alerts.append(apiAlert)
             }
         }
-
+        
+        // Adds Campus Alert and Bus Message alerts
+        addSchoolMessageAlerts()
+        
+        // Order the alerts
         refreshedLbBusSchedule.alerts = refreshedLbBusSchedule.alerts.sorted(by: { $0.order < $1.order });
-
-        // Create alert from daily message
-        // Website will be able to customize this in the near future
-        if self.dailyMessage != "" {
-            // Only add to alerts if message is not empty string
-            let dailyMessageAlert: Alert;
-            // Will be default if not overwritten by our API
-            let dailyMessageSettings = linkbusApiResponse.dailyMessage
-            // Only render if active
-            if(dailyMessageSettings.active) {
-                dailyMessageAlert = Alert(id: dailyMessageSettings.id, active: dailyMessageSettings.active, text: self.dailyMessage,
-                                          clickable: dailyMessageSettings.clickable, action: dailyMessageSettings.action,
-                                          fullWidth: dailyMessageSettings.fullWidth, color: dailyMessageSettings.color,
-                                          rgb: dailyMessageSettings.rgb, order: 99)
-                refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
-            }
-        }
         
         // Routes
         if (!csbsjuApiResponse.routes!.isEmpty) {
