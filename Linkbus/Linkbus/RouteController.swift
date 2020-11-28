@@ -332,7 +332,7 @@ extension RouteController {
         if linkbusApiResponse.schoolAlertsSettings.count == 2 {
             // Create alert from Bus Message
             // Only add alert if message is not empty string
-            if self.dailyMessage != "" {
+            if self.dailyMessage != "" && self.dailyMessage.firstIndex(of: ">") == nil  && self.dailyMessage.firstIndex(of: "<") == nil && self.dailyMessage.count < 300 {
                 // Will be default if not overwritten by our API
                 let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 0})
                 let busMessageSettings = linkbusApiResponse.schoolAlertsSettings[index!]
@@ -348,8 +348,7 @@ extension RouteController {
             
             // Create alert from daily message
             // Website will be able to customize this in the near future
-            
-            if self.campusAlert != "" {
+            if self.campusAlert != "" && self.campusAlert.firstIndex(of: ">") == nil  && self.campusAlert.firstIndex(of: "<") == nil && self.campusAlert.count < 300 {
                 // Will be default if not overwritten by our API
                 let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 1})
                 let campusAlertSettings = linkbusApiResponse.schoolAlertsSettings[index!]
