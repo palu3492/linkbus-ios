@@ -22,22 +22,34 @@ class RouteController: ObservableObject {
     @Published var deviceOnlineStatus = ""
     @Published var csbsjuApiOnlineStatus = ""
     
-    private var webRequestInProgress: Bool
-    public var initalWebRequestFinished: Bool // Used by main view
+    private var webRequestInProgress = false
+    public var initalWebRequestFinished = false // Used by main view
     
     private var dailyMessage = ""
     private var campusAlert = ""
     private var campusAlertLink = ""
     
+    public var selectedDate = Date()
+    public var dateIsChanged = false;
+    
     init() {
-//        self.dailyMessage = ""
-        self.webRequestInProgress = false
-        self.initalWebRequestFinished = false
         webRequest()
     }
 }
 
 extension RouteController {
+    
+    func changeDateWebRequest() {
+        dateIsChanged = true;
+        webRequest();
+    }
+    
+    func exitChangeDate() {
+        self.lbBusSchedule.routes = []
+        self.selectedDate = Date()
+        webRequest();
+        dateIsChanged = false
+    }
     
     func webRequest() {
         
@@ -111,7 +123,13 @@ extension RouteController {
     }
     
     func fetchCsbsjuApi(completionHandler: @escaping (BusSchedule?) -> Void) {
-        let url = URL(string: CsbsjuApiUrl)!
+        // Format date object into string e.g. 10/23/20
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        let formattedDate = formatter.string(from: selectedDate)
+        // Add date to URL
+        let urlString = CsbsjuApiUrl + "?date=" + formattedDate
+        let url = URL(string: urlString)!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {

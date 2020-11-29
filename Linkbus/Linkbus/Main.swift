@@ -23,6 +23,18 @@ struct Home: View {
     @State var lastRefreshTime = ""
     @State var greeting = "Linkbus"
     
+    @State var showingChangeDate = false
+    
+    
+    var calendarButton: some View {
+        Button(action: { self.showingChangeDate.toggle() }) {
+            Image(systemName: "calendar")
+                .imageScale(.large)
+                .accessibility(label: Text("Change Date"))
+                .padding()
+        }
+    }
+    
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
         self.routeController = RouteController()
@@ -48,21 +60,27 @@ struct Home: View {
                     if #available(iOS 14.0, *) { // iOS 14
                         ScrollView {
                             AlertList(routeController: routeController)
-                            RouteList(routeController: routeController)
+                            if !self.routeController.dateIsChanged {
+                                RouteList(routeController: routeController)
+                            }
                         }
                         .padding(.top, 0.3) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
                         .navigationBarTitle(self.menuBarTitle)
                         //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                        .navigationBarItems(trailing: calendarButton)
                     } else { // iOS 13
                         List {
                             AlertList(routeController: routeController)
-                            RouteList(routeController: routeController)
+                            if !self.routeController.dateIsChanged {
+                                RouteList(routeController: routeController)
+                            }
                         }
                         .transition(.opacity)
                         .animation(.default)
                         .navigationBarTitle(self.menuBarTitle)
                         //.transition(.opacity)
                         //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                        .navigationBarItems(trailing: calendarButton)
                     }
 //                } else {
 //                    VStack() {
@@ -98,6 +116,11 @@ struct Home: View {
                 self.counter += 1
                 // Auto refresh
                 autoRefreshData(self: self)
+            }
+            .sheet(isPresented: $showingChangeDate, onDismiss: {
+                self.routeController.exitChangeDate()
+            }) {
+                ChangeDate(routeController: routeController)
             }
     }
 }
