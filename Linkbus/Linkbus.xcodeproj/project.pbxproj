@@ -19,8 +19,9 @@
 		4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */; };
 		4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */; };
 		4CB762DD24F76582001FA9CB /* AlertCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB762DC24F76582001FA9CB /* AlertCard.swift */; };
+		7C5A9AC1257329D8001F6458 /* ChangeDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A9AC0257329D8001F6458 /* ChangeDate.swift */; };
 		7CE8525B254F95580018F456 /* AlertList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8525A254F95580018F456 /* AlertList.swift */; };
-		7CE8525E254F96850018F456 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8525D254F96850018F456 /* MainView.swift */; };
+		7CE8525E254F96850018F456 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8525D254F96850018F456 /* Main.swift */; };
 		B7394866229F194000C47603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394865229F194000C47603 /* AppDelegate.swift */; };
 		B7394868229F194000C47603 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7394867229F194000C47603 /* SceneDelegate.swift */; };
 		B739486C229F194200C47603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B739486B229F194200C47603 /* Assets.xcassets */; };
@@ -47,8 +48,9 @@
 		4CB7629A24F31F71001FA9CB /* LinkbusApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkbusApi.swift; sourceTree = "<group>"; };
 		4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSheet.swift; sourceTree = "<group>"; };
 		4CB762DC24F76582001FA9CB /* AlertCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCard.swift; sourceTree = "<group>"; };
+		7C5A9AC0257329D8001F6458 /* ChangeDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeDate.swift; sourceTree = "<group>"; };
 		7CE8525A254F95580018F456 /* AlertList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlertList.swift; path = Models/AlertList.swift; sourceTree = "<group>"; };
-		7CE8525D254F96850018F456 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		7CE8525D254F96850018F456 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		B7394862229F194000C47603 /* Linkbus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkbus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7394865229F194000C47603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B7394867229F194000C47603 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,7 +127,8 @@
 				4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */,
 				7CE8525A254F95580018F456 /* AlertList.swift */,
 				4CB762DC24F76582001FA9CB /* AlertCard.swift */,
-				7CE8525D254F96850018F456 /* MainView.swift */,
+				7CE8525D254F96850018F456 /* Main.swift */,
+				7C5A9AC0257329D8001F6458 /* ChangeDate.swift */,
 				B739487D229F1C0100C47603 /* Supporting Views */,
 				B7394883229F291A00C47603 /* Resources */,
 				B739486B229F194200C47603 /* Assets.xcassets */,
@@ -250,12 +253,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CB7629324F2FE9C001FA9CB /* RouteController.swift in Sources */,
+				7C5A9AC1257329D8001F6458 /* ChangeDate.swift in Sources */,
 				B7394882229F28B900C47603 /* Data.swift in Sources */,
 				4CB7629724F30918001FA9CB /* LbTime.swift in Sources */,
 				4C38F0E42547BDDE00C92EE6 /* OnboardingView.swift in Sources */,
 				B7394866229F194000C47603 /* AppDelegate.swift in Sources */,
 				4CB7628F24F2F3ED001FA9CB /* CsbsjuApi.swift in Sources */,
-				7CE8525E254F96850018F456 /* MainView.swift in Sources */,
+				7CE8525E254F96850018F456 /* Main.swift in Sources */,
 				4CAECD2D24F1DDBB005F6E87 /* RouteCard.swift in Sources */,
 				4CB762DB24F5D63D001FA9CB /* RouteSheet.swift in Sources */,
 				4CB7629B24F31F71001FA9CB /* LinkbusApi.swift in Sources */,
@@ -335,7 +339,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -391,7 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
