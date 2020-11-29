@@ -19,8 +19,7 @@ struct ChangeDate: View {
         Binding<Date>(get: {self.selectedDate }, set: {
             self.selectedDate = $0
             self.routeController.selectedDate = self.selectedDate
-            self.routeController.changeDateWebRequest()
-            print("Change")
+            self.routeController.onDateChanged()
         })
     }
     
