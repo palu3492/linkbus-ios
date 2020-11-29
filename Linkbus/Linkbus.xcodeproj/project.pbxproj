@@ -49,6 +49,7 @@
 		4CB762DA24F5D63C001FA9CB /* RouteSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSheet.swift; sourceTree = "<group>"; };
 		4CB762DC24F76582001FA9CB /* AlertCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCard.swift; sourceTree = "<group>"; };
 		7C5A9AC0257329D8001F6458 /* ChangeDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeDate.swift; sourceTree = "<group>"; };
+		7C5A9AC625733E14001F6458 /* Linkbus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Linkbus.entitlements; sourceTree = "<group>"; };
 		7CE8525A254F95580018F456 /* AlertList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlertList.swift; path = Models/AlertList.swift; sourceTree = "<group>"; };
 		7CE8525D254F96850018F456 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		B7394862229F194000C47603 /* Linkbus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linkbus.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +118,7 @@
 		B7394864229F194000C47603 /* Linkbus */ = {
 			isa = PBXGroup;
 			children = (
+				7C5A9AC625733E14001F6458 /* Linkbus.entitlements */,
 				B739487E229F282200C47603 /* Models */,
 				B7394865229F194000C47603 /* AppDelegate.swift */,
 				B7394867229F194000C47603 /* SceneDelegate.swift */,
@@ -410,6 +412,7 @@
 			baseConfigurationReference = FB75835CADF255844DAD0DAD /* SampleCode.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Linkbus/Linkbus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
@@ -434,6 +437,7 @@
 			baseConfigurationReference = FB75835CADF255844DAD0DAD /* SampleCode.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Linkbus/Linkbus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "Linkbus/Preview\\ Content";
