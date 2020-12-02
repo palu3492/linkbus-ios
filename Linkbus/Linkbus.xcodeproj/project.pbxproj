@@ -412,6 +412,7 @@
 				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Linkbus/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -436,6 +437,7 @@
 				DEVELOPMENT_TEAM = 2S7B3MHJRB;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Linkbus/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
