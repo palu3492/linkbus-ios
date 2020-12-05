@@ -39,7 +39,7 @@ struct RouteList: View {
 }
 
 struct Routes: View {
-    let routeController: RouteController
+    @ObservedObject var routeController: RouteController
     init(routeController: RouteController) {
         self.routeController = routeController
     }

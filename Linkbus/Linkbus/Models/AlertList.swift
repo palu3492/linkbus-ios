@@ -38,7 +38,7 @@ struct AlertList: View {
 }
 
 struct Alerts: View {
-    let routeController: RouteController
+    @ObservedObject var routeController: RouteController
     init(routeController: RouteController) {
         self.routeController = routeController
     }
