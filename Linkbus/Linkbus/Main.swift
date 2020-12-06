@@ -118,7 +118,7 @@ struct Home: View {
                 autoRefreshData(self: self)
             }
             .sheet(isPresented: $showingChangeDate, onDismiss: {
-                self.routeController.exitChangeDate()
+                self.routeController.resetDate()
             }) {
                 ChangeDate(routeController: routeController)
             }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api" // /?date=11/23/2020
+    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
 //    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
@@ -29,7 +29,7 @@ class RouteController: ObservableObject {
     private var campusAlert = ""
     private var campusAlertLink = ""
     
-    public var selectedDate = Date()
+    private var selectedDate = Date()
     public var dateIsChanged = false;
     
     init() {
@@ -40,9 +40,10 @@ class RouteController: ObservableObject {
 extension RouteController {
     
     /**
-     Called when the date is changed on the select date view.
+     Changes the selected date. Called when the date is changed on the select date view.
      */
-    func onDateChanged() {
+    func changeDate(selectedDate: Date) {
+        self.selectedDate = selectedDate
         self.dateIsChanged = true
         routesWebRequest()
     }
@@ -50,7 +51,7 @@ extension RouteController {
     /**
      Resets routes and loads todays routes. Called when leaving the select date sheet.
      */
-    func exitChangeDate() {
+    func resetDate() {
         if self.dateIsChanged {
             self.lbBusSchedule.routes = []
             self.selectedDate = Date()
@@ -418,6 +419,7 @@ extension RouteController {
      Creates all the alerts
      */
     func processAlerts() {
+//        print("processAlerts")
         for apiAlert in linkbusApiResponse.alerts {
             if (apiAlert.active) {
                 refreshedLbBusSchedule.alerts.append(apiAlert)
@@ -483,6 +485,7 @@ extension RouteController {
      Creates all the routes from CSB/SJU API
      */
     func processRoutes() {
+//        print("processRoutes")
         if (!csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
@@ -514,7 +517,6 @@ extension RouteController {
                             if (startDate <= Date()) {
                                 current = true
                             }
-                            
                             
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
@@ -571,6 +573,7 @@ extension RouteController {
                         tempRoute.state = linkbusApiResponse.routes[i].state
                         tempRoute.coordinates = linkbusApiResponse.routes[i].coordinates
                     }
+//                    print(linkbusApiResponse.routes)
                     
                     // next bus timer logic:
                     
