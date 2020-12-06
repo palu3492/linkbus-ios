@@ -74,6 +74,7 @@ struct ChangeDate: View {
                             if #available(iOS 14.0, *) {
                                 DatePicker(
                                     selection: dateProxy,
+                                    in: Date()...,
                                     displayedComponents: .date,
                                     label:{ Text("Selected Date") }
                                 )
@@ -85,6 +86,7 @@ struct ChangeDate: View {
                             } else {
                                 DatePicker(
                                     selection: dateProxy,
+                                    in: Date()...,
                                     displayedComponents: .date,
                                     label:{ Text("Selected Date") }
                                 )
