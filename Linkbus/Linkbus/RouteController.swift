@@ -9,7 +9,7 @@
 import SwiftUI
 
 class RouteController: ObservableObject {
-    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api" // /?date=11/23/2020
+    let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
 //    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
@@ -22,22 +22,68 @@ class RouteController: ObservableObject {
     @Published var deviceOnlineStatus = ""
     @Published var csbsjuApiOnlineStatus = ""
     
-    private var webRequestInProgress: Bool
-    public var initalWebRequestFinished: Bool // Used by main view
+    private var webRequestInProgress = false
+    public var initalWebRequestFinished = false // Used by main view
     
     private var dailyMessage = ""
     private var campusAlert = ""
     private var campusAlertLink = ""
     
+    private var selectedDate = Date()
+    public var dateIsChanged = false;
+    
     init() {
-//        self.dailyMessage = ""
-        self.webRequestInProgress = false
-        self.initalWebRequestFinished = false
         webRequest()
     }
 }
 
 extension RouteController {
+    
+    /**
+     Changes the selected date. Called when the date is changed on the select date view.
+     */
+    func changeDate(selectedDate: Date) {
+        self.selectedDate = selectedDate
+        self.dateIsChanged = true
+        routesWebRequest()
+    }
+    
+    /**
+     Resets routes and loads todays routes. Called when leaving the select date sheet.
+     */
+    func resetDate() {
+        if self.dateIsChanged {
+            self.lbBusSchedule.routes = []
+            self.selectedDate = Date()
+            routesWebRequest()
+            dateIsChanged = false
+        }
+    }
+    
+    /**
+     Fetches routes from CSB/SJU API and updates the routes.
+     */
+    func routesWebRequest() {
+        self.refreshedLbBusSchedule.routes = []
+        // Grab the most up to date routes
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        fetchCsbsjuApi { apiResponse in
+            DispatchQueue.main.async {
+                if apiResponse != nil {
+                    self.csbsjuApiResponse = apiResponse!
+                    self.csbsjuApiOnlineStatus = "online"
+                } else {
+                    self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
+                }
+                dispatchGroup.leave()
+            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            self.processRoutes()
+            self.lbBusSchedule.routes = self.refreshedLbBusSchedule.routes
+        }
+    }
     
     func webRequest() {
         
@@ -72,7 +118,7 @@ extension RouteController {
             // Daily message alert
             // Website does not always have a message
             dispatchGroup.enter()
-            fetchDailyMessage { response in
+            fetchBusMessage { response in
                 DispatchQueue.main.async {
                     if response != nil {
                         self.dailyMessage = response!
@@ -104,14 +150,20 @@ extension RouteController {
             }
             
             dispatchGroup.notify(queue: .main) {
-                self.processJson()
+                self.processRoutesAndAlerts()
             }
         }
         
     }
     
     func fetchCsbsjuApi(completionHandler: @escaping (BusSchedule?) -> Void) {
-        let url = URL(string: CsbsjuApiUrl)!
+        // Format date object into string e.g. 10/23/20
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        let formattedDate = formatter.string(from: selectedDate)
+        // Add date to URL
+        let urlString = CsbsjuApiUrl + "?date=" + formattedDate
+        let url = URL(string: urlString)!
         
         let task = URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             if let error = error {
@@ -156,13 +208,13 @@ extension RouteController {
     }
     
     /**
-     Fetches the bus schedule website html that contains the daily message, seen here  https://apps.csbsju.edu/busschedule/
-     After fetching the data, processDailyMessage() is called to parse the data into just the daily message string.
+     Fetches the bus schedule website html that contains the bus message, seen here  https://apps.csbsju.edu/busschedule/
+     After fetching the data, processBusMessage() is called to parse the data into just the bus message string.
      - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
      
-     - Returns: calls completion handler with daily message as argument or returns nill on error.
+     - Returns: calls completion handler with bus message as argument or returns nill on error.
      */
-    func fetchDailyMessage(completionHandler: @escaping (String?) -> Void) {
+    func fetchBusMessage(completionHandler: @escaping (String?) -> Void) {
         let url = URL(string: "https://apps.csbsju.edu/busschedule/default.aspx")
         // Create request
         var request = URLRequest(url: url!)
@@ -170,9 +222,9 @@ extension RouteController {
         request.httpMethod = "POST"
         // Add body (form data)
         var postString = ""
+        // Allows for date to be changed. We probably won't ever want to use this.
         //        let specifyData = false
         //        if specifyData {
-        //            // Allows for date to be changed. Disabled by default. Implement later.
         //            let date = "9/20/2020"
         //            let dateEncoded = date.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         //            postString += "ctl00%24BodyContent%24BusSchedule%24SelectedDate=" + dateEncoded!
@@ -198,19 +250,19 @@ extension RouteController {
                 return
             }
             // Process HTML into data we care about, the "daily message"
-            let dailyMessage = self.processDailyMessage(data: data!)
+            let dailyMessage = self.processBusMessage(data: data!)
             completionHandler(dailyMessage)
         })
         task.resume()
     }
     
     /**
-     Processes the daily message website HTML into just the daily message string.
+     Processes the daily message website HTML into just the Bus message string.
      - Parameter data: The fetched bus schedule website HTML.
      
-     - Returns: Daily message string or empty string.
+     - Returns: Bus message string or empty string.
      */
-    func processDailyMessage(data: Data) -> String {
+    func processBusMessage(data: Data) -> String {
         // Use regex to parse HTML for daily message within p tag
         let dataString = String(decoding: data, as: UTF8.self)
         let pattern = #"TodayMsg"><p>([^<]*)<\/p>"#
@@ -228,9 +280,9 @@ extension RouteController {
 
     /**
      Fetches the csbsju.com html and parses into the campus alert message text and link
-     - Parameter completionHandler: The callback function to be executed on successful fetching of website html.
+     - Parameter completionHandler:The callback function to be executed on successful fetching of website html.
      
-     - Returns: calls completion handler with daily message as argument or returns nill on error.
+     - Returns: calls completion handler with campus alert as argument or returns on error.
      */
     func fetchCampusAlert(completionHandler: @escaping (Data?) -> Void) {
         let url = URL(string: "https://csbsju.edu/")
@@ -248,7 +300,6 @@ extension RouteController {
                 return
             }
             // Process HTML into data we care about, the "daily message"
-//            let campusAlert = self.processCampusAlert(data: data!)
             completionHandler(data)
         })
         task.resume()
@@ -257,10 +308,8 @@ extension RouteController {
     /**
      Processes the csbaju.com html into the campus alert text and link strings.
      - Parameter data: The fetched bus schedule website HTML.
-     
-     - Returns: Daily message string or empty string.
      */
-    func processCampusAlert(data: Data) {
+    func processCampusAlert(data: Data) -> Void {
         // Use regex to parse HTML
         let dataString = String(decoding: data, as: UTF8.self)
         let pattern = #"CampusAlert"><h5>(?><a href="([^"]+?)"[^>]*?>([^<]+?)<|([^<]+?)<)"#
@@ -327,54 +376,12 @@ extension RouteController {
         task.resume()
     }
     
-    func addSchoolMessageAlerts() {
-        // )(id: "321", active: true, clickable: false, action: "", fullWidth: false, color: "red", rgb: RGBColor(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.0)))
-        if linkbusApiResponse.schoolAlertsSettings.count == 2 {
-            // Create alert from Bus Message
-            // Only add alert if message is not empty string
-            if self.dailyMessage != "" {
-                // Will be default if not overwritten by our API
-                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 0})
-                let busMessageSettings = linkbusApiResponse.schoolAlertsSettings[index!]
-                // Only render if active
-                if(busMessageSettings.active) {
-                    let dailyMessageAlert = Alert(id: busMessageSettings.id, active: busMessageSettings.active, text: self.dailyMessage,
-                                              clickable: busMessageSettings.clickable, action: busMessageSettings.action,
-                                              fullWidth: busMessageSettings.fullWidth, color: busMessageSettings.color,
-                                              rgb: busMessageSettings.rgb, order: busMessageSettings.order)
-                    refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
-                }
-            }
-            
-            // Create alert from daily message
-            // Website will be able to customize this in the near future
-            
-            if self.campusAlert != "" {
-                // Will be default if not overwritten by our API
-                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 1})
-                let campusAlertSettings = linkbusApiResponse.schoolAlertsSettings[index!]
-                // Only render if active
-                if(campusAlertSettings.active) {
-                    var action = ""
-                    var clickable = false
-                    if(self.campusAlertLink != "") {
-                        action = self.campusAlertLink
-                        clickable = true
-                    }
-                    let campusAlertAlert = Alert(id: campusAlertSettings.id, active: campusAlertSettings.active, text: self.campusAlert,
-                                              clickable: clickable, action: action,
-                                              fullWidth: campusAlertSettings.fullWidth, color: campusAlertSettings.color,
-                                              rgb: campusAlertSettings.rgb, order: campusAlertSettings.order)
-                    refreshedLbBusSchedule.alerts.append(campusAlertAlert)
-                }
-            }
-        }
-    }
-    
-    func processJson() {
+    func processRoutesAndAlerts() {
         //print(apiBusSchedule.routes?.count)
         //let busSchedule = BusSchedule(msg: apiBusSchedule.msg!, attention: apiBusSchedule.attention!, routes: apiBusSchedule.routes!)
         
+        // Store msg and attention from the CSB/SJU API
+        // We're not using either of these curretly
         if(csbsjuApiResponse.msg != nil){
             refreshedLbBusSchedule.msg = csbsjuApiResponse.msg!
         }
@@ -385,6 +392,34 @@ extension RouteController {
         // Already set to empty string, see refreshedLbBusSchedule declaration
         else { refreshedLbBusSchedule.attention = "" }
         
+        // Create all the alerts
+        processAlerts()
+        
+        // Create all the routes
+        processRoutes()
+        
+        // Set the bus routes and alert data to the newly refreshed data
+        lbBusSchedule = refreshedLbBusSchedule
+        
+        //        if (lbBusSchedule.routes.count > 0) {
+        //            var iterator = lbBusSchedule.routes[0].times.makeIterator()
+        //            while let time = iterator.next() {
+        //                print(time.timeString)
+        //            }
+        //        }
+        
+        self.webRequestInProgress = false
+        // Only change this once
+        if(!self.initalWebRequestFinished){
+            self.initalWebRequestFinished = true
+        }
+    }
+    
+    /**
+     Creates all the alerts
+     */
+    func processAlerts() {
+//        print("processAlerts")
         for apiAlert in linkbusApiResponse.alerts {
             if (apiAlert.active) {
                 refreshedLbBusSchedule.alerts.append(apiAlert)
@@ -396,8 +431,61 @@ extension RouteController {
         
         // Order the alerts
         refreshedLbBusSchedule.alerts = refreshedLbBusSchedule.alerts.sorted(by: { $0.order < $1.order });
-        
-        // Routes
+    }
+    
+    /**
+     Creates alerts out of the campus alert and bus message if they are valid.
+     */
+    func addSchoolMessageAlerts() {
+        if linkbusApiResponse.schoolAlertsSettings.count == 2 {
+            // Create alert from bus message
+            // Only add alert if message is not empty string and is valid
+            if self.dailyMessage != "" && self.dailyMessage.firstIndex(of: ">") == nil  && self.dailyMessage.firstIndex(of: "<") == nil && self.dailyMessage.count < 300 {
+                // Find the setting which has msgId 0 meaning bus message settings
+                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 0})
+                let busMessageSettings = linkbusApiResponse.schoolAlertsSettings[index!]
+                // Only render if active
+                if(busMessageSettings.active) {
+                    // Create alert using website settings
+                    let dailyMessageAlert = Alert(id: busMessageSettings.id, active: busMessageSettings.active, text: self.dailyMessage,
+                                              clickable: busMessageSettings.clickable, action: busMessageSettings.action,
+                                              fullWidth: busMessageSettings.fullWidth, color: busMessageSettings.color,
+                                              rgb: busMessageSettings.rgb, order: busMessageSettings.order)
+                    refreshedLbBusSchedule.alerts.append(dailyMessageAlert)
+                }
+            }
+            
+            // Create alert from campus alert
+            // Only add alert if message is not empty string and is valid
+            if self.campusAlert != "" && self.campusAlert.firstIndex(of: ">") == nil  && self.campusAlert.firstIndex(of: "<") == nil && self.campusAlert.count < 300 {
+                // Find the setting which has msgId 1 meaning campus alert settings
+                let index = linkbusApiResponse.schoolAlertsSettings.firstIndex(where: {$0.msgId == 1})
+                let campusAlertSettings = linkbusApiResponse.schoolAlertsSettings[index!]
+                // Only render if active
+                if(campusAlertSettings.active) {
+                    // If link was found then add action to alert
+                    var action = ""
+                    var clickable = false
+                    if(self.campusAlertLink != "") {
+                        action = self.campusAlertLink
+                        clickable = true
+                    }
+                    // Create alert using website settings
+                    let campusAlertAlert = Alert(id: campusAlertSettings.id, active: campusAlertSettings.active, text: self.campusAlert,
+                                              clickable: clickable, action: action,
+                                              fullWidth: campusAlertSettings.fullWidth, color: campusAlertSettings.color,
+                                              rgb: campusAlertSettings.rgb, order: campusAlertSettings.order)
+                    refreshedLbBusSchedule.alerts.append(campusAlertAlert)
+                }
+            }
+        }
+    }
+    
+    /**
+     Creates all the routes from CSB/SJU API
+     */
+    func processRoutes() {
+//        print("processRoutes")
         if (!csbsjuApiResponse.routes!.isEmpty) {
             for apiRoute in csbsjuApiResponse.routes! {
                 var tempRoute = LbRoute(id: 0, title: "", times: [LbTime](), nextBusTimer: "", origin: "", originLocation: "", destination: "", destinationLocation: "", city: "", state: "", coordinates: Coordinates(longitude: 0, latitude: 0))
@@ -430,7 +518,6 @@ extension RouteController {
                                 current = true
                             }
                             
-                            
                             let textFormatter = DateFormatter()
                             textFormatter.dateFormat = "h:mm a"
                             
@@ -439,8 +526,7 @@ extension RouteController {
                             tempId+=1
                             tempTimes.append(LbTime(id: tempId, startDate: startDate, endDate: endDate, timeString: timeString, hasStart: true, lastBusClass: apiTime.lbc!, ss: apiTime.ss!, current: current))
                         }
-                    }
-                    else {
+                    } else {
                         let isoDate = apiTime.end
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "MM/dd/yyyy h:mm:ss a"
@@ -487,6 +573,7 @@ extension RouteController {
                         tempRoute.state = linkbusApiResponse.routes[i].state
                         tempRoute.coordinates = linkbusApiResponse.routes[i].coordinates
                     }
+//                    print(linkbusApiResponse.routes)
                     
                     // next bus timer logic:
                     
@@ -526,20 +613,5 @@ extension RouteController {
                 }
             }
         }
-//        print(refreshedLbBusSchedule)
-        lbBusSchedule = refreshedLbBusSchedule
-        
-        //        if (lbBusSchedule.routes.count > 0) {
-        //            var iterator = lbBusSchedule.routes[0].times.makeIterator()
-        //            while let time = iterator.next() {
-        //                print(time.timeString)
-        //            }
-        //        }
-        
-        self.webRequestInProgress = false
-        // Only change this once
-        if(!self.initalWebRequestFinished){
-            self.initalWebRequestFinished = true
-        }
-    }
+    } // End processRoutes()
 }
