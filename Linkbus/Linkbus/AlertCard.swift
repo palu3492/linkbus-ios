@@ -38,15 +38,16 @@ struct AlertCard: View {
         
         if alertColor != "" {
             // TODO: Check if color is in colors
-            color = colors[alertColor]!
-        } else {
-            color = Color(
+            color = colors[alertColor] ?? Color(
                 red: alertRgb.red,
                 green: alertRgb.green,
                 blue: alertRgb.blue,
                 opacity: alertRgb.opacity
-            )
+            )}
+        else {
+            color = Color.blue
         }
+        
         self.alertColor = color
         self.fullWidth = fullWidth
         self.clickable = clickable
@@ -57,24 +58,45 @@ struct AlertCard: View {
     
     var body: some View {
         Group(){
-            Text(alertText)
-                .foregroundColor(Color.white)
-                .padding(12)
-                .font(Font.custom("HelveticaNeue", size: 14))
-                .frame(maxWidth: self.fullWidth ? .infinity : nil, alignment: .leading)
-        }
-        .background(alertColor)
-        .cornerRadius(15)
-        .onTapGesture {
-            if clickable {
-                if (action == "webRequest") {
-                    self.routeController.webRequest()
-                }
-                else {
-                self.showingActionSheet = true
-                }
+            if !clickable {
+                Text(alertText)
+                    .foregroundColor(Color.white)
+                    .padding(12)
+                    .font(Font.custom("HelveticaNeue", size: 14))
+                    .frame(maxWidth: self.fullWidth ? .infinity : nil, alignment: .leading)
+                    .background(alertColor)
+                    .cornerRadius(15)
+            }
+            else {
+                Button(action: {
+                    if (action == "webRequest") {
+                        self.routeController.webRequest()
+                    }
+                    else if (action == "resetDate") {
+                        self.routeController.resetDate()
+                    }
+                    else if (action == "changeDateTomorrow") {
+                        let today = Date()
+                        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+                        self.routeController.changeDate(selectedDate: tomorrow)
+                    }
+                    else {
+                        self.showingActionSheet = true
+                    }
+                },
+                label: {
+                    Text(alertText)
+                        .foregroundColor(.white)
+                        .padding(12)
+                        .font(Font.custom("HelveticaNeue", size: 14))
+                        .frame(maxWidth: self.fullWidth ? .infinity : nil, alignment: .leading)
+                        .background(alertColor)
+                        .cornerRadius(15)
+                })
+                .animation(.none)
             }
         }
+        .buttonStyle(PlainButtonStyle())
         .actionSheet(isPresented: $showingActionSheet) {
             ActionSheet(title: Text(action), buttons: [
                 .default(Text("Open in Browser")) { UIApplication.shared.open(URL(string: action)!) },

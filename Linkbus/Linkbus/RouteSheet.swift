@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct RouteSheet: View {
+    @Environment(\.presentationMode) var presentationMode
     var route: LbRoute!
     
     @State private var totalHeight
@@ -187,7 +188,17 @@ struct RouteSheet: View {
                                         Spacer()
                                     }
                                 }
+//                                Button(action: { }, label: {
+//                                    Text("View tomorrow's schedule")
+//                                        .foregroundColor(.white)
+//                                        .padding(12)
+//                                        .font(Font.custom("HelveticaNeue", size: 14))
+//                                        .frame(alignment: .leading)
+//                                        .background(Color.green)
+//                                        .cornerRadius(15)
+//                                })
                             }
+                            .buttonStyle(PlainButtonStyle())
                             .padding(12)
                             .padding(.leading)
                         }
@@ -207,6 +218,7 @@ struct RouteSheet: View {
                 .navigationBarHidden(true)
                 
             }
+            .background(Color(UIColor.systemGroupedBackground)).edgesIgnoringSafeArea(.all)
         }
         
     }

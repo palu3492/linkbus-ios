@@ -10,7 +10,7 @@ import SwiftUI
 
 class RouteController: ObservableObject {
     let CsbsjuApiUrl = "https://apps.csbsju.edu/busschedule/api"
-//    let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
+    //let LinkbusApiUrl = "https://us-central1-linkbus-website.cloudfunctions.net/api" // Production API
     let LinkbusApiUrl = "https://us-central1-linkbus-website-development.cloudfunctions.net/api" // Development API
     
     var csbsjuApiResponse = BusSchedule(msg: "", attention: "", routes: [Route]())
@@ -29,7 +29,7 @@ class RouteController: ObservableObject {
     private var campusAlert = ""
     private var campusAlertLink = ""
     
-    private var selectedDate = Date()
+    public var selectedDate = Date()
     public var dateIsChanged = false;
     
     init() {
@@ -43,19 +43,28 @@ extension RouteController {
      Changes the selected date. Called when the date is changed on the select date view.
      */
     func changeDate(selectedDate: Date) {
+        let isSelectedDateToday = Calendar.current.isDateInToday(selectedDate)
+        if isSelectedDateToday {
+            resetDate()
+        }
+        else {
         self.selectedDate = selectedDate
+        print(selectedDate)
         self.dateIsChanged = true
-        routesWebRequest()
+        self.lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]()) // see below
+        webRequest() // doing a full webRequest here so that it clears the arrays, if it doesn't the animation is not smooth when switching dates. Also the extra time a full webRequest takes makes the animation more pleasant... although caching while switching days can also ruin the animation
+        }
     }
     
     /**
-     Resets routes and loads todays routes. Called when leaving the select date sheet.
+     Resets routes and loads todays routes
      */
     func resetDate() {
         if self.dateIsChanged {
             self.lbBusSchedule.routes = []
             self.selectedDate = Date()
-            routesWebRequest()
+            self.lbBusSchedule = LbBusSchedule(msg: "", attention: "", alerts: [Alert](), routes: [LbRoute]())
+            webRequest()
             dateIsChanged = false
         }
     }
@@ -169,6 +178,7 @@ extension RouteController {
             if let error = error {
                 DispatchQueue.main.async {
                     self.localizedDescription = error.localizedDescription
+                    print("Localized desc:" + self.localizedDescription)
                     self.deviceOnlineStatus = "offline"
                     self.webRequestInProgress = false
                 }
@@ -194,6 +204,9 @@ extension RouteController {
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
+                DispatchQueue.main.async {
+                    self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response"
+                }
                 return
             }
             do {
@@ -297,6 +310,11 @@ extension RouteController {
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode) else {
                 print("Error with the response, unexpected status code: \(String(describing: response))")
+                DispatchQueue.main.async {
+                    self.deviceOnlineStatus = "offline"
+                    self.csbsjuApiOnlineStatus = "CsbsjuApi invalid response" // adding this to the campus alert fetch since if csbsju.edu is down the bus api likely is too, for some reason this isn't hit in the fetchCsbsjuApi method during a timeout
+                    
+                }
                 return
             }
             // Process HTML into data we care about, the "daily message"

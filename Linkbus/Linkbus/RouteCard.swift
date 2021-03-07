@@ -63,6 +63,9 @@ struct RouteCard: View {
                         .font(Font.custom("HelveticaNeue", size: 18))
                         .font(.headline)
                         .fontWeight(.regular)
+                        .foregroundColor(Color.primary)
+                    //.background(Color(red: 43/255, green: 175/255, blue: 187/255))
+                    //.background(Color.white)
                     Spacer()
                     
                     VStack (alignment: .leading, spacing: 0) {
@@ -125,13 +128,14 @@ struct RouteCard: View {
                                     .padding([.top, .bottom], 4)
                             }
                         }
-                        
-                        .transition(.scale)
-                        .animation(.default)
                     }
+                    
+                    .transition(.scale)
+                    .animation(.default)
                 }
-                
                 .padding([.top, .bottom], 8)
+                
+                
                 
                 //                HStack(alignment: .center, spacing: 4) {
                 //                    Text(String.init(format: "$%.2f", arguments: [self.price]))
@@ -160,9 +164,12 @@ struct RouteCard: View {
                 
                 
             }
-            .padding(12)
+            
             
         }
+        .buttonStyle(PlainButtonStyle())
+        .padding(12)
+        
         //https://medium.com/@masamichiueta/bridging-uicolor-system-color-to-swiftui-color-ef98f6e21206
         .background(colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground))
         //        .background(colorScheme == .dark ?
@@ -172,7 +179,8 @@ struct RouteCard: View {
         //.shadow(color: Color.black.opacity(0.2), radius: 7, x: 0, y: 2)
         .onTapGesture {
             self.showRouteSheet = true
-        }.sheet(isPresented: $showRouteSheet) {
+        }
+        .sheet(isPresented: $showRouteSheet) {
             RouteSheet(route: self.route, routeController: self.routeController)
         }
     }

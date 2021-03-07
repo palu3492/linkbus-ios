@@ -27,26 +27,31 @@ struct Home: View {
     
     
     var calendarButton: some View {
+        //NavigationLink(destination: ChangeDate(routeController: self.routeController)) {
         Button(action: { self.showingChangeDate.toggle() }) {
             Image(systemName: "calendar")
                 .imageScale(.large)
                 .accessibility(label: Text("Change Date"))
                 .padding()
         }
+        
+        //}.navigationBarTitle("Choose date")
     }
     
     // init removes seperator/dividers from list, in future maybe use scrollview
     init() {
         self.routeController = RouteController()
+        //UINavigationBar.appearance().backgroundColor = .systemGroupedBackground // currently impossible to change background color with navigationview, in future swiftui use .systemGroupedBackground
+        
         
         //UINavigationBar.setAnimationsEnabled(true)
         UITableView.appearance().separatorStyle = .none
-
+        
         //        UITableView.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        UITableViewCell.appearance().backgroundColor = .clear
         //        UINavigationBar.appearance().backgroundColor = (colorScheme == .dark ? .white : .black)
         //        print(colorScheme)
-
+        
         let time = Date()
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm"
@@ -55,84 +60,101 @@ struct Home: View {
     }
     
     var body: some View {
-            NavigationView {
-//                if(routeController.initalWebRequestFinished) {
-                    if #available(iOS 14.0, *) { // iOS 14
-                        ScrollView {
-                            AlertList(routeController: routeController)
-                            if !self.routeController.dateIsChanged {
-                                RouteList(routeController: routeController)
-                            }
-                        }
-                        .padding(.top, 0.3) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
-                        .navigationBarTitle(self.menuBarTitle)
-                        //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                        .navigationBarItems(trailing: calendarButton)
-                    } else { // iOS 13
-                        List {
-                            AlertList(routeController: routeController)
-                            if !self.routeController.dateIsChanged {
-                                RouteList(routeController: routeController)
-                            }
-                        }
-                        .transition(.opacity)
-                        .animation(.default)
-                        .navigationBarTitle(self.menuBarTitle)
-                        //.transition(.opacity)
-                        //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
-                        .navigationBarItems(trailing: calendarButton)
-                    }
-//                } else {
-//                    VStack() {
-////                        Text("Loading")
-//                        ActivityIndicator(isAnimating: .constant(true), style: .large)
-//                    }
-//                    .navigationBarTitle(self.menuBarTitle)
-//                    Spacer() // Makes the alerts and routes animate in from bottom
+        NavigationView {
+            //                ZStack(alignment: .topLeading) {
+            //                     Rectangle()
+            //                          .fill(Color(.systemGroupedBackground))
+            //                          .edgesIgnoringSafeArea(.all)
+            //                if(routeController.initalWebRequestFinished) {
+            if #available(iOS 14.0, *) { // iOS 14
+                ScrollView {
+                    AlertList(routeController: routeController)
+                    RouteList(routeController: routeController)
                 }
-//            }
-            .onAppear {
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                let isFirstLaunch = appDelegate.isFirstLaunch()
-                print(isFirstLaunch)
-                if (isFirstLaunch) {
-                    self.showOnboardingSheet = true
-                } else {
-                    self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
-                    print("isFirstLaunch: ", showOnboardingSheet)
+                .padding(.top, 0.3) // !! FIXES THE WEIRD NAVIGATION BAR GRAPHICAL GLITCHES WITH SCROLLVIEW IN NAVVIEW
+                .navigationBarTitle(self.menuBarTitle, displayMode: .automatic)
+                //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                .navigationBarItems(trailing: calendarButton)
+            } else { // iOS 13
+                List {
+                    AlertList(routeController: routeController)
+                    RouteList(routeController: routeController)
                 }
+                .transition(.opacity)
+                .animation(.default)
+                .navigationBarTitle(self.menuBarTitle)
+                //.transition(.opacity)
+                //.background((colorScheme == .dark ? Color(UIColor.systemBackground) : Color(UIColor.systemGray6)))
+                .navigationBarItems(trailing: calendarButton)
             }
-            .sheet(isPresented: $showOnboardingSheet) {
-                OnboardingView()
+            //                } else {
+            //                    VStack() {
+            ////                        Text("Loading")
+            //                        ActivityIndicator(isAnimating: .constant(true), style: .large)
+            //                    }
+            //                    .navigationBarTitle(self.menuBarTitle)
+            //                    Spacer() // Makes the alerts and routes animate in from bottom
+            //}
+        }
+        //            }
+        .onAppear {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let isFirstLaunch = appDelegate.isFirstLaunch()
+            print(isFirstLaunch)
+            if (isFirstLaunch) {
+                self.showOnboardingSheet = true
+            } else {
+                self.showOnboardingSheet = false // change this to true while debugging OnboardingSheet
+                print("isFirstLaunch: ", showOnboardingSheet)
             }
-            // .hoverEffect(.lift)
-            .onReceive(timer) { time in
-                if self.counter >= 1 {
-                    // Online Status
-                    titleOnlineStatus(self: self, routeController: self.routeController)
-                    // Greeting
-                    titleGreeting(self: self)
-                }
-                self.counter += 1
-                // Auto refresh
-                autoRefreshData(self: self)
+        }
+        .sheet(isPresented: $showOnboardingSheet) {
+            OnboardingView()
+        }
+        // .hoverEffect(.lift)
+        .onReceive(timer) { time in
+            if self.counter >= 1 {
+                // Online Status
+                titleOnlineStatus(self: self, routeController: self.routeController)
+                // Greeting
+                titleGreeting(self: self)
+                // Date changed
+                titleDate(self: self, routeController: self.routeController)
             }
-            .sheet(isPresented: $showingChangeDate, onDismiss: {
-                self.routeController.resetDate()
-            }) {
-                ChangeDate(routeController: routeController)
-            }
+            self.counter += 1
+            // Auto refresh
+            autoRefreshData(self: self)
+        }
+        .sheet(isPresented: $showingChangeDate
+               //                   ,onDismiss: {
+               //                self.routeController.resetDate()
+               //            }
+        ) {
+            DateSheet(routeController: routeController)
+        }
     }
 }
 
-struct ActivityIndicator: UIViewRepresentable {
-    @Binding var isAnimating: Bool
-    let style: UIActivityIndicatorView.Style
-    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
+//struct ActivityIndicator: UIViewRepresentable {
+//    @Binding var isAnimating: Bool
+//    let style: UIActivityIndicatorView.Style
+//    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+//        return UIActivityIndicatorView(style: style)
+//    }
+//    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+//        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+//    }
+//}
+
+func titleDate(self: Home, routeController: RouteController) {
+    if routeController.dateIsChanged {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, MMM d"
+        let formattedDate = formatter.string(from: routeController.selectedDate)
+        self.menuBarTitle = "⏭ " + formattedDate
     }
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
-        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+    else {
+        self.menuBarTitle = self.greeting
     }
 }
 
@@ -174,7 +196,7 @@ func titleGreeting(self: Home) {
     
     if (timeOfDayChanged) {
         if (self.timeOfDay == "night") {
-            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 🌌", "Goodnight 😴"]
+            let nightGreetings = ["Goodnight 😴", "Buenas noches 😴", "Goodnight 😴", "Goodnight 🌌", "Goodnight 😴", "You up? 😏💤", "You up? 😏💤"]
             let randomGreeting = nightGreetings.randomElement()
             self.greeting = randomGreeting!
         } else if (self.timeOfDay == "morning") {
@@ -206,9 +228,9 @@ func autoRefreshData(self: Home) {
     let timeFormatter = DateFormatter()
     timeFormatter.dateFormat = "HH:mm"
     let currentTime = timeFormatter.string(from: time)
-//                print("last ref: " + self.lastRefreshTime)
-//                print("current time: " + currentTime)
-//                print("local desc: " + routeController.localizedDescription)
+    //                print("last ref: " + self.lastRefreshTime)
+    //                print("current time: " + currentTime)
+    //                print("local desc: " + routeController.localizedDescription)
     if self.lastRefreshTime != currentTime {
         print("Refreshing data")
         self.routeController.webRequest()
