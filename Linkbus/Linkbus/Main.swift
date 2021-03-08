@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import HalfASheet
+import PartialSheet
 
 struct Home: View {
     
@@ -23,7 +25,7 @@ struct Home: View {
     @State var lastRefreshTime = ""
     @State var greeting = "Linkbus"
     
-    @State var showingChangeDate = false
+    @State private var showingChangeDate = false
     
     
     var calendarButton: some View {
@@ -61,11 +63,6 @@ struct Home: View {
     
     var body: some View {
         NavigationView {
-            //                ZStack(alignment: .topLeading) {
-            //                     Rectangle()
-            //                          .fill(Color(.systemGroupedBackground))
-            //                          .edgesIgnoringSafeArea(.all)
-            //                if(routeController.initalWebRequestFinished) {
             if #available(iOS 14.0, *) { // iOS 14
                 ScrollView {
                     AlertList(routeController: routeController)
@@ -111,6 +108,13 @@ struct Home: View {
         .sheet(isPresented: $showOnboardingSheet) {
             OnboardingView()
         }
+        .addPartialSheet()
+        .partialSheet(isPresented: $showingChangeDate) {
+            DateSheet(routeController: routeController)
+        }
+//        .halfASheet(isPresented: $showingChangeDate) {
+//            DateSheet(routeController: routeController)
+//        }
         // .hoverEffect(.lift)
         .onReceive(timer) { time in
             if self.counter >= 1 {
@@ -125,15 +129,13 @@ struct Home: View {
             // Auto refresh
             autoRefreshData(self: self)
         }
-        .sheet(isPresented: $showingChangeDate
-               //                   ,onDismiss: {
-               //                self.routeController.resetDate()
-               //            }
-        ) {
-            DateSheet(routeController: routeController)
-        }
+        //            .halfASheet(isPresented: $showingChangeDate) {
+        //                DateSheet(routeController: routeController)
+        //            }
     }
 }
+
+
 
 //struct ActivityIndicator: UIViewRepresentable {
 //    @Binding var isAnimating: Bool

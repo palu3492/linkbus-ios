@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/michael/dev/github/linkbus-ios/linkbus-ios/Landmarks/Linkbus.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

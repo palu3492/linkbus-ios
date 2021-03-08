@@ -7,6 +7,7 @@ The scene delegate.
 
 import UIKit
 import SwiftUI
+import PartialSheet
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -17,10 +18,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        // github.com/AndreaMiotto/PartialSheet
+        let sheetManager: PartialSheetManager = PartialSheetManager()
+        let contentView = Home()
+            // 1.2 Add the manager as environmentObject
+            .environmentObject(sheetManager)
+        
         // Use a UIHostingController as window root view controller
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: Home())
+            window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
         }

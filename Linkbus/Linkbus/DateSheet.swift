@@ -9,23 +9,11 @@
 import SwiftUI
 
 struct DateSheet: View {
-    
     @State private var selectedDate: Date
     @ObservedObject var routeController: RouteController
     @State private var showDatePicker = true
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
-    
-    private var dateProxy:Binding<Date> {
-        Binding<Date>(get: {self.selectedDate }, set: {
-            self.selectedDate = $0
-            self.routeController.changeDate(selectedDate: self.selectedDate)
-            // If this vvv is uncommeneted then date picker will collapse when a date is selected
-            //self.showDatePicker = false
-            // If this vvv is uncommented then the sheet will close when a date is selected
-            self.presentationMode.wrappedValue.dismiss()
-        })
-    }
     
     init(routeController: RouteController) {
         self.routeController = routeController
@@ -38,6 +26,18 @@ struct DateSheet: View {
         }
     }
     
+    private var dateProxy:Binding<Date> {
+        Binding<Date>(get: {self.selectedDate }, set: {
+            self.selectedDate = $0
+            self.routeController.changeDate(selectedDate: self.selectedDate)
+            // If this vvv is uncommeneted then date picker will collapse when a date is selected
+            //self.isPresented.toggle()
+            // If this vvv is uncommented then the sheet will close when a date is selected
+            self.presentationMode.wrappedValue.dismiss()
+            
+        })
+    }
+    
     static let dateFormat: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -47,12 +47,6 @@ struct DateSheet: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            RoundedRectangle(cornerRadius: CGFloat(5.0) / 2.0)
-                .frame(width: 60, height: 4)
-                .foregroundColor(Color(UIColor.systemGray2))
-                .padding([.top], 10)
-                .padding([.bottom], 5)
-            
             VStack(alignment: .leading, spacing: 0) {
                 // This VStack in charge of placing elements correctly, ScrollView won't on its own
                 VStack(spacing: 14) {
@@ -98,6 +92,7 @@ struct DateSheet: View {
                                 //.padding(.top, 6)
                                 .background((colorScheme == .dark ? Color(UIColor.secondarySystemBackground) : Color(UIColor.systemBackground)))
                                 .cornerRadius(15)
+                                //.datePickerStyle(CompactDatePickerStyle())
                             } else {
                                 DatePicker(
                                     selection: dateProxy,
@@ -117,7 +112,6 @@ struct DateSheet: View {
                 }
                 .padding() // Padding for everything above the routes
             }
-            Spacer()
         }
         .background(Color(UIColor.systemGroupedBackground)).edgesIgnoringSafeArea(.all)
     }
